@@ -8,6 +8,7 @@
 
 #import "TimelineViewController.h"
 #import "AddMeetingViewController.h"
+#import "QueueBarButtonItem.h"
 #import "Contact.h"
 #import "Meeting.h"
 
@@ -102,11 +103,17 @@
     [self.view addSubview:self.tableView];
     
     // Add the add meeting button to the right side of the nav bar
-    UIBarButtonItem *addMeetingButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
-                                                                                      target:self
-                                                                                      action:@selector(addMeeting)];
+    QueueBarButtonItem *addMeetingButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeAdd target:self action:@selector(addMeeting)];
     self.navigationItem.rightBarButtonItem = addMeetingButton;
+    
+    QueueBarButtonItem *backButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeBack target:self action:@selector(back)];
+    self.navigationItem.leftBarButtonItem = backButton;
 
+}
+
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated

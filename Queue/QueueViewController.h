@@ -11,7 +11,7 @@
 #import "AddMeetingViewController.h"
 @class Queue;
 
-@interface QueueViewController : UIViewController <ABPeoplePickerNavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface QueueViewController : UIViewController <ABPeoplePickerNavigationControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) Queue *queue;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;

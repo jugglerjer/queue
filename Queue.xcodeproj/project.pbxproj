@@ -32,15 +32,14 @@
 		3FABEE7F17483ED800BBB760 /* QueuesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FABEE7E17483ED800BBB760 /* QueuesViewController.m */; };
 		3FE80CE6174DBFEC0009D61D /* nav-bar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CE5174DBFEC0009D61D /* nav-bar@2x.png */; };
 		3FE80CE8174DC82D0009D61D /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CE7174DC82D0009D61D /* back@2x.png */; };
-		3FE80CEA174DC9F10009D61D /* button-background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CE9174DC9F10009D61D /* button-background@2x.png */; };
 		3FE80CEC174DCBE90009D61D /* add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CEB174DCBE90009D61D /* add@2x.png */; };
 		3FE80CF0174DCED50009D61D /* done@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CEF174DCED50009D61D /* done@2x.png */; };
 		3FE80CF2174DD05E0009D61D /* cancel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CF1174DD05E0009D61D /* cancel@2x.png */; };
-		3FE80CF5174DD6030009D61D /* QueueBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE80CF4174DD6030009D61D /* QueueBarButtonItem.m */; };
 		3FE80CFA174DE2080009D61D /* nav_button_back_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CF6174DE2080009D61D /* nav_button_back_pressed@2x.png */; };
 		3FE80CFB174DE2080009D61D /* nav_button_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CF7174DE2080009D61D /* nav_button_back@2x.png */; };
 		3FE80CFC174DE2080009D61D /* nav_button_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CF8174DE2080009D61D /* nav_button_pressed@2x.png */; };
 		3FE80CFD174DE2080009D61D /* nav_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CF9174DE2080009D61D /* nav_button@2x.png */; };
+		3FE80D00174DE8A30009D61D /* QueueBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE80CFF174DE8A30009D61D /* QueueBarButtonItem.m */; };
 		3FF2C01B1749BDAB007203D8 /* Meeting.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2C01A1749BDAB007203D8 /* Meeting.m */; };
 		3FF2C0211749D74E007203D8 /* AddMeetingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2C0201749D74E007203D8 /* AddMeetingViewController.m */; };
 		3FF2C027174B52DC007203D8 /* TimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2C026174B52DC007203D8 /* TimelineViewController.m */; };
@@ -92,16 +91,15 @@
 		3FABEE7E17483ED800BBB760 /* QueuesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QueuesViewController.m; sourceTree = "<group>"; };
 		3FE80CE5174DBFEC0009D61D /* nav-bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "nav-bar@2x.png"; path = "Queue/nav-bar@2x.png"; sourceTree = "<group>"; };
 		3FE80CE7174DC82D0009D61D /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "back@2x.png"; path = "Queue/back@2x.png"; sourceTree = "<group>"; };
-		3FE80CE9174DC9F10009D61D /* button-background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "button-background@2x.png"; path = "Queue/button-background@2x.png"; sourceTree = "<group>"; };
 		3FE80CEB174DCBE90009D61D /* add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "add@2x.png"; path = "Queue/add@2x.png"; sourceTree = "<group>"; };
 		3FE80CEF174DCED50009D61D /* done@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "done@2x.png"; path = "Queue/done@2x.png"; sourceTree = "<group>"; };
 		3FE80CF1174DD05E0009D61D /* cancel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cancel@2x.png"; path = "Queue/cancel@2x.png"; sourceTree = "<group>"; };
-		3FE80CF3174DD6030009D61D /* QueueBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QueueBarButtonItem.h; sourceTree = "<group>"; };
-		3FE80CF4174DD6030009D61D /* QueueBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QueueBarButtonItem.m; sourceTree = "<group>"; };
 		3FE80CF6174DE2080009D61D /* nav_button_back_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "nav_button_back_pressed@2x.png"; path = "../Carma/Carma/nav_button_back_pressed@2x.png"; sourceTree = "<group>"; };
 		3FE80CF7174DE2080009D61D /* nav_button_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "nav_button_back@2x.png"; path = "../Carma/Carma/nav_button_back@2x.png"; sourceTree = "<group>"; };
 		3FE80CF8174DE2080009D61D /* nav_button_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "nav_button_pressed@2x.png"; path = "../Carma/Carma/nav_button_pressed@2x.png"; sourceTree = "<group>"; };
 		3FE80CF9174DE2080009D61D /* nav_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "nav_button@2x.png"; path = "../Carma/Carma/nav_button@2x.png"; sourceTree = "<group>"; };
+		3FE80CFE174DE8A30009D61D /* QueueBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QueueBarButtonItem.h; sourceTree = "<group>"; };
+		3FE80CFF174DE8A30009D61D /* QueueBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QueueBarButtonItem.m; sourceTree = "<group>"; };
 		3FF2C0191749BDAB007203D8 /* Meeting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Meeting.h; sourceTree = "<group>"; };
 		3FF2C01A1749BDAB007203D8 /* Meeting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Meeting.m; sourceTree = "<group>"; };
 		3FF2C01F1749D74E007203D8 /* AddMeetingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddMeetingViewController.h; sourceTree = "<group>"; };
@@ -194,8 +192,8 @@
 				3FF2C01A1749BDAB007203D8 /* Meeting.m */,
 				3FABEE741748130F00BBB760 /* Queue.xcdatamodeld */,
 				3FA1019217447769007D2520 /* Supporting Files */,
-				3FE80CF3174DD6030009D61D /* QueueBarButtonItem.h */,
-				3FE80CF4174DD6030009D61D /* QueueBarButtonItem.m */,
+				3FE80CFE174DE8A30009D61D /* QueueBarButtonItem.h */,
+				3FE80CFF174DE8A30009D61D /* QueueBarButtonItem.m */,
 			);
 			path = Queue;
 			sourceTree = "<group>";
@@ -243,7 +241,6 @@
 				3FE80CF1174DD05E0009D61D /* cancel@2x.png */,
 				3FE80CEF174DCED50009D61D /* done@2x.png */,
 				3FE80CEB174DCBE90009D61D /* add@2x.png */,
-				3FE80CE9174DC9F10009D61D /* button-background@2x.png */,
 				3FE80CE7174DC82D0009D61D /* back@2x.png */,
 				3FE80CE5174DBFEC0009D61D /* nav-bar@2x.png */,
 			);
@@ -328,7 +325,6 @@
 				3FA101A217447769007D2520 /* Default-568h@2x.png in Resources */,
 				3FE80CE6174DBFEC0009D61D /* nav-bar@2x.png in Resources */,
 				3FE80CE8174DC82D0009D61D /* back@2x.png in Resources */,
-				3FE80CEA174DC9F10009D61D /* button-background@2x.png in Resources */,
 				3FE80CEC174DCBE90009D61D /* add@2x.png in Resources */,
 				3FE80CF0174DCED50009D61D /* done@2x.png in Resources */,
 				3FE80CF2174DD05E0009D61D /* cancel@2x.png in Resources */,
@@ -381,7 +377,7 @@
 				3FF2C01B1749BDAB007203D8 /* Meeting.m in Sources */,
 				3FF2C0211749D74E007203D8 /* AddMeetingViewController.m in Sources */,
 				3FF2C027174B52DC007203D8 /* TimelineViewController.m in Sources */,
-				3FE80CF5174DD6030009D61D /* QueueBarButtonItem.m in Sources */,
+				3FE80D00174DE8A30009D61D /* QueueBarButtonItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

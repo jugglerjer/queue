@@ -8,6 +8,7 @@
 
 #import "QueuesViewController.h"
 #import "QueueViewController.h"
+#import "QueueBarButtonItem.h"
 #import "Queue.h"
 
 @interface QueuesViewController ()
@@ -100,9 +101,7 @@
     [self.view addSubview:self.tableView];
     
     // Add the add contact button to the right side of the nav bar
-    UIBarButtonItem *addContactButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
-                                                                                      target:self
-                                                                                      action:@selector(addQueue)];
+    QueueBarButtonItem *addContactButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeAdd target:self action:@selector(addQueue)];
     self.navigationItem.rightBarButtonItem = addContactButton;
     
     // Load all of the Queues from memory

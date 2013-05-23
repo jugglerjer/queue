@@ -16,9 +16,57 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
+- (void)customizeUserInterfaceElements
+{
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"nav-bar.png"] forBarMetrics:UIBarMetricsDefault];
+    
+    [[UINavigationBar appearance] setTitleTextAttributes:
+     [NSDictionary dictionaryWithObjectsAndKeys:
+      [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0],
+      UITextAttributeTextColor,
+      [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.2],
+      UITextAttributeTextShadowColor,
+      [NSValue valueWithUIOffset:UIOffsetMake(0, -1)],
+      UITextAttributeTextShadowOffset,
+      [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0],
+      UITextAttributeFont,
+      nil]];
+    
+    UIImage *backButtonImageNormal = [UIImage imageNamed:@"nav_button_back.png"];
+    UIImage *stretchableBackButtonImageNormal = [backButtonImageNormal resizableImageWithCapInsets:UIEdgeInsetsMake(0, 14, 0, 5)];
+    
+    UIImage *backButtonImagePressed = [UIImage imageNamed:@"nav_button_back_pressed.png"];
+    UIImage *stretchableBackButtonImagePressed = [backButtonImagePressed resizableImageWithCapInsets:UIEdgeInsetsMake(0, 14, 0, 5)];
+    
+    UIImage *buttonImageNormal = [UIImage imageNamed:@"nav_button.png"];
+    UIImage *stretchableButtonImageNormal = [buttonImageNormal stretchableImageWithLeftCapWidth:8 topCapHeight:8];
+    
+    UIImage *buttonImagePressed = [UIImage imageNamed:@"nav_button_pressed.png"];
+    UIImage *stretchableButtonImagePressed = [buttonImagePressed stretchableImageWithLeftCapWidth:8 topCapHeight:8];
+    
+    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:stretchableBackButtonImageNormal
+                                                      forState:UIControlStateNormal
+                                                    barMetrics:UIBarMetricsDefault];
+    
+    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:stretchableBackButtonImagePressed
+                                                      forState:UIControlStateHighlighted
+                                                    barMetrics:UIBarMetricsDefault];
+    
+    [[UIBarButtonItem appearance] setBackgroundImage:stretchableButtonImageNormal
+                                            forState:UIControlStateNormal
+                                          barMetrics:UIBarMetricsDefault];
+    
+    [[UIBarButtonItem appearance] setBackgroundImage:stretchableButtonImagePressed
+                                            forState:UIControlStateHighlighted
+                                          barMetrics:UIBarMetricsDefault];
+    
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    [self customizeUserInterfaceElements];
     
     NSManagedObjectContext *context = [self managedObjectContext];
     if (!context) {

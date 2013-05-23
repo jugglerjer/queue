@@ -8,6 +8,7 @@
 
 #import "QueueViewController.h"
 #import "TimelineViewController.h"
+#import "QueueBarButtonItem.h"
 #import "Contact.h"
 #import "Queue.h"
 
@@ -39,8 +40,18 @@
     ABPeoplePickerNavigationController *picker =
     [[ABPeoplePickerNavigationController alloc] init];
     picker.peoplePickerDelegate = self;
+    picker.delegate = self;
     
     [self presentViewController:picker animated:YES completion:NULL];
+}
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if([navigationController isKindOfClass:[ABPeoplePickerNavigationController class]])
+    {
+        QueueBarButtonItem *cancelButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeCancel target:self action:@selector(peoplePickerNavigationControllerDidCancel:)];
+        navigationController.topViewController.navigationItem.rightBarButtonItem = cancelButton;
+    }
 }
 
 - (void)peoplePickerNavigationControllerDidCancel:(ABPeoplePickerNavigationController *)peoplePicker
@@ -203,12 +214,18 @@
     [self.view addSubview:self.tableView];
     
     // Add the add contact button to the right side of the nav bar
-    UIBarButtonItem *addContactButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
-                                                                                      target:self
-                                                                                      action:@selector(importContact)];
+    QueueBarButtonItem *addContactButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeAdd target:self action:@selector(importContact)];
     self.navigationItem.rightBarButtonItem = addContactButton;
     
+    QueueBarButtonItem *backButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeBack target:self action:@selector(back)];
+    self.navigationItem.leftBarButtonItem = backButton;
+    
     [self updateContactsArrayWithTableReload:NO];
+}
+
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated

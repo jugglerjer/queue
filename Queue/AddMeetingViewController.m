@@ -7,6 +7,7 @@
 //
 
 #import "AddMeetingViewController.h"
+#import "QueueBarButtonItem.h"
 #import "Meeting.h"
 #import "Contact.h"
 
@@ -100,11 +101,8 @@ static CGFloat dateCellHeight = 44;
    
     
     // Add the save and cancel buttons to the nav bar    
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancel)];
-    UIBarButtonItem *addMeetingButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                                                      target:self
-                                                                                      action:@selector(saveMeeting)];
-    
+    QueueBarButtonItem *cancelButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeCancel target:self action:@selector(cancel)];
+    QueueBarButtonItem *addMeetingButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeDone target:self action:@selector(saveMeeting)];
     self.navigationItem.leftBarButtonItem = cancelButton;
     self.navigationItem.rightBarButtonItem = addMeetingButton;
     
