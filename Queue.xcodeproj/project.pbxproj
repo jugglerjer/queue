@@ -21,6 +21,18 @@
 		3FA101AC17447769007D2520 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA1018D17447769007D2520 /* Foundation.framework */; };
 		3FA101B417447769007D2520 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3FA101B217447769007D2520 /* InfoPlist.strings */; };
 		3FA101B717447769007D2520 /* QueueTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA101B617447769007D2520 /* QueueTests.m */; };
+		3FA101C8174484AB007D2520 /* LLPullNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA101C7174484AB007D2520 /* LLPullNavigationController.m */; };
+		3FABEE231745F9A200BBB760 /* QueueViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FABEE221745F9A200BBB760 /* QueueViewController.m */; };
+		3FABEE291746012600BBB760 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FABEE271746012600BBB760 /* AddressBook.framework */; };
+		3FABEE2A1746012600BBB760 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FABEE281746012600BBB760 /* AddressBookUI.framework */; };
+		3FABEE2C174812A700BBB760 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FABEE2B174812A700BBB760 /* CoreData.framework */; };
+		3FABEE761748130F00BBB760 /* Queue.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3FABEE741748130F00BBB760 /* Queue.xcdatamodeld */; };
+		3FABEE79174822C800BBB760 /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FABEE78174822C800BBB760 /* Contact.m */; };
+		3FABEE7C174823BA00BBB760 /* Queue.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FABEE7B174823BA00BBB760 /* Queue.m */; };
+		3FABEE7F17483ED800BBB760 /* QueuesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FABEE7E17483ED800BBB760 /* QueuesViewController.m */; };
+		3FF2C01B1749BDAB007203D8 /* Meeting.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2C01A1749BDAB007203D8 /* Meeting.m */; };
+		3FF2C0211749D74E007203D8 /* AddMeetingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2C0201749D74E007203D8 /* AddMeetingViewController.m */; };
+		3FF2C027174B52DC007203D8 /* TimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2C026174B52DC007203D8 /* TimelineViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +65,26 @@
 		3FA101B317447769007D2520 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		3FA101B517447769007D2520 /* QueueTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QueueTests.h; sourceTree = "<group>"; };
 		3FA101B617447769007D2520 /* QueueTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QueueTests.m; sourceTree = "<group>"; };
+		3FA101C6174484AB007D2520 /* LLPullNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLPullNavigationController.h; sourceTree = "<group>"; };
+		3FA101C7174484AB007D2520 /* LLPullNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLPullNavigationController.m; sourceTree = "<group>"; };
+		3FABEE211745F9A200BBB760 /* QueueViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QueueViewController.h; sourceTree = "<group>"; };
+		3FABEE221745F9A200BBB760 /* QueueViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QueueViewController.m; sourceTree = "<group>"; };
+		3FABEE271746012600BBB760 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		3FABEE281746012600BBB760 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		3FABEE2B174812A700BBB760 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		3FABEE751748130F00BBB760 /* Queue.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Queue.xcdatamodel; sourceTree = "<group>"; };
+		3FABEE77174822C800BBB760 /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
+		3FABEE78174822C800BBB760 /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
+		3FABEE7A174823BA00BBB760 /* Queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Queue.h; sourceTree = "<group>"; };
+		3FABEE7B174823BA00BBB760 /* Queue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Queue.m; sourceTree = "<group>"; };
+		3FABEE7D17483ED700BBB760 /* QueuesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QueuesViewController.h; sourceTree = "<group>"; };
+		3FABEE7E17483ED800BBB760 /* QueuesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QueuesViewController.m; sourceTree = "<group>"; };
+		3FF2C0191749BDAB007203D8 /* Meeting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Meeting.h; sourceTree = "<group>"; };
+		3FF2C01A1749BDAB007203D8 /* Meeting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Meeting.m; sourceTree = "<group>"; };
+		3FF2C01F1749D74E007203D8 /* AddMeetingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddMeetingViewController.h; sourceTree = "<group>"; };
+		3FF2C0201749D74E007203D8 /* AddMeetingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddMeetingViewController.m; sourceTree = "<group>"; };
+		3FF2C025174B52DC007203D8 /* TimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineViewController.h; sourceTree = "<group>"; };
+		3FF2C026174B52DC007203D8 /* TimelineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimelineViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +92,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FABEE2C174812A700BBB760 /* CoreData.framework in Frameworks */,
+				3FABEE291746012600BBB760 /* AddressBook.framework in Frameworks */,
+				3FABEE2A1746012600BBB760 /* AddressBookUI.framework in Frameworks */,
 				3FA1018C17447769007D2520 /* UIKit.framework in Frameworks */,
 				3FA1018E17447769007D2520 /* Foundation.framework in Frameworks */,
 				3FA1019017447769007D2520 /* CoreGraphics.framework in Frameworks */,
@@ -82,6 +117,9 @@
 		3FA1017F17447769007D2520 = {
 			isa = PBXGroup;
 			children = (
+				3FABEE2B174812A700BBB760 /* CoreData.framework */,
+				3FABEE271746012600BBB760 /* AddressBook.framework */,
+				3FABEE281746012600BBB760 /* AddressBookUI.framework */,
 				3FA1019117447769007D2520 /* Queue */,
 				3FA101AF17447769007D2520 /* QueueTests */,
 				3FA1018A17447769007D2520 /* Frameworks */,
@@ -114,6 +152,23 @@
 			children = (
 				3FA1019A17447769007D2520 /* LLAppDelegate.h */,
 				3FA1019B17447769007D2520 /* LLAppDelegate.m */,
+				3FA101C6174484AB007D2520 /* LLPullNavigationController.h */,
+				3FA101C7174484AB007D2520 /* LLPullNavigationController.m */,
+				3FABEE7D17483ED700BBB760 /* QueuesViewController.h */,
+				3FABEE7E17483ED800BBB760 /* QueuesViewController.m */,
+				3FABEE211745F9A200BBB760 /* QueueViewController.h */,
+				3FABEE221745F9A200BBB760 /* QueueViewController.m */,
+				3FF2C025174B52DC007203D8 /* TimelineViewController.h */,
+				3FF2C026174B52DC007203D8 /* TimelineViewController.m */,
+				3FF2C01F1749D74E007203D8 /* AddMeetingViewController.h */,
+				3FF2C0201749D74E007203D8 /* AddMeetingViewController.m */,
+				3FABEE7A174823BA00BBB760 /* Queue.h */,
+				3FABEE7B174823BA00BBB760 /* Queue.m */,
+				3FABEE77174822C800BBB760 /* Contact.h */,
+				3FABEE78174822C800BBB760 /* Contact.m */,
+				3FF2C0191749BDAB007203D8 /* Meeting.h */,
+				3FF2C01A1749BDAB007203D8 /* Meeting.m */,
+				3FABEE741748130F00BBB760 /* Queue.xcdatamodeld */,
 				3FA1019217447769007D2520 /* Supporting Files */,
 			);
 			path = Queue;
@@ -264,6 +319,15 @@
 			files = (
 				3FA1019817447769007D2520 /* main.m in Sources */,
 				3FA1019C17447769007D2520 /* LLAppDelegate.m in Sources */,
+				3FA101C8174484AB007D2520 /* LLPullNavigationController.m in Sources */,
+				3FABEE231745F9A200BBB760 /* QueueViewController.m in Sources */,
+				3FABEE761748130F00BBB760 /* Queue.xcdatamodeld in Sources */,
+				3FABEE79174822C800BBB760 /* Contact.m in Sources */,
+				3FABEE7C174823BA00BBB760 /* Queue.m in Sources */,
+				3FABEE7F17483ED800BBB760 /* QueuesViewController.m in Sources */,
+				3FF2C01B1749BDAB007203D8 /* Meeting.m in Sources */,
+				3FF2C0211749D74E007203D8 /* AddMeetingViewController.m in Sources */,
+				3FF2C027174B52DC007203D8 /* TimelineViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -436,6 +500,7 @@
 				3FA101BC17447769007D2520 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3FA101BD17447769007D2520 /* Build configuration list for PBXNativeTarget "QueueTests" */ = {
 			isa = XCConfigurationList;
@@ -444,8 +509,22 @@
 				3FA101BF17447769007D2520 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		3FABEE741748130F00BBB760 /* Queue.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				3FABEE751748130F00BBB760 /* Queue.xcdatamodel */,
+			);
+			currentVersion = 3FABEE751748130F00BBB760 /* Queue.xcdatamodel */;
+			path = Queue.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 3FA1018017447769007D2520 /* Project object */;
 }
