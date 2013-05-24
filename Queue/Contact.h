@@ -28,6 +28,7 @@
 
 - (void)populateWithAddressBookRecord:(ABRecordRef)person;
 - (NSDate *)dueDate;
+- (double)weeksUntilDue;
 - (NSArray *)sortedMeetings;
 
 @end

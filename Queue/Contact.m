@@ -74,6 +74,13 @@ static double defaultMeetInterval = 90 * 24 * 60 * 60; /* 3 months ~ 90 days */
     return lastMeetingDate;
 }
 
+- (double)weeksUntilDue
+{
+    NSTimeInterval secondsInWeek = 7 * 24 * 60 * 60;
+    NSTimeInterval secondsUntilDue = [[self dueDate] timeIntervalSinceDate:[NSDate date]];
+    return secondsUntilDue / secondsInWeek;
+}
+
 // -------------------------------------------------------------
 // Return the contacts meetings sorted by date
 // -------------------------------------------------------------

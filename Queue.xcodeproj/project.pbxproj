@@ -40,6 +40,10 @@
 		3FE80CFC174DE2080009D61D /* nav_button_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CF8174DE2080009D61D /* nav_button_pressed@2x.png */; };
 		3FE80CFD174DE2080009D61D /* nav_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CF9174DE2080009D61D /* nav_button@2x.png */; };
 		3FE80D00174DE8A30009D61D /* QueueBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE80CFF174DE8A30009D61D /* QueueBarButtonItem.m */; };
+		3FE80D02174DF34E0009D61D /* queue_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80D01174DF34E0009D61D /* queue_background@2x.png */; };
+		3FE80D04174DF4F60009D61D /* queue-row-background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80D03174DF4F60009D61D /* queue-row-background@2x.png */; };
+		3FE80D07174F0D380009D61D /* QueueContactCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE80D06174F0D380009D61D /* QueueContactCell.m */; };
+		3FE80D09174F12390009D61D /* contact-avatar-placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80D08174F12390009D61D /* contact-avatar-placeholder@2x.png */; };
 		3FF2C01B1749BDAB007203D8 /* Meeting.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2C01A1749BDAB007203D8 /* Meeting.m */; };
 		3FF2C0211749D74E007203D8 /* AddMeetingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2C0201749D74E007203D8 /* AddMeetingViewController.m */; };
 		3FF2C027174B52DC007203D8 /* TimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2C026174B52DC007203D8 /* TimelineViewController.m */; };
@@ -100,6 +104,11 @@
 		3FE80CF9174DE2080009D61D /* nav_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "nav_button@2x.png"; path = "../Carma/Carma/nav_button@2x.png"; sourceTree = "<group>"; };
 		3FE80CFE174DE8A30009D61D /* QueueBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QueueBarButtonItem.h; sourceTree = "<group>"; };
 		3FE80CFF174DE8A30009D61D /* QueueBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QueueBarButtonItem.m; sourceTree = "<group>"; };
+		3FE80D01174DF34E0009D61D /* queue_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "queue_background@2x.png"; path = "Queue/queue_background@2x.png"; sourceTree = "<group>"; };
+		3FE80D03174DF4F60009D61D /* queue-row-background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "queue-row-background@2x.png"; path = "Queue/queue-row-background@2x.png"; sourceTree = "<group>"; };
+		3FE80D05174F0D380009D61D /* QueueContactCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QueueContactCell.h; sourceTree = "<group>"; };
+		3FE80D06174F0D380009D61D /* QueueContactCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QueueContactCell.m; sourceTree = "<group>"; };
+		3FE80D08174F12390009D61D /* contact-avatar-placeholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "contact-avatar-placeholder@2x.png"; path = "Queue/contact-avatar-placeholder@2x.png"; sourceTree = "<group>"; };
 		3FF2C0191749BDAB007203D8 /* Meeting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Meeting.h; sourceTree = "<group>"; };
 		3FF2C01A1749BDAB007203D8 /* Meeting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Meeting.m; sourceTree = "<group>"; };
 		3FF2C01F1749D74E007203D8 /* AddMeetingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddMeetingViewController.h; sourceTree = "<group>"; };
@@ -180,6 +189,8 @@
 				3FABEE7E17483ED800BBB760 /* QueuesViewController.m */,
 				3FABEE211745F9A200BBB760 /* QueueViewController.h */,
 				3FABEE221745F9A200BBB760 /* QueueViewController.m */,
+				3FE80D05174F0D380009D61D /* QueueContactCell.h */,
+				3FE80D06174F0D380009D61D /* QueueContactCell.m */,
 				3FF2C025174B52DC007203D8 /* TimelineViewController.h */,
 				3FF2C026174B52DC007203D8 /* TimelineViewController.m */,
 				3FF2C01F1749D74E007203D8 /* AddMeetingViewController.h */,
@@ -234,6 +245,9 @@
 		3FE80CE4174DBFA50009D61D /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				3FE80D08174F12390009D61D /* contact-avatar-placeholder@2x.png */,
+				3FE80D03174DF4F60009D61D /* queue-row-background@2x.png */,
+				3FE80D01174DF34E0009D61D /* queue_background@2x.png */,
 				3FE80CF6174DE2080009D61D /* nav_button_back_pressed@2x.png */,
 				3FE80CF7174DE2080009D61D /* nav_button_back@2x.png */,
 				3FE80CF8174DE2080009D61D /* nav_button_pressed@2x.png */,
@@ -332,6 +346,9 @@
 				3FE80CFB174DE2080009D61D /* nav_button_back@2x.png in Resources */,
 				3FE80CFC174DE2080009D61D /* nav_button_pressed@2x.png in Resources */,
 				3FE80CFD174DE2080009D61D /* nav_button@2x.png in Resources */,
+				3FE80D02174DF34E0009D61D /* queue_background@2x.png in Resources */,
+				3FE80D04174DF4F60009D61D /* queue-row-background@2x.png in Resources */,
+				3FE80D09174F12390009D61D /* contact-avatar-placeholder@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -378,6 +395,7 @@
 				3FF2C0211749D74E007203D8 /* AddMeetingViewController.m in Sources */,
 				3FF2C027174B52DC007203D8 /* TimelineViewController.m in Sources */,
 				3FE80D00174DE8A30009D61D /* QueueBarButtonItem.m in Sources */,
+				3FE80D07174F0D380009D61D /* QueueContactCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

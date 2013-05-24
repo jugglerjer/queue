@@ -8,6 +8,7 @@
 
 #import "QueueViewController.h"
 #import "TimelineViewController.h"
+#import "QueueContactCell.h"
 #import "QueueBarButtonItem.h"
 #import "Contact.h"
 #import "Queue.h"
@@ -17,6 +18,8 @@
 @property (strong, nonatomic) UITableView *tableView;
 @property (nonatomic) NSMutableArray *contactsArray;
 @property (strong, nonatomic) Contact * selectedContact;
+
+@property BOOL isScrollingToNewContact;
 
 @end
 
@@ -86,10 +89,14 @@
         NSError *error = nil;
         if (![self.managedObjectContext save:&error]) {
             // Handle the error.
+            [self dismissViewControllerAnimated:YES completion:NULL];
         } else {
-            [self updateContactsArrayWithTableReload:YES];
+            [self updateContactsArrayWithTableReload:NO];
+            NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:[self.contactsArray indexOfObject:newContact] inSection:0];
+            
+            [self dismissViewControllerAnimated:YES completion:^{[self insertRowAtIndexPath:newIndexPath];}];
         }
-        [self dismissViewControllerAnimated:YES completion:NULL];
+        
     }
     return NO;
 }
@@ -131,6 +138,31 @@
 
 # pragma mark - Queue Display Methods
 
+- (void)insertRowAtIndexPath:(NSIndexPath *)indexPath
+{    
+    // Only perform this animation once the view has scrolled to the new contact
+    // This method will continue to call itself every few milliseconds until
+    // the view has finished scrolling
+    
+    NSIndexPath *scrollToIndexPath;
+    if (indexPath.row == [self.contactsArray count] - 1)
+        scrollToIndexPath = [NSIndexPath indexPathForRow:[self.contactsArray count] - 2 inSection:0];
+    else
+        scrollToIndexPath = indexPath;
+    
+    if (![self.tableView.indexPathsForVisibleRows containsObject:scrollToIndexPath])
+    {
+        self.isScrollingToNewContact = YES;
+        [self.tableView scrollToRowAtIndexPath:scrollToIndexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+    }
+    
+    
+    if (self.isScrollingToNewContact)
+        [self performSelector:@selector(insertRowAtIndexPath:) withObject:indexPath afterDelay:50];
+    else
+        [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+}
+
 - (void)updateContactsArrayWithTableReload:(BOOL)shouldReload
 {
     self.contactsArray = [NSMutableArray arrayWithArray:[self.queue sortedContacts]];
@@ -154,6 +186,19 @@
     
 }
 
+// --------------------------------------------------------
+// Understand when the table view has stopped scrolling
+// to a just-added contact so the new row will be
+// in view when it is inserted
+// --------------------------------------------------------
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    if (self.isScrollingToNewContact)
+    {
+        self.isScrollingToNewContact = NO;
+    }
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -166,19 +211,19 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *ContactRowIdentifier = @"ContactRowIdentifier";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ContactRowIdentifier];
+    QueueContactCell *cell = [tableView dequeueReusableCellWithIdentifier:ContactRowIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ContactRowIdentifier];
+        cell = [[QueueContactCell alloc] initWithReuseIdentifier:ContactRowIdentifier];
     }
     
-    NSDateFormatter *dueDateFormatter = [[NSDateFormatter alloc] init];
-    [dueDateFormatter setDateFormat:@"MMM d"];
+    [cell configureWithContact:[self.contactsArray objectAtIndex:indexPath.row]];
     
-    Contact *contact = (Contact *)[self.contactsArray objectAtIndex:indexPath.row];
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", contact.firstName, contact.lastName];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"Due on %@", [dueDateFormatter stringFromDate:[contact dueDate]]];
-//    cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 72.0f;
 }
 
 # pragma mark - Queue Row Selection Methods
@@ -206,10 +251,16 @@
     [super viewDidLoad];
 	
     // Create a table view to hold the contacts
-    UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds
+    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
+                                                                           self.view.bounds.origin.y,
+                                                                           self.view.bounds.size.width,
+                                                                           self.view.bounds.size.height - self.navigationController.navigationBar.frame.size.height)
                                                           style:UITableViewStylePlain];
+    tableView.backgroundColor = [UIColor colorWithPatternImage: [UIImage imageNamed:@"queue_background.png"]];
+    tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     tableView.delegate = self;
     tableView.dataSource = self;
+    
     self.tableView = tableView;
     [self.view addSubview:self.tableView];
     
@@ -241,7 +292,12 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     // See whether we need to reposition the contact we were just viewing
-    [self repositionSelectedContact];
+    if (self.selectedContact)
+    {
+        [self repositionSelectedContact];
+    }
+    self.selectedContact = nil;
+
 }
 
 - (void)didReceiveMemoryWarning

@@ -93,7 +93,10 @@
     [super viewDidLoad];
 	
     // Create a table view to hold the contacts
-    UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds
+    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
+                                                                           self.view.bounds.origin.y,
+                                                                           self.view.bounds.size.width,
+                                                                           self.view.bounds.size.height - self.navigationController.navigationBar.frame.size.height)
                                                           style:UITableViewStylePlain];
     tableView.delegate = self;
     tableView.dataSource = self;
