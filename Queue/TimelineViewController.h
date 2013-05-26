@@ -9,11 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "AddMeetingViewController.h"
 @class Contact;
+@class QueueViewController;
 
 @interface TimelineViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, AddMeetingViewControllerDelegate>
 
 @property (strong, nonatomic) Contact * contact;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (strong, nonatomic) QueueViewController *queueViewController;
 
 - (id)initWithContact:(Contact *)contact;
 

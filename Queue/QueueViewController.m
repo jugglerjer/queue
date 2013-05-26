@@ -234,6 +234,7 @@ static CGFloat contactRowHeight = 72.0f;
         TimelineViewController *timelineView = [[TimelineViewController alloc] initWithContact:[self.contactsArray objectAtIndex:indexPath.row - 1]];
         timelineView.view.frame = cell.bounds;
         timelineView.managedObjectContext = self.managedObjectContext;
+        timelineView.queueViewController = self;
         self.timeline = timelineView;
         [cell addSubview:timelineView.view];
         return cell;

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3F98A2EC17529196006A3668 /* timeline-inner-shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F98A2EB17529196006A3668 /* timeline-inner-shadow.png */; };
+		3F98A2EF17529A32006A3668 /* MeetingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F98A2EE17529A32006A3668 /* MeetingCell.m */; };
 		3FA1018C17447769007D2520 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA1018B17447769007D2520 /* UIKit.framework */; };
 		3FA1018E17447769007D2520 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA1018D17447769007D2520 /* Foundation.framework */; };
 		3FA1019017447769007D2520 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA1018F17447769007D2520 /* CoreGraphics.framework */; };
@@ -62,6 +63,8 @@
 
 /* Begin PBXFileReference section */
 		3F98A2EB17529196006A3668 /* timeline-inner-shadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "timeline-inner-shadow.png"; path = "Queue/timeline-inner-shadow.png"; sourceTree = "<group>"; };
+		3F98A2ED17529A32006A3668 /* MeetingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeetingCell.h; sourceTree = "<group>"; };
+		3F98A2EE17529A32006A3668 /* MeetingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeetingCell.m; sourceTree = "<group>"; };
 		3FA1018817447769007D2520 /* Queue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Queue.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FA1018B17447769007D2520 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		3FA1018D17447769007D2520 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -195,6 +198,8 @@
 				3FE80D06174F0D380009D61D /* QueueContactCell.m */,
 				3FF2C025174B52DC007203D8 /* TimelineViewController.h */,
 				3FF2C026174B52DC007203D8 /* TimelineViewController.m */,
+				3F98A2ED17529A32006A3668 /* MeetingCell.h */,
+				3F98A2EE17529A32006A3668 /* MeetingCell.m */,
 				3FF2C01F1749D74E007203D8 /* AddMeetingViewController.h */,
 				3FF2C0201749D74E007203D8 /* AddMeetingViewController.m */,
 				3FABEE7A174823BA00BBB760 /* Queue.h */,
@@ -400,6 +405,7 @@
 				3FF2C027174B52DC007203D8 /* TimelineViewController.m in Sources */,
 				3FE80D00174DE8A30009D61D /* QueueBarButtonItem.m in Sources */,
 				3FE80D07174F0D380009D61D /* QueueContactCell.m in Sources */,
+				3F98A2EF17529A32006A3668 /* MeetingCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
