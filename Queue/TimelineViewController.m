@@ -96,18 +96,23 @@
                                                                            self.view.bounds.origin.y,
                                                                            self.view.bounds.size.width,
                                                                            self.view.bounds.size.height)
-                                                          style:UITableViewStyleGrouped];
+                                                          style:UITableViewStylePlain];
     tableView.delegate = self;
     tableView.dataSource = self;
     self.tableView = tableView;
     [self.view addSubview:self.tableView];
     
-    // Add the add meeting button to the right side of the nav bar
-    QueueBarButtonItem *addMeetingButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeAdd target:self action:@selector(addMeeting)];
-    self.navigationItem.rightBarButtonItem = addMeetingButton;
+    UIImage *innerShadow = [[UIImage imageNamed:@"timeline-inner-shadow.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:5];
+    UIImageView *innerShadowView = [[UIImageView alloc] initWithImage:innerShadow];
+    innerShadowView.frame = self.tableView.bounds;
+    [self.view addSubview:innerShadowView];
     
-    QueueBarButtonItem *backButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeBack target:self action:@selector(back)];
-    self.navigationItem.leftBarButtonItem = backButton;
+    // Add the add meeting button to the right side of the nav bar
+//    QueueBarButtonItem *addMeetingButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeAdd target:self action:@selector(addMeeting)];
+//    self.navigationItem.rightBarButtonItem = addMeetingButton;
+//    
+//    QueueBarButtonItem *backButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeBack target:self action:@selector(back)];
+//    self.navigationItem.leftBarButtonItem = backButton;
 
 }
 

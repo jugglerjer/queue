@@ -17,13 +17,17 @@
 
 @property (strong, nonatomic) UITableView *tableView;
 @property (nonatomic) NSMutableArray *contactsArray;
-@property (strong, nonatomic) Contact * selectedContact;
+@property (strong, nonatomic) NSIndexPath * selectedIndexPath;
+@property (strong, nonatomic) TimelineViewController *timeline;
 
 @property BOOL isScrollingToNewContact;
+@property BOOL isTimelineExpanded;
 
 @end
 
 @implementation QueueViewController
+
+static CGFloat contactRowHeight = 72.0f;
 
 # pragma mark - Initialization Methods
 
@@ -109,7 +113,7 @@
     return NO;
 }
 
-#pragma mark - Meeting Management Methods
+#pragma mark - Contact Management Methods
 
 // -------------------------------------------------------------
 // Animate the repositioning of a contact
@@ -118,28 +122,28 @@
 - (void)repositionSelectedContact
 {
     // Get the contact's current queue position
-    NSInteger oldRow = [self.contactsArray indexOfObject:self.selectedContact];
-    NSIndexPath *oldPosition = [NSIndexPath indexPathForRow:oldRow inSection:0];
+//    NSInteger oldRow = [self.contactsArray indexOfObject:self.selectedContact];
+//    NSIndexPath *oldPosition = [NSIndexPath indexPathForRow:oldRow inSection:0];
+    NSIndexPath *oldPosition = self.selectedIndexPath;
+    Contact *contact = [self.contactsArray objectAtIndex:self.selectedIndexPath.row];
     
     // Update the contacts array
     [self updateContactsArrayWithTableReload:NO];
     
     // Get the contact's new position
-    NSInteger newRow = [self.contactsArray indexOfObject:self.selectedContact];
+    NSInteger newRow = [self.contactsArray indexOfObject:contact];
     NSIndexPath *newPosition = [NSIndexPath indexPathForRow:newRow inSection:0];
     
     // Animate the position change
-    if (oldRow != newRow) {
+    if (oldPosition.row != newRow) {
         [self sendContactToNewPosition:newPosition fromOldPosition:oldPosition animated:YES];
     } else {
         [self sendContactToNewPosition:newPosition fromOldPosition:oldPosition animated:NO];
     }
 }
 
-# pragma mark - Queue Display Methods
-
 - (void)insertRowAtIndexPath:(NSIndexPath *)indexPath
-{    
+{
     // Only perform this animation once the view has scrolled to the new contact
     // This method will continue to call itself every few milliseconds until
     // the view has finished scrolling
@@ -150,17 +154,12 @@
     else
         scrollToIndexPath = indexPath;
     
-    if (![self.tableView.indexPathsForVisibleRows containsObject:scrollToIndexPath])
-    {
-        self.isScrollingToNewContact = YES;
-        [self.tableView scrollToRowAtIndexPath:scrollToIndexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
-    }
+    [self.tableView scrollToRowAtIndexPath:scrollToIndexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
     
-    
-    if (self.isScrollingToNewContact)
-        [self performSelector:@selector(insertRowAtIndexPath:) withObject:indexPath afterDelay:50];
-    else
+    if ([self.tableView.indexPathsForVisibleRows containsObject:scrollToIndexPath])
         [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+    else
+        [self performSelector:@selector(insertRowAtIndexPath:) withObject:scrollToIndexPath afterDelay:50];
 }
 
 - (void)updateContactsArrayWithTableReload:(BOOL)shouldReload
@@ -186,17 +185,26 @@
     
 }
 
+# pragma mark - Queue Display Methods
+
 // --------------------------------------------------------
 // Understand when the table view has stopped scrolling
 // to a just-added contact so the new row will be
 // in view when it is inserted
 // --------------------------------------------------------
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+//{
+//    if (self.isScrollingToNewContact)
+//    {
+//        self.isScrollingToNewContact = NO;
+//    }
+//}
+
+- (NSIndexPath *)timelineIndexPath
 {
-    if (self.isScrollingToNewContact)
-    {
-        self.isScrollingToNewContact = NO;
-    }
+
+    return [NSIndexPath indexPathForRow:self.selectedIndexPath.row + 1 inSection:0];
+
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -206,15 +214,38 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (self.selectedIndexPath)
+        return [self.contactsArray count] + 1;
     return [self.contactsArray count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    // Return a special timeline cell if the timeline is expanded and we're
+    // one row beneath the selected cell
+    if (self.selectedIndexPath && [indexPath isEqual:[self timelineIndexPath]])
+    {
+        static NSString *TimelineRowIdentifier = @"TimelineRowIdentifier";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:TimelineRowIdentifier];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TimelineRowIdentifier];
+        }
+        
+        TimelineViewController *timelineView = [[TimelineViewController alloc] initWithContact:[self.contactsArray objectAtIndex:indexPath.row - 1]];
+        timelineView.view.frame = cell.bounds;
+        timelineView.managedObjectContext = self.managedObjectContext;
+        self.timeline = timelineView;
+        [cell addSubview:timelineView.view];
+        return cell;
+    }
+    
+    // Otherwise, just return a normal contact cell
     static NSString *ContactRowIdentifier = @"ContactRowIdentifier";
     QueueContactCell *cell = [tableView dequeueReusableCellWithIdentifier:ContactRowIdentifier];
     if (cell == nil) {
         cell = [[QueueContactCell alloc] initWithReuseIdentifier:ContactRowIdentifier];
     }
+
     
     [cell configureWithContact:[self.contactsArray objectAtIndex:indexPath.row]];
     
@@ -223,20 +254,33 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 72.0f;
+    if (self.selectedIndexPath && [indexPath isEqual:[self timelineIndexPath]])
+        return self.tableView.frame.size.height - contactRowHeight;
+    return contactRowHeight;
 }
 
 # pragma mark - Queue Row Selection Methods
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{    
-    TimelineViewController *timelineView = [[TimelineViewController alloc] initWithContact:[self.contactsArray objectAtIndex:indexPath.row]];
-    timelineView.managedObjectContext = self.managedObjectContext;
-    timelineView.title = [NSString stringWithFormat:@"Meetings"];
-    [self.navigationController pushViewController:timelineView animated:YES];
+{        
+    if ([self.selectedIndexPath isEqual:indexPath])
+    {
+        // Contract the cell to hide the timeline
+        self.tableView.scrollEnabled = YES;
+        NSIndexPath *timelineIndexPath = [self timelineIndexPath];
+        self.selectedIndexPath = nil;
+        [tableView deleteRowsAtIndexPaths:@[timelineIndexPath] withRowAnimation:UITableViewRowAnimationTop];
+    }
     
-    self.selectedContact = [self.contactsArray objectAtIndex:indexPath.row];
-    
+    else
+    {
+        // Expand the height of the selected cell to expose enough room for the timeline
+        self.selectedIndexPath = indexPath;
+        self.tableView.scrollEnabled = NO;
+        NSIndexPath *timelineIndexPath = [self timelineIndexPath];
+        [tableView insertRowsAtIndexPaths:@[timelineIndexPath] withRowAnimation:UITableViewRowAnimationTop];
+        [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
@@ -292,11 +336,11 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     // See whether we need to reposition the contact we were just viewing
-    if (self.selectedContact)
-    {
-        [self repositionSelectedContact];
-    }
-    self.selectedContact = nil;
+//    if (self.selectedIndexPath)
+//    {
+//        [self repositionSelectedContact];
+//    }
+//    self.selectedIndexPath = nil;
 
 }
 
