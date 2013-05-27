@@ -15,7 +15,6 @@
 
 @interface QueueViewController ()
 
-@property (strong, nonatomic) UITableView *tableView;
 @property (nonatomic) NSMutableArray *contactsArray;
 @property (strong, nonatomic) NSIndexPath * selectedIndexPath;
 @property (strong, nonatomic) TimelineViewController *timeline;
@@ -116,6 +115,15 @@ static CGFloat contactRowHeight = 72.0f;
 #pragma mark - Contact Management Methods
 
 // -------------------------------------------------------------
+// Update a contact row
+// after a meeting is created or updated
+// -------------------------------------------------------------
+- (void)timelineViewController:(TimelineViewController *)timelineViewController didUpdateContact:(Contact *)contact withMeeting:(Meeting *)meeting
+{
+    [self.tableView reloadRowsAtIndexPaths:@[self.selectedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+// -------------------------------------------------------------
 // Animate the repositioning of a contact
 // after a meeting is created
 // -------------------------------------------------------------
@@ -133,6 +141,8 @@ static CGFloat contactRowHeight = 72.0f;
     // Get the contact's new position
     NSInteger newRow = [self.contactsArray indexOfObject:contact];
     NSIndexPath *newPosition = [NSIndexPath indexPathForRow:newRow inSection:0];
+    
+    self.selectedIndexPath = nil;
     
     // Animate the position change
     if (oldPosition.row != newRow) {
@@ -154,12 +164,20 @@ static CGFloat contactRowHeight = 72.0f;
     else
         scrollToIndexPath = indexPath;
     
-    [self.tableView scrollToRowAtIndexPath:scrollToIndexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
-    
-    if ([self.tableView.indexPathsForVisibleRows containsObject:scrollToIndexPath])
-        [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+    if ([self.contactsArray count] > 1)
+    {
+        [self.tableView scrollToRowAtIndexPath:scrollToIndexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+        
+        if ([self.tableView.indexPathsForVisibleRows containsObject:scrollToIndexPath])
+            [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+        else
+            [self performSelector:@selector(insertRowAtIndexPath:) withObject:scrollToIndexPath afterDelay:50];
+    }
     else
-        [self performSelector:@selector(insertRowAtIndexPath:) withObject:scrollToIndexPath afterDelay:50];
+    {
+        [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+    }
+
 }
 
 - (void)updateContactsArrayWithTableReload:(BOOL)shouldReload
@@ -214,7 +232,7 @@ static CGFloat contactRowHeight = 72.0f;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (self.selectedIndexPath)
+    if (self.isTimelineExpanded)
         return [self.contactsArray count] + 1;
     return [self.contactsArray count];
 }
@@ -223,7 +241,7 @@ static CGFloat contactRowHeight = 72.0f;
     
     // Return a special timeline cell if the timeline is expanded and we're
     // one row beneath the selected cell
-    if (self.selectedIndexPath && [indexPath isEqual:[self timelineIndexPath]])
+    if (self.isTimelineExpanded && [indexPath isEqual:[self timelineIndexPath]])
     {
         static NSString *TimelineRowIdentifier = @"TimelineRowIdentifier";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:TimelineRowIdentifier];
@@ -235,6 +253,7 @@ static CGFloat contactRowHeight = 72.0f;
         timelineView.view.frame = cell.bounds;
         timelineView.managedObjectContext = self.managedObjectContext;
         timelineView.queueViewController = self;
+        timelineView.delegate = self;
         self.timeline = timelineView;
         [cell addSubview:timelineView.view];
         return cell;
@@ -255,7 +274,7 @@ static CGFloat contactRowHeight = 72.0f;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.selectedIndexPath && [indexPath isEqual:[self timelineIndexPath]])
+    if (self.isTimelineExpanded && [indexPath isEqual:[self timelineIndexPath]])
         return self.tableView.frame.size.height - contactRowHeight;
     return contactRowHeight;
 }
@@ -267,15 +286,18 @@ static CGFloat contactRowHeight = 72.0f;
     if ([self.selectedIndexPath isEqual:indexPath])
     {
         // Contract the cell to hide the timeline
-        self.tableView.scrollEnabled = YES;
+        self.isTimelineExpanded = NO;
         NSIndexPath *timelineIndexPath = [self timelineIndexPath];
-        self.selectedIndexPath = nil;
         [tableView deleteRowsAtIndexPaths:@[timelineIndexPath] withRowAnimation:UITableViewRowAnimationTop];
+        self.tableView.scrollEnabled = YES;
+        [self performSelector:@selector(repositionSelectedContact) withObject:nil afterDelay:0.4];
+//        [self repositionSelectedContact];
     }
     
     else
     {
         // Expand the height of the selected cell to expose enough room for the timeline
+        self.isTimelineExpanded = YES;
         self.selectedIndexPath = indexPath;
         self.tableView.scrollEnabled = NO;
         NSIndexPath *timelineIndexPath = [self timelineIndexPath];
@@ -336,12 +358,6 @@ static CGFloat contactRowHeight = 72.0f;
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    // See whether we need to reposition the contact we were just viewing
-//    if (self.selectedIndexPath)
-//    {
-//        [self repositionSelectedContact];
-//    }
-//    self.selectedIndexPath = nil;
 
 }
 

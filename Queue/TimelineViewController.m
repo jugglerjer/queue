@@ -61,6 +61,11 @@
     
     // Animate the position change
     [self addNewMeeting:meeting withRow:row animated:YES];
+    
+    // Update the contact's queue cell
+    if ([self.delegate respondsToSelector:@selector(timelineViewController:didUpdateContact:withMeeting:)]) {
+        [self.delegate timelineViewController:self didUpdateContact:contact withMeeting:meeting];
+    }
 }
 
 - (void)addMeetingViewController:(AddMeetingViewController *)addMeetingViewController
@@ -81,6 +86,11 @@
         [self updateMeeting:meeting toNewRow:newRow fromOldRow:oldRow animated:YES];
     } else {
         [self updateMeeting:meeting toNewRow:newRow fromOldRow:oldRow animated:NO];
+    }
+    
+    // Update the contact's queue cell
+    if ([self.delegate respondsToSelector:@selector(timelineViewController:didUpdateContact:withMeeting:)]) {
+        [self.delegate timelineViewController:self didUpdateContact:contact withMeeting:meeting];
     }
 }
 
@@ -173,52 +183,22 @@
     Meeting *meeting = [self.meetingsArray objectAtIndex:indexPath.row];
     [cell configureWithMeeting:meeting];
     
-    UIView *topLine = [[UIView alloc] initWithFrame:CGRectMake(0,
-                                                               0,
-                                                               cell.bounds.size.width,
-                                                               0.5)];
-    topLine.backgroundColor = [UIColor whiteColor];
-    topLine.alpha = 0.2;
-    [cell addSubview:topLine];
+    CGRect lineFrame = CGRectMake(0,0,cell.bounds.size.width, 0.5);
     
-    UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0,
-                                                                  [self tableView:tableView heightForRowAtIndexPath:indexPath] - 0.5,
-                                                                  cell.bounds.size.width,
-                                                                  0.5)];
-    bottomLine.backgroundColor = [UIColor blackColor];
-    bottomLine.alpha = 0.1;
-    [cell addSubview:bottomLine];
+    lineFrame.origin.y = [self tableView:tableView heightForRowAtIndexPath:indexPath] - 0.5;
+    cell.bottomLine.frame = lineFrame;
     
     if (indexPath.row == 0)
     {
-        UIView *tableTopLine = [[UIView alloc] initWithFrame:CGRectMake(0, -0.5, cell.bounds.size.width, 0.5)];
-        tableTopLine.backgroundColor = [UIColor blackColor];
-        tableTopLine.alpha = 0.1;
-        [cell addSubview:tableTopLine];
+        lineFrame.origin.y = -0.5;
+        cell.tableTopLine.frame = lineFrame;
     }
     
     if (indexPath.row == [self.meetingsArray count] - 1)
     {
-        UIView *tableBottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, [self tableView:tableView heightForRowAtIndexPath:indexPath] + 0.5, cell.bounds.size.width, 0.5)];
-        tableBottomLine.backgroundColor = [UIColor whiteColor];
-        tableBottomLine.alpha = 0.2;
-        [cell addSubview:bottomLine];
+        lineFrame.origin.y = [self tableView:tableView heightForRowAtIndexPath:indexPath];
+        cell.tableBottomLine.frame = lineFrame;
     }
-    
-//    if (indexPath.row == kDateRow)
-//    {
-//        NSDateFormatter *meetingDateFormatter = [[NSDateFormatter alloc] init];
-//        [meetingDateFormatter setDateFormat:@"MMMM d, y"];
-//        cell.textLabel.text = [meetingDateFormatter stringFromDate:meeting.date];
-//    }
-//    
-//    else if (indexPath.row == kNoteRow)
-//    {
-//        cell.textLabel.text = meeting.note;
-//    }
-    
-    
-
     return cell;
 }
 

@@ -155,6 +155,19 @@ static CGFloat dateCellHeight = 44;
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:AddMeetingCellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:AddMeetingCellIdentifier];
+        
+        if (indexPath.row == kNoteCellRow)
+        {
+            UITextView *noteView = [[UITextView alloc] initWithFrame:CGRectMake(cell.frame.origin.x  + cellPadding,
+                                                                                cell.frame.origin.y + cellPadding,
+                                                                                cell.frame.size.width - (2*cellPadding),
+                                                                                [self heightForNoteCellRowInTableView:tableView] - (2*cellPadding))];
+            noteView.backgroundColor = [UIColor clearColor];
+            noteView.text = self.meeting.note;
+            noteView.delegate = self;
+            self.textView = noteView;
+            [cell addSubview:self.textView];
+        }
     }
     
     if (indexPath.row == kDateCellRow)
@@ -166,15 +179,7 @@ static CGFloat dateCellHeight = 44;
     }
     else if (indexPath.row == kNoteCellRow)
     {
-        UITextView *noteView = [[UITextView alloc] initWithFrame:CGRectMake(cell.frame.origin.x  + cellPadding,
-                                                                            cell.frame.origin.y + cellPadding,
-                                                                            cell.frame.size.width - (2*cellPadding),
-                                                                            [self heightForNoteCellRowInTableView:tableView] - (2*cellPadding))];
-        noteView.backgroundColor = [UIColor clearColor];
-        noteView.text = self.meeting.note;
-        noteView.delegate = self;
-        self.textView = noteView;
-        [cell addSubview:self.textView];
+        self.textView.text = self.meeting.note;
     }
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;

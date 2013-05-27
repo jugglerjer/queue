@@ -14,6 +14,11 @@
 @property (strong, nonatomic) UILabel *noteLabel;
 @property (strong, nonatomic) UILabel *dateLabel;
 
+@property (strong, nonatomic) UIView *topLine;
+@property (strong, nonatomic) UIView *bottomLine;
+@property (strong, nonatomic) UIView *tableTopLine;
+@property (strong, nonatomic) UIView *tableBottomLine;
+
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
 - (void)configureWithMeeting:(Meeting *)meeting;
 

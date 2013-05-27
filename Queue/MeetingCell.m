@@ -49,6 +49,32 @@
         self.noteLabel = noteLabel;
         [self addSubview:self.noteLabel];
         
+        CGRect lineFrame = CGRectMake(0,0,self.bounds.size.width, 0.5);
+
+        UIView *topLine = [[UIView alloc] initWithFrame:lineFrame];
+        topLine.backgroundColor = [UIColor whiteColor];
+        topLine.alpha = 0.2;
+        self.topLine = topLine;
+        [self addSubview:self.topLine];
+        
+        UIView *bottomLine = [[UIView alloc] initWithFrame:lineFrame];
+        bottomLine.backgroundColor = [UIColor blackColor];
+        bottomLine.alpha = 0.1;
+        self.bottomLine = bottomLine;
+        [self addSubview:self.bottomLine];
+        
+        UIView *tableTopLine = [[UIView alloc] initWithFrame:lineFrame];
+        topLine.backgroundColor = [UIColor blackColor];
+        topLine.alpha = 0.1;
+        self.tableTopLine = tableTopLine;
+        [self addSubview:self.topLine];
+        
+        UIView *tableBottomLine = [[UIView alloc] initWithFrame:lineFrame];
+        bottomLine.backgroundColor = [UIColor whiteColor];
+        bottomLine.alpha = 0.2;
+        self.tableBottomLine = tableBottomLine;
+        [self addSubview:self.bottomLine];
+        
         self.selectionStyle = UITableViewCellSelectionStyleNone;
 
     }
