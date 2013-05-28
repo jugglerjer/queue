@@ -17,7 +17,8 @@
     if (self)
     {        
         // Background View
-        self.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"queue-row-background.png"]];
+        UIImageView *backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"queue-row-background.png"]];
+        [self addSubview:backgroundView];
         
         // TODO Contact Photo
         UIImageView *contactImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"contact-avatar-placeholder.png"]];
@@ -64,6 +65,8 @@
         [self addSubview:self.unitsLabel];
         [self addSubview:self.statusLabel];
         [self addSubview:self.dueLabel];
+        
+        self.selectionStyle = UITableViewCellEditingStyleNone;
     }
     return self;
 }
