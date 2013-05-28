@@ -17,10 +17,23 @@
 #define kDateRow    0
 #define kNoteRow    1
 
+#define TIMELINE_MARGIN_LEFT    36
+#define TIMELINE_WIDTH          2
+
+#define BUTTON_MARGIN_RIGHT     11
+#define BUTTON_MARGIN_BOTTOM    11
+#define BUTTON_HEIGHT           44
+#define BUTTON_WIDTH            44
+
+#define TOOLBELT_HEIGHT         56
+#define TOOLBELT_BUMP_DISTANCE  10
+
 @interface TimelineViewController ()
 
 @property (strong, nonatomic) UITableView * tableView;
 @property (strong, nonatomic) NSMutableArray * meetingsArray;
+@property (strong, nonatomic) UIButton *arrowButton;
+@property (strong, nonatomic) UIImageView *toolBelt;
 
 @end
 
@@ -46,6 +59,100 @@
     UINavigationController *navContoller = [[UINavigationController alloc] initWithRootViewController:addMeetingController];
     [self.queueViewController.navigationController presentViewController:navContoller animated:YES completion:nil];
 }
+
+- (void)snoozeContact
+{
+    
+}
+
+- (void)showSettings
+{
+    
+}
+
+- (void)contactContact
+{
+    
+}
+
+- (void)deleteContact
+{
+    
+}
+
+// -------------------------------------------------------------
+// Animate the display of the toolbelt when the arrow
+// button is pressed.
+// -------------------------------------------------------------
+- (void)showToolbelt
+{    
+    // Animate the toolbelt into position    
+//    CGFloat totalDistance = self.view.frame.size.width - (BUTTON_MARGIN_RIGHT * 2) + (TOOLBELT_BUMP_DISTANCE * 2);
+//    CGFloat initialDistancePortion = (self.view.frame.size.width - (BUTTON_MARGIN_RIGHT * 2) + TOOLBELT_BUMP_DISTANCE) / totalDistance;
+//    CGFloat bumpDistancePortion = TOOLBELT_BUMP_DISTANCE / totalDistance;
+//    
+//    CGFloat totalDuration = 0.2;
+    CGFloat initialDuration = /*initialDistancePortion * totalDuration*/0.2;
+    CGFloat bumpDuration = /*bumpDistancePortion * totalDuration*/0.1;
+    [UIView animateWithDuration:initialDuration
+                     animations:^{
+                         
+                         // Expand the toolbelt
+                         CGRect newFrame = self.toolBelt.frame;
+                         newFrame.origin.x = BUTTON_MARGIN_RIGHT - TOOLBELT_BUMP_DISTANCE;
+                         newFrame.size.width = self.view.frame.size.width - (BUTTON_MARGIN_RIGHT * 2) + TOOLBELT_BUMP_DISTANCE;
+                         self.toolBelt.frame = newFrame;
+                         
+                         // Rotate the expand button
+                         CGAffineTransform transform = CGAffineTransformMakeRotation(M_PI);
+                         self.arrowButton.transform = transform;
+                         
+                         self.arrowButton.alpha = 0;
+                         self.toolBelt.alpha = 1;
+                         
+                     }
+                     completion:^(BOOL finished){
+                         [UIView animateWithDuration:bumpDuration
+                                          animations:^{
+                                              CGRect newFrame = self.toolBelt.frame;
+                                              newFrame.origin.x = BUTTON_MARGIN_RIGHT;
+                                              newFrame.size.width = self.view.frame.size.width - (BUTTON_MARGIN_RIGHT * 2);
+                                              self.toolBelt.frame = newFrame;
+                                          }
+                                          completion:nil];
+                     }
+     ];
+    
+    // Animate the buttons on the toolbelt
+    
+}
+
+- (void)hideToolbelt
+{
+    CGFloat initialDuration = /*initialDistancePortion * totalDuration*/0.2;
+//    CGFloat bumpDuration = /*bumpDistancePortion * totalDuration*/0.1;
+    [UIView animateWithDuration:initialDuration
+                     animations:^{
+                         
+                         // Contract the toolbelt
+                         CGRect newFrame = self.toolBelt.frame;
+                         newFrame.origin.x = self.view.frame.size.width - BUTTON_WIDTH - BUTTON_MARGIN_RIGHT;
+                         newFrame.size.width = BUTTON_WIDTH;
+                         self.toolBelt.frame = newFrame;
+
+                         
+                         // Rotate the expand button
+                         CGAffineTransform transform = CGAffineTransformMakeRotation(0);
+                         self.arrowButton.transform = transform;
+                         
+                         self.arrowButton.alpha = 1;
+                         self.toolBelt.alpha = 0;
+                         
+                     }
+                     completion:nil];
+
+}
+
 
 // -------------------------------------------------------------
 // Animate the addition of a meeting
@@ -100,14 +207,6 @@
     if (shouldReload) [self.tableView reloadData];
 }
 
-#define TIMELINE_MARGIN_LEFT    36
-#define TIMELINE_WIDTH          2
-
-#define BUTTON_MARGIN_RIGHT     11
-#define BUTTON_MARGIN_BOTTOM    11
-#define BUTTON_HEIGHT           44
-#define BUTTON_WIDTH            44
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -129,15 +228,58 @@
     timeline.alpha = 0.2;
     [self.view addSubview:timeline];
     
+    
+    // Add floating buttons
     CGFloat buttonTopMargin = self.view.frame.size.height - self.queueViewController.navigationController.navigationBar.frame.size.height - [self.queueViewController tableView:self.queueViewController.tableView heightForRowAtIndexPath:self.queueViewController.selectedIndexPath];
+    
     UIButton *addButton = [UIButton buttonWithType:UIButtonTypeCustom];
     addButton.frame = CGRectMake(self.view.frame.size.width - BUTTON_WIDTH - BUTTON_MARGIN_RIGHT,
                                  buttonTopMargin - BUTTON_HEIGHT - BUTTON_MARGIN_BOTTOM,
                                  BUTTON_WIDTH,
                                  BUTTON_HEIGHT);
     [addButton setImage:[UIImage imageNamed:@"expand-button.png"] forState:UIControlStateNormal];
-    [addButton addTarget:self action:@selector(addMeeting) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:addButton];
+    [addButton addTarget:self action:@selector(showToolbelt) forControlEvents:UIControlEventTouchUpInside];
+    self.arrowButton = addButton;
+    
+    UIImage *toolbeltImage = [[UIImage imageNamed:@"expanded-button.png"] stretchableImageWithLeftCapWidth:21 topCapHeight:21];
+    UIImageView *toolbelt = [[UIImageView alloc] initWithImage:toolbeltImage];
+    CGRect frame = self.arrowButton.frame;
+    frame.size.height = TOOLBELT_HEIGHT;
+    frame.origin.y = self.arrowButton.frame.origin.y - (TOOLBELT_HEIGHT - BUTTON_HEIGHT) / 2;
+    toolbelt.frame = frame;
+    toolbelt.userInteractionEnabled = YES;
+    self.toolBelt = toolbelt;
+    self.toolBelt.alpha = 0;
+    
+    // Add toolbelt buttons
+    NSArray *buttonsArray = @[@"delete-button.png", @"email-button.png", @"settings-button.png", @"snooze-button.png", @"add-meeting-button.png", @"contract-button.png"];
+    NSArray *buttonSelectorsArray = @[@"deleteContact", @"contactContact", @"showSettings", @"snoozeContact", @"addMeeting", @"hideToolbelt"];
+    CGRect buttonFrame = CGRectMake(0, (TOOLBELT_HEIGHT - BUTTON_HEIGHT) / 2, BUTTON_WIDTH, BUTTON_HEIGHT);
+    CGFloat space = ((self.view.frame.size.width - (BUTTON_MARGIN_RIGHT * 2)) - ([buttonsArray count] * BUTTON_WIDTH)) / ([buttonsArray count] - 1);
+    UIButton *toolbeltButton;
+    for (int i = 0; i < [buttonsArray count]; i++)
+    {
+        buttonFrame.origin.x = i * BUTTON_WIDTH + i * space;
+        toolbeltButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        toolbeltButton.frame = buttonFrame;
+        [toolbeltButton setImage:[UIImage imageNamed:[buttonsArray objectAtIndex:i]] forState:UIControlStateNormal];
+        toolbeltButton.contentMode = UIViewContentModeCenter;
+        [toolbeltButton addTarget:self action:NSSelectorFromString([buttonSelectorsArray objectAtIndex:i]) forControlEvents:UIControlEventTouchUpInside];
+        toolbeltButton.showsTouchWhenHighlighted = YES;
+        [self.toolBelt addSubview:toolbeltButton];
+    }
+    
+//    UIButton *contractButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    contractButton.frame = CGRectMake(self.toolBelt.frame.size.width - BUTTON_WIDTH,
+//                                      (TOOLBELT_HEIGHT - BUTTON_HEIGHT)/2,
+//                                      self.arrowButton.frame.size.width,
+//                                      self.arrowButton.frame.size.height);
+//    [contractButton setImage:[UIImage imageNamed:@"contract-button.png"] forState:UIControlStateNormal];
+//    contractButton.contentMode = UIViewContentModeCenter;
+//    [self.toolBelt addSubview:contractButton];
+    
+    [self.view addSubview:self.toolBelt];
+    [self.view addSubview:self.arrowButton];
     
     
     UIImage *innerShadow = [[UIImage imageNamed:@"timeline-inner-shadow.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:5];

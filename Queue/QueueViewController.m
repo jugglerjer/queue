@@ -17,6 +17,7 @@
 
 @property (nonatomic) NSMutableArray *contactsArray;
 @property (strong, nonatomic) TimelineViewController *timeline;
+@property (strong, nonatomic) QueueBarButtonItem *addButton;
 
 @property BOOL isScrollingToNewContact;
 @property BOOL isTimelineExpanded;
@@ -256,6 +257,7 @@ static CGFloat contactRowHeight = 72.0f;
         [cell addSubview:timelineView.view];
         self.timeline.view.frame = cell.bounds;
         cell.clipsToBounds = YES;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
     
@@ -281,6 +283,13 @@ static CGFloat contactRowHeight = 72.0f;
 
 # pragma mark - Queue Row Selection Methods
 
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.isTimelineExpanded && [indexPath isEqual:[self timelineIndexPath]])
+        return nil;
+    return indexPath;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {        
     if ([self.selectedIndexPath isEqual:indexPath])
@@ -292,6 +301,7 @@ static CGFloat contactRowHeight = 72.0f;
         self.tableView.scrollEnabled = YES;
         [self performSelector:@selector(repositionSelectedContact) withObject:nil afterDelay:0.4];
         [self.timeline.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.4];
+        [self.addButton setEnabled:YES];
 //        self.timeline = nil;
     }
     
@@ -304,6 +314,7 @@ static CGFloat contactRowHeight = 72.0f;
         NSIndexPath *timelineIndexPath = [self timelineIndexPath];
         [tableView insertRowsAtIndexPaths:@[timelineIndexPath] withRowAnimation:UITableViewRowAnimationTop];
         [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        [self.addButton setEnabled:NO];
     }
 }
 
@@ -334,7 +345,8 @@ static CGFloat contactRowHeight = 72.0f;
     
     // Add the add contact button to the right side of the nav bar
     QueueBarButtonItem *addContactButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeAdd target:self action:@selector(importContact)];
-    self.navigationItem.rightBarButtonItem = addContactButton;
+    self.addButton = addContactButton;
+    self.navigationItem.rightBarButtonItem = self.addButton;
     
     QueueBarButtonItem *backButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeBack target:self action:@selector(back)];
     self.navigationItem.leftBarButtonItem = backButton;
