@@ -124,6 +124,22 @@ static CGFloat contactRowHeight = 72.0f;
 }
 
 // -------------------------------------------------------------
+// Delete a contact once the user confirms their removal
+// -------------------------------------------------------------
+- (void)timelineViewController:(TimelineViewController *)timelineViewController shouldDeleteContact:(Contact *)contact
+{
+    [self.queue removeContactsObject:contact];
+    NSError *error = nil;
+    if (![self.managedObjectContext save:&error]) {
+        // Handle the error.
+    } else {
+        [self hideTimelineWithContactReposition:NO];
+        [self performSelector:@selector(updateContactsArrayWithTableReload:) withObject:NO afterDelay:0.4];
+        [self performSelector:@selector(deleteRowAtIndexPath:) withObject:self.selectedIndexPath afterDelay:0.4];
+    }
+}
+
+// -------------------------------------------------------------
 // Animate the repositioning of a contact
 // after a meeting is created
 // -------------------------------------------------------------
@@ -178,6 +194,16 @@ static CGFloat contactRowHeight = 72.0f;
         [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
     }
 
+}
+
+- (void)deleteRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
+}
+
+- (void)scrollToNearestRowForIndexPath:(NSIndexPath *)indexPath
+{
+    
 }
 
 - (void)updateContactsArrayWithTableReload:(BOOL)shouldReload
@@ -292,30 +318,41 @@ static CGFloat contactRowHeight = 72.0f;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {        
-    if ([self.selectedIndexPath isEqual:indexPath])
+    if (self.isTimelineExpanded && [self.selectedIndexPath isEqual:indexPath])
     {
-        // Contract the cell to hide the timeline
-        self.isTimelineExpanded = NO;
-        NSIndexPath *timelineIndexPath = [self timelineIndexPath];
-        [tableView deleteRowsAtIndexPaths:@[timelineIndexPath] withRowAnimation:UITableViewRowAnimationTop];
-        self.tableView.scrollEnabled = YES;
-        [self performSelector:@selector(repositionSelectedContact) withObject:nil afterDelay:0.4];
-        [self.timeline.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.4];
-        [self.addButton setEnabled:YES];
-//        self.timeline = nil;
+        [self hideTimelineWithContactReposition:YES];
     }
-    
     else
     {
-        // Expand the height of the selected cell to expose enough room for the timeline
-        self.isTimelineExpanded = YES;
-        self.selectedIndexPath = indexPath;
-        self.tableView.scrollEnabled = NO;
-        NSIndexPath *timelineIndexPath = [self timelineIndexPath];
-        [tableView insertRowsAtIndexPaths:@[timelineIndexPath] withRowAnimation:UITableViewRowAnimationTop];
-        [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
-        [self.addButton setEnabled:NO];
+        [self showTimelineWithIndexPath:indexPath];
     }
+}
+
+- (void)showTimelineWithIndexPath:(NSIndexPath *)indexPath
+{
+    // Expand the height of the selected cell to expose enough room for the timeline
+    self.isTimelineExpanded = YES;
+    self.selectedIndexPath = indexPath;
+    self.tableView.scrollEnabled = NO;
+    NSIndexPath *timelineIndexPath = [self timelineIndexPath];
+    [self.tableView insertRowsAtIndexPaths:@[timelineIndexPath] withRowAnimation:UITableViewRowAnimationTop];
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    [self.addButton setEnabled:NO];
+}
+
+- (void)hideTimelineWithContactReposition:(BOOL)reposition
+{
+    // Contract the cell to hide the timeline
+    self.isTimelineExpanded = NO;
+    NSIndexPath *timelineIndexPath = [self timelineIndexPath];
+    [self.tableView deleteRowsAtIndexPaths:@[timelineIndexPath] withRowAnimation:UITableViewRowAnimationTop];
+    self.tableView.scrollEnabled = YES;
+    
+    if (reposition)
+        [self performSelector:@selector(repositionSelectedContact) withObject:nil afterDelay:0.4];
+    
+    [self.timeline.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.4];
+    [self.addButton setEnabled:YES];
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath

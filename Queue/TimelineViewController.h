@@ -31,6 +31,6 @@
               didUpdateContact:(Contact *)contact
                    withMeeting:(Meeting *)meeting;
 
-- (void)timelineViewController:(TimelineViewController *)timelineViewController didDeleteContact:(Contact *)contact;
+- (void)timelineViewController:(TimelineViewController *)timelineViewController shouldDeleteContact:(Contact *)contact;
 
 @end

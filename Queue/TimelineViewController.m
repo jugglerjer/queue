@@ -77,7 +77,10 @@
 
 - (void)deleteContact
 {
-    
+    if ([_delegate respondsToSelector:@selector(timelineViewController:shouldDeleteContact:)])
+    {
+        [_delegate timelineViewController:self shouldDeleteContact:self.contact];
+    }
 }
 
 // -------------------------------------------------------------
@@ -266,6 +269,10 @@
         toolbeltButton.contentMode = UIViewContentModeCenter;
         [toolbeltButton addTarget:self action:NSSelectorFromString([buttonSelectorsArray objectAtIndex:i]) forControlEvents:UIControlEventTouchUpInside];
         toolbeltButton.showsTouchWhenHighlighted = YES;
+        
+        if (i == 1 || i == 2 || i == 3)
+            [toolbeltButton setEnabled:NO];
+        
         [self.toolBelt addSubview:toolbeltButton];
     }
     
