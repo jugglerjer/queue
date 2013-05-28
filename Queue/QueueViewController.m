@@ -16,7 +16,6 @@
 @interface QueueViewController ()
 
 @property (nonatomic) NSMutableArray *contactsArray;
-@property (strong, nonatomic) NSIndexPath * selectedIndexPath;
 @property (strong, nonatomic) TimelineViewController *timeline;
 
 @property BOOL isScrollingToNewContact;
@@ -250,12 +249,13 @@ static CGFloat contactRowHeight = 72.0f;
         }
         
         TimelineViewController *timelineView = [[TimelineViewController alloc] initWithContact:[self.contactsArray objectAtIndex:indexPath.row - 1]];
-        timelineView.view.frame = cell.bounds;
         timelineView.managedObjectContext = self.managedObjectContext;
         timelineView.queueViewController = self;
         timelineView.delegate = self;
         self.timeline = timelineView;
         [cell addSubview:timelineView.view];
+        self.timeline.view.frame = cell.bounds;
+        cell.clipsToBounds = YES;
         return cell;
     }
     
@@ -291,7 +291,8 @@ static CGFloat contactRowHeight = 72.0f;
         [tableView deleteRowsAtIndexPaths:@[timelineIndexPath] withRowAnimation:UITableViewRowAnimationTop];
         self.tableView.scrollEnabled = YES;
         [self performSelector:@selector(repositionSelectedContact) withObject:nil afterDelay:0.4];
-//        [self repositionSelectedContact];
+        [self.timeline.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.4];
+//        self.timeline = nil;
     }
     
     else

@@ -44,7 +44,7 @@
     addMeetingController.delegate = self;
     addMeetingController.editMeetingType = QueueEditMeetingTypeAdd;
     UINavigationController *navContoller = [[UINavigationController alloc] initWithRootViewController:addMeetingController];
-    [self.navigationController presentViewController:navContoller animated:YES completion:nil];
+    [self.queueViewController.navigationController presentViewController:navContoller animated:YES completion:nil];
 }
 
 // -------------------------------------------------------------
@@ -103,6 +103,11 @@
 #define TIMELINE_MARGIN_LEFT    36
 #define TIMELINE_WIDTH          2
 
+#define BUTTON_MARGIN_RIGHT     11
+#define BUTTON_MARGIN_BOTTOM    11
+#define BUTTON_HEIGHT           44
+#define BUTTON_WIDTH            44
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -123,6 +128,17 @@
     timeline.backgroundColor = [UIColor blackColor];
     timeline.alpha = 0.2;
     [self.view addSubview:timeline];
+    
+    CGFloat buttonTopMargin = self.view.frame.size.height - self.queueViewController.navigationController.navigationBar.frame.size.height - [self.queueViewController tableView:self.queueViewController.tableView heightForRowAtIndexPath:self.queueViewController.selectedIndexPath];
+    UIButton *addButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    addButton.frame = CGRectMake(self.view.frame.size.width - BUTTON_WIDTH - BUTTON_MARGIN_RIGHT,
+                                 buttonTopMargin - BUTTON_HEIGHT - BUTTON_MARGIN_BOTTOM,
+                                 BUTTON_WIDTH,
+                                 BUTTON_HEIGHT);
+    [addButton setImage:[UIImage imageNamed:@"expand-button.png"] forState:UIControlStateNormal];
+    [addButton addTarget:self action:@selector(addMeeting) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:addButton];
+    
     
     UIImage *innerShadow = [[UIImage imageNamed:@"timeline-inner-shadow.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:5];
     UIImageView *innerShadowView = [[UIImageView alloc] initWithImage:innerShadow];

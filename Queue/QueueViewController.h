@@ -17,6 +17,7 @@
 @property (strong, nonatomic) Queue *queue;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) NSIndexPath * selectedIndexPath;
 
 - (id)initWithQueue:(Queue *)queue;
 
