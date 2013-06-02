@@ -22,8 +22,12 @@
 @property (strong, nonatomic) UITextView * textView;
 @property (strong, nonatomic) UILabel * dateLabel;
 @property (strong, nonatomic) LocationChooserViewController *locationChooser;
+@property (strong, nonatomic) UIScrollView *scrollView;
 @property BOOL isKeyboardVisible;
 @property BOOL isDatePickerVisible;
+@property BOOL wasKeyboardVisible;
+@property BOOL wasDatePickerVisible;
+@property BOOL isLocationExpanded;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 
@@ -123,11 +127,7 @@ static CGFloat keyboardHeight = 216;
     } else {
         self.title = @"Edit Meeting";
     }
-    
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"light-background.png"]];
-    
    
-    
     // Add the save and cancel buttons to the nav bar    
     QueueBarButtonItem *cancelButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeCancel target:self action:@selector(cancel)];
     QueueBarButtonItem *addMeetingButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeDone target:self action:@selector(saveMeeting)];
@@ -144,10 +144,18 @@ static CGFloat keyboardHeight = 216;
 //    self.tableView = tableView;
 //    [self.view addSubview:self.tableView];
     
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
+    scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height * 2 - keyboardHeight);
+    scrollView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"light-background.png"]];
+    scrollView.delegate = self;
+    scrollView.scrollEnabled = NO;
+    self.scrollView = scrollView;
+    [self.view addSubview:scrollView];
+    
     UIControl *dateViewContainer = [[UIControl alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
                                                                          self.view.bounds.origin.y,
                                                                          self.view.bounds.size.width,
-                                                                         DATE_TEXT_HEIGHT + DATE_TEXT_MARGIN_TOP + DATE_TEXT_MARGIN_BOTTOM)];
+                                                                         [self dateViewContainerHeight])];
     [dateViewContainer addTarget:self action:@selector(shouldEditDateField) forControlEvents:UIControlEventTouchUpInside];
     UILabel *dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(dateViewContainer.bounds.origin.x + DATE_TEXT_MARGIN_LEFT,
                                                                    dateViewContainer.bounds.origin.y + DATE_TEXT_MARGIN_TOP,
@@ -164,7 +172,7 @@ static CGFloat keyboardHeight = 216;
                                     ICON_HEIGHT);
     [dateViewContainer addSubview:calendarIcon];
     [dateViewContainer addSubview:self.dateLabel];
-    [self.view addSubview:dateViewContainer];
+    [self.scrollView addSubview:dateViewContainer];
     UIView *dividerLine = [[UIView alloc] initWithFrame:CGRectMake(dateViewContainer.bounds.origin.x,
                                                                    dateViewContainer.bounds.size.height - 0.5,
                                                                    dateViewContainer.bounds.size.width,
@@ -176,7 +184,7 @@ static CGFloat keyboardHeight = 216;
     UIControl *noteViewContainer = [[UIControl alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
                                                                          self.view.bounds.origin.y + dateViewContainer.bounds.size.height,
                                                                          self.view.bounds.size.width,
-                                                                         self.view.bounds.size.height - keyboardHeight - self.navigationController.navigationBar.frame.size.height - PLACE_TEXT_HEIGHT - PLACE_TEXT_MARGIN_TOP - PLACE_TEXT_MARGIN_BOTTOM - dateViewContainer.bounds.size.height)];
+                                                                         [self noteViewContainerHeight])];
     noteViewContainer.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"light-background.png"]];
     [noteViewContainer addTarget:self action:@selector(shouldEditNoteField) forControlEvents:UIControlEventTouchUpInside];
 //    UITextView *noteView = [[UITextView alloc] initWithFrame:CGRectMake(noteViewContainer.bounds.origin.x + NOTE_TEXT_MARGIN_LEFT,
@@ -204,14 +212,21 @@ static CGFloat keyboardHeight = 216;
     noteView.delegate = self;
     self.textView = noteView;
     [noteViewContainer addSubview:self.textView];
-    [self.view addSubview:noteViewContainer];
+    [self.scrollView addSubview:noteViewContainer];
     
     CGRect locationFrame = self.view.bounds;
     locationFrame.origin.y = locationFrame.origin.y + dateViewContainer.frame.size.height + noteViewContainer.frame.size.height;
+    locationFrame.size.height = locationFrame.size.height;
     LocationChooserViewController *locationChooser = [[LocationChooserViewController alloc] init];
     locationChooser.view.frame = locationFrame;
     self.locationChooser = locationChooser;
-    [self.view addSubview:self.locationChooser.view];
+    [self.scrollView addSubview:self.locationChooser.view];
+    
+    CGRect buttonFrame = self.locationChooser.view.frame;
+    buttonFrame.size.height = PLACE_TEXT_MARGIN_TOP + 2*PLACE_TEXT_HEIGHT + PLACE_TEXT_MARGIN_BOTTOM;
+    UIButton *scrollButton = [[UIButton alloc] initWithFrame:buttonFrame];
+    [scrollButton addTarget:self action:@selector(scrollMeetingView) forControlEvents:UIControlEventTouchUpInside];
+    [self.scrollView addSubview:scrollButton];
     
     UIDatePicker *datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
                                                                               self.view.bounds.size.height - keyboardHeight - self.navigationController.navigationBar.frame.size.height,
@@ -230,10 +245,71 @@ static CGFloat keyboardHeight = 216;
     [self registerForKeyboardNotifications];
 }
 
+- (CGFloat)dateViewContainerHeight
+{
+    return DATE_TEXT_HEIGHT + DATE_TEXT_MARGIN_TOP + DATE_TEXT_MARGIN_BOTTOM;
+}
+
+- (CGFloat)noteViewContainerHeight
+{
+    return self.view.bounds.size.height - keyboardHeight - self.navigationController.navigationBar.frame.size.height - PLACE_TEXT_HEIGHT - PLACE_TEXT_MARGIN_TOP - PLACE_TEXT_MARGIN_BOTTOM - [self dateViewContainerHeight];
+}
+
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Scroll View Delegate Methods
+- (void)scrollMeetingView
+{
+    if (self.isLocationExpanded)
+    {
+        [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+        [self showActiveInputView];
+        self.isLocationExpanded = NO;
+    }
+    else
+    {
+        [self.scrollView setContentOffset:CGPointMake(0, [self dateViewContainerHeight] + [self noteViewContainerHeight] + self.navigationController.navigationBar.frame.size.height) animated:YES];
+        [self hideActiveInputView];
+        self.isLocationExpanded = YES;
+    }
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [self hideActiveInputView];
+}
+
+- (void)hideActiveInputView
+{
+    if (self.isKeyboardVisible)
+    {
+        [self.textView resignFirstResponder];
+        self.wasKeyboardVisible = YES;
+        self.wasDatePickerVisible = NO;
+    }
+    else if (self.isDatePickerVisible)
+    {
+        [self hideDatePickerAnimated:YES completion:nil];
+        self.wasDatePickerVisible = YES;
+        self.wasKeyboardVisible = NO;
+    }
+}
+
+- (void)showActiveInputView
+{
+    if (self.wasKeyboardVisible)
+    {
+        [self shouldEditNoteField];
+    }
+    else if (self.wasDatePickerVisible)
+    {
+        [self shouldEditDateField];
+    }
 }
 
 #pragma mark - Note View Delegate Methods
@@ -267,7 +343,14 @@ static CGFloat keyboardHeight = 216;
 
 - (void)shouldEditNoteField
 {
-    [self hideDatePickerAnimated:YES completion:^{[self.textView becomeFirstResponder];}];
+    if (self.isDatePickerVisible)
+    {
+        [self hideDatePickerAnimated:YES completion:^{[self.textView becomeFirstResponder];}];
+    }
+    else
+    {
+        [self.textView becomeFirstResponder];
+    }
 }
 
 - (void)registerForKeyboardNotifications

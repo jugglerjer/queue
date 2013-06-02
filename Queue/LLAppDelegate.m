@@ -8,6 +8,7 @@
 
 #import "LLAppDelegate.h"
 #import <CoreData/CoreData.h>
+#import <GoogleMaps/GoogleMaps.h>
 #import "QueuesViewController.h"
 
 @implementation LLAppDelegate
@@ -67,6 +68,7 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     [self customizeUserInterfaceElements];
+    [GMSServices provideAPIKey:@"AIzaSyA9I-EJpd4dZ7SgSFmKkYz-PzxeMCoHaU4"];
     
     NSManagedObjectContext *context = [self managedObjectContext];
     if (!context) {

@@ -18,7 +18,7 @@ typedef enum
     QueueEditMeetingTypeUpdate
 } QueueEditMeetingType;
 
-@interface AddMeetingViewController : UIViewController <UITextViewDelegate>
+@interface AddMeetingViewController : UIViewController <UITextViewDelegate, UIScrollViewDelegate>
 
 @property (weak, nonatomic) id<AddMeetingViewControllerDelegate> delegate;
 @property (strong, nonatomic) Contact *contact;
