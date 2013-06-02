@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreLocation/CoreLocation.h>
+#import "LLDataDownloader.h"
 
-@interface LocationChooserViewController : UIViewController
+@interface LocationChooserViewController : UIViewController <CLLocationManagerDelegate, LLDataDownloaderDelegate>
+
+@property (strong, nonatomic) CLLocationManager *locationManager;
 
 @end

@@ -14,6 +14,14 @@
 		3F5FA4B6175458FE002A0F5B /* email-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F5FA4B1175458FD002A0F5B /* email-button@2x.png */; };
 		3F5FA4B7175458FE002A0F5B /* settings-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F5FA4B2175458FD002A0F5B /* settings-button@2x.png */; };
 		3F5FA4B8175458FE002A0F5B /* snooze-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F5FA4B3175458FE002A0F5B /* snooze-button@2x.png */; };
+		3F934437175AD49C000FD331 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F934436175AD49C000FD331 /* CoreLocation.framework */; };
+		3F93443A175AD9DE000FD331 /* LLDataDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F934439175AD9DE000FD331 /* LLDataDownloader.m */; };
+		3F93443B175ADBC5000FD331 /* LLDataDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F934439175AD9DE000FD331 /* LLDataDownloader.m */; };
+		3F934444175ADDF2000FD331 /* SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F93443D175ADDF2000FD331 /* SBJSON.m */; };
+		3F934445175ADDF2000FD331 /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F93443F175ADDF2000FD331 /* SBJsonBase.m */; };
+		3F934446175ADDF2000FD331 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F934441175ADDF2000FD331 /* SBJsonParser.m */; };
+		3F934447175ADDF2000FD331 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F934443175ADDF2000FD331 /* SBJsonWriter.m */; };
+		3F934449175AE968000FD331 /* location-enabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F934448175AE968000FD331 /* location-enabled@2x.png */; };
 		3F977641175723C200E6B5B7 /* LocationChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F977640175723C200E6B5B7 /* LocationChooserViewController.m */; };
 		3F977644175726B000E6B5B7 /* calendar_full@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F977642175726B000E6B5B7 /* calendar_full@2x.png */; };
 		3F977645175726B000E6B5B7 /* notepad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F977643175726B000E6B5B7 /* notepad@2x.png */; };
@@ -81,6 +89,18 @@
 		3F5FA4B1175458FD002A0F5B /* email-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "email-button@2x.png"; path = "Queue/email-button@2x.png"; sourceTree = "<group>"; };
 		3F5FA4B2175458FD002A0F5B /* settings-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "settings-button@2x.png"; path = "Queue/settings-button@2x.png"; sourceTree = "<group>"; };
 		3F5FA4B3175458FE002A0F5B /* snooze-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "snooze-button@2x.png"; path = "Queue/snooze-button@2x.png"; sourceTree = "<group>"; };
+		3F934436175AD49C000FD331 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		3F934438175AD9DE000FD331 /* LLDataDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLDataDownloader.h; sourceTree = "<group>"; };
+		3F934439175AD9DE000FD331 /* LLDataDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLDataDownloader.m; sourceTree = "<group>"; };
+		3F93443C175ADDF2000FD331 /* SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJSON.h; sourceTree = "<group>"; };
+		3F93443D175ADDF2000FD331 /* SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJSON.m; sourceTree = "<group>"; };
+		3F93443E175ADDF2000FD331 /* SBJsonBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonBase.h; sourceTree = "<group>"; };
+		3F93443F175ADDF2000FD331 /* SBJsonBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonBase.m; sourceTree = "<group>"; };
+		3F934440175ADDF2000FD331 /* SBJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonParser.h; sourceTree = "<group>"; };
+		3F934441175ADDF2000FD331 /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
+		3F934442175ADDF2000FD331 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
+		3F934443175ADDF2000FD331 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
+		3F934448175AE968000FD331 /* location-enabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "location-enabled@2x.png"; path = "Queue/location-enabled@2x.png"; sourceTree = "<group>"; };
 		3F97763F175723C200E6B5B7 /* LocationChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationChooserViewController.h; sourceTree = "<group>"; };
 		3F977640175723C200E6B5B7 /* LocationChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationChooserViewController.m; sourceTree = "<group>"; };
 		3F977642175726B000E6B5B7 /* calendar_full@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "calendar_full@2x.png"; path = "Queue/calendar_full@2x.png"; sourceTree = "<group>"; };
@@ -152,6 +172,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F934437175AD49C000FD331 /* CoreLocation.framework in Frameworks */,
 				3FABEE2C174812A700BBB760 /* CoreData.framework in Frameworks */,
 				3FABEE291746012600BBB760 /* AddressBook.framework in Frameworks */,
 				3FABEE2A1746012600BBB760 /* AddressBookUI.framework in Frameworks */,
@@ -177,6 +198,7 @@
 		3FA1017F17447769007D2520 = {
 			isa = PBXGroup;
 			children = (
+				3F934436175AD49C000FD331 /* CoreLocation.framework */,
 				3FABEE2B174812A700BBB760 /* CoreData.framework */,
 				3FABEE271746012600BBB760 /* AddressBook.framework */,
 				3FABEE281746012600BBB760 /* AddressBookUI.framework */,
@@ -211,6 +233,14 @@
 		3FA1019117447769007D2520 /* Queue */ = {
 			isa = PBXGroup;
 			children = (
+				3F93443C175ADDF2000FD331 /* SBJSON.h */,
+				3F93443D175ADDF2000FD331 /* SBJSON.m */,
+				3F93443E175ADDF2000FD331 /* SBJsonBase.h */,
+				3F93443F175ADDF2000FD331 /* SBJsonBase.m */,
+				3F934440175ADDF2000FD331 /* SBJsonParser.h */,
+				3F934441175ADDF2000FD331 /* SBJsonParser.m */,
+				3F934442175ADDF2000FD331 /* SBJsonWriter.h */,
+				3F934443175ADDF2000FD331 /* SBJsonWriter.m */,
 				3FA1019A17447769007D2520 /* LLAppDelegate.h */,
 				3FA1019B17447769007D2520 /* LLAppDelegate.m */,
 				3FA101C6174484AB007D2520 /* LLPullNavigationController.h */,
@@ -239,6 +269,8 @@
 				3FA1019217447769007D2520 /* Supporting Files */,
 				3FE80CFE174DE8A30009D61D /* QueueBarButtonItem.h */,
 				3FE80CFF174DE8A30009D61D /* QueueBarButtonItem.m */,
+				3F934438175AD9DE000FD331 /* LLDataDownloader.h */,
+				3F934439175AD9DE000FD331 /* LLDataDownloader.m */,
 			);
 			path = Queue;
 			sourceTree = "<group>";
@@ -279,6 +311,7 @@
 		3FE80CE4174DBFA50009D61D /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				3F934448175AE968000FD331 /* location-enabled@2x.png */,
 				3F97764617572C4900E6B5B7 /* light-background@2x.png */,
 				3F977642175726B000E6B5B7 /* calendar_full@2x.png */,
 				3F977643175726B000E6B5B7 /* notepad@2x.png */,
@@ -407,6 +440,7 @@
 				3F977644175726B000E6B5B7 /* calendar_full@2x.png in Resources */,
 				3F977645175726B000E6B5B7 /* notepad@2x.png in Resources */,
 				3F97764717572C4900E6B5B7 /* light-background@2x.png in Resources */,
+				3F934449175AE968000FD331 /* location-enabled@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -441,6 +475,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F93443B175ADBC5000FD331 /* LLDataDownloader.m in Sources */,
 				3FA1019817447769007D2520 /* main.m in Sources */,
 				3FA1019C17447769007D2520 /* LLAppDelegate.m in Sources */,
 				3FA101C8174484AB007D2520 /* LLPullNavigationController.m in Sources */,
@@ -456,6 +491,10 @@
 				3FE80D07174F0D380009D61D /* QueueContactCell.m in Sources */,
 				3F98A2EF17529A32006A3668 /* MeetingCell.m in Sources */,
 				3F977641175723C200E6B5B7 /* LocationChooserViewController.m in Sources */,
+				3F934444175ADDF2000FD331 /* SBJSON.m in Sources */,
+				3F934445175ADDF2000FD331 /* SBJsonBase.m in Sources */,
+				3F934446175ADDF2000FD331 /* SBJsonParser.m in Sources */,
+				3F934447175ADDF2000FD331 /* SBJsonWriter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -464,6 +503,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FA101B717447769007D2520 /* QueueTests.m in Sources */,
+				3F93443A175AD9DE000FD331 /* LLDataDownloader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

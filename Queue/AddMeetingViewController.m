@@ -21,6 +21,7 @@
 @property (strong, nonatomic) UIDatePicker *datePicker;
 @property (strong, nonatomic) UITextView * textView;
 @property (strong, nonatomic) UILabel * dateLabel;
+@property (strong, nonatomic) LocationChooserViewController *locationChooser;
 @property BOOL isKeyboardVisible;
 @property BOOL isDatePickerVisible;
 
@@ -186,10 +187,11 @@ static CGFloat keyboardHeight = 216;
     noteViewFrame.size.width = noteViewFrame.size.width - NOTE_TEXT_MARGIN_RIGHT;
     noteViewFrame.size.height = noteViewFrame.size.height - NOTE_TEXT_MARGIN_BOTTOM;
     noteViewFrame.origin.x = NOTE_TEXT_INSET_LEFT;
+    noteViewFrame.origin.y = NOTE_TEXT_INSET_TOP;
     UITextView *noteView = [[UITextView alloc] initWithFrame:noteViewFrame];
     noteView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     noteView.textColor = [UIColor colorWithRed:165.0/255.0 green:165.0/255.0 blue:165.0/255.0 alpha:1];
-    noteView.contentInset = UIEdgeInsetsMake(NOTE_TEXT_INSET_TOP, 0, NOTE_TEXT_INSET_BOTTOM, NOTE_TEXT_INSET_RIGHT);
+    noteView.contentInset = UIEdgeInsetsMake(0, 0, NOTE_TEXT_INSET_BOTTOM, NOTE_TEXT_INSET_RIGHT);
     noteView.backgroundColor = [UIColor clearColor];
     noteView.text = self.meeting.note;
     UIImageView *noteIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"notepad.png"]];
@@ -208,7 +210,8 @@ static CGFloat keyboardHeight = 216;
     locationFrame.origin.y = locationFrame.origin.y + dateViewContainer.frame.size.height + noteViewContainer.frame.size.height;
     LocationChooserViewController *locationChooser = [[LocationChooserViewController alloc] init];
     locationChooser.view.frame = locationFrame;
-    [self.view addSubview:locationChooser.view];
+    self.locationChooser = locationChooser;
+    [self.view addSubview:self.locationChooser.view];
     
     UIDatePicker *datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
                                                                               self.view.bounds.size.height - keyboardHeight - self.navigationController.navigationBar.frame.size.height,
