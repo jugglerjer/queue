@@ -8,6 +8,7 @@
 
 #import "AddMeetingViewController.h"
 #import "QueueBarButtonItem.h"
+#import "LocationChooserViewController.h"
 #import "Meeting.h"
 #import "Contact.h"
 
@@ -17,9 +18,9 @@
 @interface AddMeetingViewController ()
 
 @property (strong, nonatomic) Meeting * meeting;
-@property (strong, nonatomic) UITableView * tableView;
 @property (strong, nonatomic) UIDatePicker *datePicker;
 @property (strong, nonatomic) UITextView * textView;
+@property (strong, nonatomic) UILabel * dateLabel;
 @property BOOL isKeyboardVisible;
 @property BOOL isDatePickerVisible;
 
@@ -30,8 +31,6 @@
 @implementation AddMeetingViewController
 
 static CGFloat keyboardHeight = 216;
-static CGFloat cellPadding = 10;
-static CGFloat dateCellHeight = 44;
 
 - (id)initWithMeeting:(Meeting *)meeting
 {
@@ -76,6 +75,32 @@ static CGFloat dateCellHeight = 44;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+#define DATE_TEXT_MARGIN_LEFT       48
+#define DATE_TEXT_MARGIN_RIGHT      48
+#define DATE_TEXT_MARGIN_TOP        20
+#define DATE_TEXT_MARGIN_BOTTOM     20
+#define DATE_TEXT_HEIGHT            15
+
+#define NOTE_TEXT_MARGIN_LEFT       48
+#define NOTE_TEXT_MARGIN_RIGHT      48
+#define NOTE_TEXT_MARGIN_TOP        20
+#define NOTE_TEXT_MARGIN_BOTTOM     20
+#define NOTE_TEXT_HEIGHT            15
+
+#define NOTE_TEXT_INSET_LEFT        40.0f
+#define NOTE_TEXT_INSET_RIGHT       -40.0f
+#define NOTE_TEXT_INSET_TOP         9.0f
+#define NOTE_TEXT_INSET_BOTTOM      9.0f
+
+#define PLACE_TEXT_MARGIN_LEFT       48
+#define PLACE_TEXT_MARGIN_RIGHT      48
+#define PLACE_TEXT_MARGIN_TOP        20
+#define PLACE_TEXT_MARGIN_BOTTOM     20
+#define PLACE_TEXT_HEIGHT            15
+
+#define ICON_HEIGHT                  14
+#define ICON_WIDTH                   13
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -98,6 +123,8 @@ static CGFloat dateCellHeight = 44;
         self.title = @"Edit Meeting";
     }
     
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"light-background.png"]];
+    
    
     
     // Add the save and cancel buttons to the nav bar    
@@ -106,20 +133,89 @@ static CGFloat dateCellHeight = 44;
     self.navigationItem.leftBarButtonItem = cancelButton;
     self.navigationItem.rightBarButtonItem = addMeetingButton;
     
-    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
-                                                                           self.view.bounds.origin.y,
-                                                                           self.view.bounds.size.width,
-                                                                           self.view.bounds.size.height)
-                                                          style:UITableViewStyleGrouped];
-    tableView.delegate = self;
-    tableView.dataSource = self;
-    self.tableView = tableView;
-    [self.view addSubview:self.tableView];
+//    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
+//                                                                           self.view.bounds.origin.y,
+//                                                                           self.view.bounds.size.width,
+//                                                                           self.view.bounds.size.height)
+//                                                          style:UITableViewStylePlain];
+//    tableView.delegate = self;
+//    tableView.dataSource = self;
+//    self.tableView = tableView;
+//    [self.view addSubview:self.tableView];
+    
+    UIControl *dateViewContainer = [[UIControl alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
+                                                                         self.view.bounds.origin.y,
+                                                                         self.view.bounds.size.width,
+                                                                         DATE_TEXT_HEIGHT + DATE_TEXT_MARGIN_TOP + DATE_TEXT_MARGIN_BOTTOM)];
+    [dateViewContainer addTarget:self action:@selector(shouldEditDateField) forControlEvents:UIControlEventTouchUpInside];
+    UILabel *dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(dateViewContainer.bounds.origin.x + DATE_TEXT_MARGIN_LEFT,
+                                                                   dateViewContainer.bounds.origin.y + DATE_TEXT_MARGIN_TOP,
+                                                                   dateViewContainer.bounds.size.width - DATE_TEXT_MARGIN_LEFT - DATE_TEXT_MARGIN_RIGHT,
+                                                                   DATE_TEXT_HEIGHT)];
+    dateLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    dateLabel.textColor = [UIColor colorWithRed:165.0/255.0 green:165.0/255.0 blue:165.0/255.0 alpha:1];
+    dateLabel.text = [self stringForMeetingDate:self.meeting.date];
+    self.dateLabel = dateLabel;
+    UIImageView *calendarIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"calendar_full.png"]];
+    calendarIcon.frame = CGRectMake((DATE_TEXT_MARGIN_LEFT - ICON_WIDTH)/2,
+                                    ((DATE_TEXT_MARGIN_TOP + DATE_TEXT_HEIGHT + DATE_TEXT_MARGIN_BOTTOM) - ICON_HEIGHT)/2,
+                                    ICON_WIDTH,
+                                    ICON_HEIGHT);
+    [dateViewContainer addSubview:calendarIcon];
+    [dateViewContainer addSubview:self.dateLabel];
+    [self.view addSubview:dateViewContainer];
+    UIView *dividerLine = [[UIView alloc] initWithFrame:CGRectMake(dateViewContainer.bounds.origin.x,
+                                                                   dateViewContainer.bounds.size.height - 0.5,
+                                                                   dateViewContainer.bounds.size.width,
+                                                                   0.5)];
+    dividerLine.backgroundColor = [UIColor blackColor];
+    dividerLine.alpha = 0.2;
+    [dateViewContainer addSubview:dividerLine];
+    
+    UIControl *noteViewContainer = [[UIControl alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
+                                                                         self.view.bounds.origin.y + dateViewContainer.bounds.size.height,
+                                                                         self.view.bounds.size.width,
+                                                                         self.view.bounds.size.height - keyboardHeight - self.navigationController.navigationBar.frame.size.height - PLACE_TEXT_HEIGHT - PLACE_TEXT_MARGIN_TOP - PLACE_TEXT_MARGIN_BOTTOM - dateViewContainer.bounds.size.height)];
+    noteViewContainer.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"light-background.png"]];
+    [noteViewContainer addTarget:self action:@selector(shouldEditNoteField) forControlEvents:UIControlEventTouchUpInside];
+//    UITextView *noteView = [[UITextView alloc] initWithFrame:CGRectMake(noteViewContainer.bounds.origin.x + NOTE_TEXT_MARGIN_LEFT,
+//                                                                        noteViewContainer.bounds.origin.y + NOTE_TEXT_MARGIN_TOP,
+//                                                                        noteViewContainer.bounds.size.width - NOTE_TEXT_MARGIN_LEFT - NOTE_TEXT_MARGIN_RIGHT,
+//                                                                        noteViewContainer.bounds.size.height - NOTE_TEXT_MARGIN_TOP - NOTE_TEXT_MARGIN_BOTTOM)];
+    CGRect noteViewFrame = noteViewContainer.bounds;
+    noteViewFrame.size.width = noteViewFrame.size.width - NOTE_TEXT_MARGIN_RIGHT;
+    noteViewFrame.size.height = noteViewFrame.size.height - NOTE_TEXT_MARGIN_BOTTOM;
+    noteViewFrame.origin.x = NOTE_TEXT_INSET_LEFT;
+    UITextView *noteView = [[UITextView alloc] initWithFrame:noteViewFrame];
+    noteView.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    noteView.textColor = [UIColor colorWithRed:165.0/255.0 green:165.0/255.0 blue:165.0/255.0 alpha:1];
+    noteView.contentInset = UIEdgeInsetsMake(NOTE_TEXT_INSET_TOP, 0, NOTE_TEXT_INSET_BOTTOM, NOTE_TEXT_INSET_RIGHT);
+    noteView.backgroundColor = [UIColor clearColor];
+    noteView.text = self.meeting.note;
+    UIImageView *noteIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"notepad.png"]];
+    noteIcon.frame = CGRectMake((NOTE_TEXT_MARGIN_LEFT - ICON_WIDTH)/2,
+                                    ((NOTE_TEXT_MARGIN_TOP + NOTE_TEXT_HEIGHT + NOTE_TEXT_MARGIN_BOTTOM) - ICON_HEIGHT)/2,
+                                    ICON_WIDTH,
+                                    ICON_HEIGHT);
+    [noteViewContainer addSubview:noteIcon];
+    noteView.text = self.meeting.note;
+    noteView.delegate = self;
+    self.textView = noteView;
+    [noteViewContainer addSubview:self.textView];
+    [self.view addSubview:noteViewContainer];
+    
+    CGRect locationFrame = self.view.bounds;
+    locationFrame.origin.y = locationFrame.origin.y + dateViewContainer.frame.size.height + noteViewContainer.frame.size.height;
+    LocationChooserViewController *locationChooser = [[LocationChooserViewController alloc] init];
+    locationChooser.view.frame = locationFrame;
+    [self.view addSubview:locationChooser.view];
     
     UIDatePicker *datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
                                                                               self.view.bounds.size.height - keyboardHeight - self.navigationController.navigationBar.frame.size.height,
                                                                               self.view.bounds.size.width,
                                                                               keyboardHeight)];
+    datePicker.datePickerMode = UIDatePickerModeDate;
+    datePicker.maximumDate = [NSDate date];
     datePicker.date = self.meeting.date;
     [datePicker addTarget:self action:@selector(datePickerDateDidChange:) forControlEvents:UIControlEventValueChanged];
     self.datePicker = datePicker;
@@ -137,71 +233,6 @@ static CGFloat dateCellHeight = 44;
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return 2;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *AddMeetingCellIdentifier = @"AddMeetingCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:AddMeetingCellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:AddMeetingCellIdentifier];
-        
-        if (indexPath.row == kNoteCellRow)
-        {
-            UITextView *noteView = [[UITextView alloc] initWithFrame:CGRectMake(cell.frame.origin.x  + cellPadding,
-                                                                                cell.frame.origin.y + cellPadding,
-                                                                                cell.frame.size.width - (2*cellPadding),
-                                                                                [self heightForNoteCellRowInTableView:tableView] - (2*cellPadding))];
-            noteView.backgroundColor = [UIColor clearColor];
-            noteView.text = self.meeting.note;
-            noteView.delegate = self;
-            self.textView = noteView;
-            [cell addSubview:self.textView];
-        }
-    }
-    
-    if (indexPath.row == kDateCellRow)
-    {
-        
-        NSDateFormatter *meetingDateFormatter = [[NSDateFormatter alloc] init];
-        [meetingDateFormatter setDateFormat:@"MMMM d, y"];
-        cell.textLabel.text = [NSString stringWithFormat:@"Date: %@", [meetingDateFormatter stringFromDate:self.meeting.date]];
-    }
-    else if (indexPath.row == kNoteCellRow)
-    {
-        self.textView.text = self.meeting.note;
-    }
-    
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
-    return cell;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.row == kNoteCellRow)
-    {
-        return [self heightForNoteCellRowInTableView:tableView];
-    }
-    
-    return dateCellHeight;
-}
-
-- (CGFloat)heightForNoteCellRowInTableView:(UITableView *)tableView
-{
-    return tableView.frame.size.height - dateCellHeight - keyboardHeight - self.navigationController.navigationBar.frame.size.height - (2*cellPadding);
-}
-
 #pragma mark - Note View Delegate Methods
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
@@ -214,63 +245,27 @@ static CGFloat dateCellHeight = 44;
     }
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-#pragma mark - Table view delegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Show or hide the date picker depending on whether the dateCellRow was selected
-    if (indexPath.row == kDateCellRow)
-    {
-        if ([self.textView isFirstResponder])
-            [self.textView resignFirstResponder];
-        
-        [self showDatePickerAnimated:YES completion:nil];
-    }
-    else {
-        [self hideDatePickerAnimated:YES completion:nil];
-    }
-}
-
 #pragma mark - Date Picker & Keyboard Methods
+
+- (NSString *)stringForMeetingDate:(NSDate *)meetingDate
+{
+    NSDateFormatter *meetingDateFormatter = [[NSDateFormatter alloc] init];
+    [meetingDateFormatter setDateFormat:@"EEEE, MMMM d, y"];
+    return [meetingDateFormatter stringFromDate:meetingDate];
+}
+
+- (void)shouldEditDateField
+{
+    if ([self.textView isFirstResponder])
+        [self.textView resignFirstResponder];
+    
+    [self showDatePickerAnimated:YES completion:nil];
+}
+
+- (void)shouldEditNoteField
+{
+    [self hideDatePickerAnimated:YES completion:^{[self.textView becomeFirstResponder];}];
+}
 
 - (void)registerForKeyboardNotifications
 {    
@@ -334,7 +329,7 @@ static CGFloat dateCellHeight = 44;
 {
     UIDatePicker *datePicker = (UIDatePicker *)sender;
     self.meeting.date = datePicker.date;
-    [self.tableView reloadData];
+    self.dateLabel.text = [self stringForMeetingDate:self.meeting.date];
 }
 
 @end

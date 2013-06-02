@@ -14,6 +14,9 @@
 
 @dynamic date;
 @dynamic note;
+@dynamic method;
+@dynamic latitude;
+@dynamic longitude;
 @dynamic contact;
 
 @end

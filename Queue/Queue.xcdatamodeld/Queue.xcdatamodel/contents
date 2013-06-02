@@ -12,6 +12,9 @@
     </entity>
     <entity name="Meeting" representedClassName="Meeting" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="method" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="note" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="contact" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Contact" inverseName="meetings" inverseEntity="Contact" syncable="YES"/>
     </entity>
@@ -21,7 +24,7 @@
     </entity>
     <elements>
         <element name="Contact" positionX="-36" positionY="204" width="128" height="165"/>
+        <element name="Meeting" positionX="160" positionY="192" width="128" height="135"/>
         <element name="Queue" positionX="160" positionY="192" width="128" height="73"/>
-        <element name="Meeting" positionX="160" positionY="192" width="128" height="90"/>
     </elements>
 </model>

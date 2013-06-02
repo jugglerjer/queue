@@ -15,6 +15,9 @@
 
 @property (nonatomic, retain) NSDate * date;
 @property (nonatomic, retain) NSString * note;
+@property (nonatomic, retain) NSString * method;
+@property (nonatomic, retain) NSNumber *latitude;
+@property (nonatomic, retain) NSNumber *longitude;
 @property (nonatomic, retain) Contact *contact;
 
 @end
