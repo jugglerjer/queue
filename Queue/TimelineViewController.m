@@ -353,19 +353,19 @@
     lineFrame.origin.y = [self tableView:tableView heightForRowAtIndexPath:indexPath] - 0.5;
     cell.bottomLine.frame = lineFrame;
     
-    if (indexPath.row == 0)
-    {
-        lineFrame.origin.y = -0.5;
-        cell.tableTopLine.frame = lineFrame;
-        cell.tableTopLine.alpha = 0.1;
-    }
-    
-    if (indexPath.row == [self.meetingsArray count] - 1)
-    {
-        lineFrame.origin.y = [self tableView:tableView heightForRowAtIndexPath:indexPath] + 0.5;
-        cell.tableBottomLine.frame = lineFrame;
-        cell.tableBottomLine.alpha = 0.2;
-    }
+//    if (indexPath.row == 0)
+//    {
+//        lineFrame.origin.y = -0.5;
+//        cell.tableTopLine.frame = lineFrame;
+//        cell.tableTopLine.alpha = 0.1;
+//    }
+//    
+//    if (indexPath.row == [self.meetingsArray count] - 1)
+//    {
+//        lineFrame.origin.y = [self tableView:tableView heightForRowAtIndexPath:indexPath] + 0.5;
+//        cell.tableBottomLine.frame = lineFrame;
+//        cell.tableBottomLine.alpha = 0.2;
+//    }
     
 //    CGRect timelineFrame = cell.timeline.frame;
 //    timelineFrame.size.height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
@@ -380,10 +380,29 @@
     return TOOLBELT_HEIGHT + BUTTON_MARGIN_BOTTOM;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 0.5;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *tableTopLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 0.5)];
+    tableTopLine.backgroundColor = [UIColor blackColor];
+    tableTopLine.alpha = 0.1;
+    return tableTopLine;
+}
+
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, TOOLBELT_HEIGHT + BUTTON_MARGIN_BOTTOM, tableView.frame.size.width, TOOLBELT_HEIGHT + BUTTON_MARGIN_BOTTOM)];
     footer.backgroundColor = [UIColor clearColor];
+    
+    UIView *tableBottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 0.5)];
+    tableBottomLine.backgroundColor = [UIColor whiteColor];
+    tableBottomLine.alpha = 0.2;
+    [footer addSubview:tableBottomLine];
+    
     return footer;
 }
 

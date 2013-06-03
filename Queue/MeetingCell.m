@@ -91,17 +91,17 @@ GMSMapView *mapView_;
         self.mapBottomLine = mapBottomLine;
         [self addSubview:self.mapBottomLine];
         
-        UIView *tableTopLine = [[UIView alloc] initWithFrame:lineFrame];
-        tableTopLine.backgroundColor = [UIColor blackColor];
-        tableTopLine.alpha = 0;
-        self.tableTopLine = tableTopLine;
-        [self addSubview:self.tableTopLine];
-        
-        UIView *tableBottomLine = [[UIView alloc] initWithFrame:lineFrame];
-        tableBottomLine.backgroundColor = [UIColor whiteColor];
-        tableBottomLine.alpha = 0;
-        self.tableBottomLine = tableBottomLine;
-        [self addSubview:self.tableBottomLine];
+//        UIView *tableTopLine = [[UIView alloc] initWithFrame:lineFrame];
+//        tableTopLine.backgroundColor = [UIColor blackColor];
+//        tableTopLine.alpha = 0;
+//        self.tableTopLine = tableTopLine;
+//        [self addSubview:self.tableTopLine];
+//        
+//        UIView *tableBottomLine = [[UIView alloc] initWithFrame:lineFrame];
+//        tableBottomLine.backgroundColor = [UIColor whiteColor];
+//        tableBottomLine.alpha = 0;
+//        self.tableBottomLine = tableBottomLine;
+//        [self addSubview:self.tableBottomLine];
         
 //        UIView *timeline = [[UIView alloc] initWithFrame:CGRectMake(TIMELINE_MARGIN_LEFT, 0, TIMELINE_WIDTH, 0)];
 //        timeline.backgroundColor = [UIColor blackColor];
@@ -135,7 +135,7 @@ GMSMapView *mapView_;
         GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:[meeting.location.latitude doubleValue]
                                                                 longitude:[meeting.location.longitude doubleValue]
                                                                      zoom:15];
-        [mapView_ setFrame:mapFrame];
+        mapView_.frame = mapFrame;
         [mapView_ setCamera:camera];
         [mapView_ clear];
         
