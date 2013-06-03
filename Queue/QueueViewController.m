@@ -279,10 +279,13 @@ static CGFloat contactRowHeight = 72.0f;
         timelineView.managedObjectContext = self.managedObjectContext;
         timelineView.queueViewController = self;
         timelineView.delegate = self;
+        CGRect frame = cell.bounds;
+        frame.size.height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
+//        frame.origin.y -= frame.size.height;
+        timelineView.view.frame = frame;
         self.timeline = timelineView;
         [cell addSubview:timelineView.view];
-        self.timeline.view.frame = cell.bounds;
-        cell.clipsToBounds = YES;
+//        cell.clipsToBounds = YES;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
@@ -306,6 +309,7 @@ static CGFloat contactRowHeight = 72.0f;
         return self.tableView.frame.size.height - contactRowHeight;
     return contactRowHeight;
 }
+
 
 # pragma mark - Queue Row Selection Methods
 
@@ -335,6 +339,8 @@ static CGFloat contactRowHeight = 72.0f;
     self.selectedIndexPath = indexPath;
     self.tableView.scrollEnabled = NO;
     NSIndexPath *timelineIndexPath = [self timelineIndexPath];
+//    [self slideTimelineDown];
+//    [self performSelector:@selector(slideTimeline) withObject:nil afterDelay:0.4];
     [self.tableView insertRowsAtIndexPaths:@[timelineIndexPath] withRowAnimation:UITableViewRowAnimationTop];
     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     [self.addButton setEnabled:NO];
@@ -345,6 +351,8 @@ static CGFloat contactRowHeight = 72.0f;
     // Contract the cell to hide the timeline
     self.isTimelineExpanded = NO;
     NSIndexPath *timelineIndexPath = [self timelineIndexPath];
+//    [self slideTimelineUp];
+//    [self performSelector:@selector(slideTimeline) withObject:nil afterDelay:0.4];
     [self.tableView deleteRowsAtIndexPaths:@[timelineIndexPath] withRowAnimation:UITableViewRowAnimationTop];
     self.tableView.scrollEnabled = YES;
     
@@ -353,6 +361,26 @@ static CGFloat contactRowHeight = 72.0f;
     
     [self.timeline.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.4];
     [self.addButton setEnabled:YES];
+}
+
+- (void)slideTimelineDown
+{
+    CGRect frame = self.timeline.view.frame;
+    frame.origin.y = frame.origin.y + frame.size.height;
+    [UIView animateWithDuration:0.3
+                     animations:^{
+                         self.timeline.view.frame = frame;
+                     }];
+}
+
+- (void)slideTimelineUp
+{
+    CGRect frame = self.timeline.view.frame;
+    frame.origin.y -= frame.size.height;
+    [UIView animateWithDuration:0.3
+                     animations:^{
+                         self.timeline.view.frame = frame;
+                     }];
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath

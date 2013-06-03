@@ -6,8 +6,10 @@
 //  Copyright (c) 2013 Lubin Labs. All rights reserved.
 //
 
+#import <GoogleMaps/GoogleMaps.h>
 #import "MeetingCell.h"
 #import "Meeting.h"
+#import "Location.h"
 
 #define MARGIN_TOP      20
 #define MARGIN_BOTTOM   20
@@ -17,7 +19,14 @@
 #define NOTE_HEIGHT     20
 #define DATE_HEIGHT     18
 
+#define MAP_HEIGHT      100
+
+#define TIMELINE_MARGIN_LEFT    36
+#define TIMELINE_WIDTH          2
+
 @implementation MeetingCell
+
+GMSMapView *mapView_;
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -49,6 +58,13 @@
         self.noteLabel = noteLabel;
         [self addSubview:self.noteLabel];
         
+        CGRect mapFrame = CGRectMake(0, self.noteLabel.frame.origin.y + self.noteLabel.frame.size.height + MARGIN_BOTTOM + 1, self.frame.size.width, 0);
+        mapView_ = [GMSMapView mapWithFrame:mapFrame camera:nil];
+        mapView_.settings.scrollGestures = NO;
+        mapView_.settings.zoomGestures = NO;
+        mapView_.userInteractionEnabled = NO;
+        [self addSubview:mapView_];
+        
         CGRect lineFrame = CGRectMake(0,0,self.bounds.size.width, 0.5);
 
         UIView *topLine = [[UIView alloc] initWithFrame:lineFrame];
@@ -62,18 +78,36 @@
         bottomLine.alpha = 0.1;
         self.bottomLine = bottomLine;
         [self addSubview:self.bottomLine];
+    
+        UIView *mapTopLine = [[UIView alloc] initWithFrame:lineFrame];
+        mapTopLine.backgroundColor = [UIColor whiteColor];
+        mapTopLine.alpha = 0.2;
+        self.mapTopLine = mapTopLine;
+        [self addSubview:self.mapTopLine];
+        
+        UIView *mapBottomLine = [[UIView alloc] initWithFrame:lineFrame];
+        mapBottomLine.backgroundColor = [UIColor blackColor];
+        mapBottomLine.alpha = 0.1;
+        self.mapBottomLine = mapBottomLine;
+        [self addSubview:self.mapBottomLine];
         
         UIView *tableTopLine = [[UIView alloc] initWithFrame:lineFrame];
-        topLine.backgroundColor = [UIColor blackColor];
-        topLine.alpha = 0.1;
+        tableTopLine.backgroundColor = [UIColor blackColor];
+        tableTopLine.alpha = 0;
         self.tableTopLine = tableTopLine;
-        [self addSubview:self.topLine];
+        [self addSubview:self.tableTopLine];
         
         UIView *tableBottomLine = [[UIView alloc] initWithFrame:lineFrame];
-        bottomLine.backgroundColor = [UIColor whiteColor];
-        bottomLine.alpha = 0.2;
+        tableBottomLine.backgroundColor = [UIColor whiteColor];
+        tableBottomLine.alpha = 0;
         self.tableBottomLine = tableBottomLine;
-        [self addSubview:self.bottomLine];
+        [self addSubview:self.tableBottomLine];
+        
+//        UIView *timeline = [[UIView alloc] initWithFrame:CGRectMake(TIMELINE_MARGIN_LEFT, 0, TIMELINE_WIDTH, 0)];
+//        timeline.backgroundColor = [UIColor blackColor];
+//        timeline.alpha = 0.2;
+//        self.timeline = timeline;
+//        [self addSubview:self.timeline];
         
         self.selectionStyle = UITableViewCellSelectionStyleNone;
 
@@ -86,9 +120,42 @@
     self.noteLabel.text = meeting.note;
     [self.noteLabel sizeToFit];
     
+    NSString *locationString;
+    if (meeting.location) {
+        
+        CGRect lineFrame = CGRectMake(0,0,self.bounds.size.width, 0.5);
+        
+        lineFrame.origin.y = self.noteLabel.frame.origin.y + self.noteLabel.frame.size.height + MARGIN_BOTTOM;
+        self.mapTopLine.frame = lineFrame;
+        
+        lineFrame.origin.y = self.noteLabel.frame.origin.y + self.noteLabel.frame.size.height + MARGIN_BOTTOM + 0.5;
+        self.mapBottomLine.frame = lineFrame;
+        
+        CGRect mapFrame = CGRectMake(0, self.noteLabel.frame.origin.y + self.noteLabel.frame.size.height + MARGIN_BOTTOM + 1, self.frame.size.width, MAP_HEIGHT);
+        GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:[meeting.location.latitude doubleValue]
+                                                                longitude:[meeting.location.longitude doubleValue]
+                                                                     zoom:15];
+        [mapView_ setFrame:mapFrame];
+        [mapView_ setCamera:camera];
+        [mapView_ clear];
+        
+        GMSMarker *marker = [[GMSMarker alloc] init];
+        marker.position = CLLocationCoordinate2DMake([meeting.location.latitude doubleValue], [meeting.location.longitude doubleValue]);
+        marker.title = [meeting.location title];
+        marker.snippet = [meeting.location subtitle];
+        marker.map = mapView_;
+        
+        locationString = [meeting.location title];
+    }
+    
     NSDateFormatter *meetingDateFormatter = [[NSDateFormatter alloc] init];
     [meetingDateFormatter setDateFormat:@"MMMM d, y"];
-    self.dateLabel.text = [meetingDateFormatter stringFromDate:meeting.date];
+    NSString *dateString = [meetingDateFormatter stringFromDate:meeting.date];
+    
+    if (meeting.location)
+        self.dateLabel.text = [NSString stringWithFormat:@"%@ | %@", dateString, locationString];
+    else
+        self.dateLabel.text = dateString;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

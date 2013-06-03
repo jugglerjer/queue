@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreLocation/CoreLocation.h>
 @class Meeting;
 
 @interface MeetingCell : UITableViewCell
@@ -18,6 +19,9 @@
 @property (strong, nonatomic) UIView *bottomLine;
 @property (strong, nonatomic) UIView *tableTopLine;
 @property (strong, nonatomic) UIView *tableBottomLine;
+@property (strong, nonatomic) UIView *mapTopLine;
+@property (strong, nonatomic) UIView *mapBottomLine;
+@property (strong, nonatomic) UIView *timeline;
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
 - (void)configureWithMeeting:(Meeting *)meeting;

@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreLocation/CoreLocation.h>
+#import "LocationChooserViewController.h"
 @class Meeting;
 @class Contact;
 
@@ -18,7 +20,7 @@ typedef enum
     QueueEditMeetingTypeUpdate
 } QueueEditMeetingType;
 
-@interface AddMeetingViewController : UIViewController <UITextViewDelegate, UIScrollViewDelegate>
+@interface AddMeetingViewController : UIViewController <UITextViewDelegate, UIScrollViewDelegate, LocationChooseViewControllerDelegate>
 
 @property (weak, nonatomic) id<AddMeetingViewControllerDelegate> delegate;
 @property (strong, nonatomic) Contact *contact;

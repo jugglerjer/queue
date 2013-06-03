@@ -217,7 +217,7 @@
     UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
                                                                            self.view.bounds.origin.y,
                                                                            self.view.bounds.size.width,
-                                                                           self.view.bounds.size.height)
+                                                                           self.view.bounds.size.height - 44 - 72 /* Nav Bar Height & Contact Row Height */)
                                                           style:UITableViewStylePlain];
     tableView.backgroundColor = [UIColor colorWithPatternImage: [UIImage imageNamed:@"queue_background.png"]];
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -357,14 +357,34 @@
     {
         lineFrame.origin.y = -0.5;
         cell.tableTopLine.frame = lineFrame;
+        cell.tableTopLine.alpha = 0.1;
     }
     
     if (indexPath.row == [self.meetingsArray count] - 1)
     {
-        lineFrame.origin.y = [self tableView:tableView heightForRowAtIndexPath:indexPath];
+        lineFrame.origin.y = [self tableView:tableView heightForRowAtIndexPath:indexPath] + 0.5;
         cell.tableBottomLine.frame = lineFrame;
+        cell.tableBottomLine.alpha = 0.2;
     }
+    
+//    CGRect timelineFrame = cell.timeline.frame;
+//    timelineFrame.size.height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
+//    cell.timeline.frame = timelineFrame;
+    
+    cell.clipsToBounds = NO;
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return TOOLBELT_HEIGHT + BUTTON_MARGIN_BOTTOM;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, TOOLBELT_HEIGHT + BUTTON_MARGIN_BOTTOM, tableView.frame.size.width, TOOLBELT_HEIGHT + BUTTON_MARGIN_BOTTOM)];
+    footer.backgroundColor = [UIColor clearColor];
+    return footer;
 }
 
 #define MARGIN_TOP      20
@@ -380,7 +400,12 @@
     NSString *text = [[self.meetingsArray objectAtIndex:indexPath.row] note];
     CGSize constraint = CGSizeMake(self.view.frame.size.width - MARGIN_LEFT - MARGIN_RIGHT, 20000.0f);
     CGSize size = [text sizeWithFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:14.0] constrainedToSize:constraint];
-    return size.height + MARGIN_TOP + MARGIN_BOTTOM + DATE_HEIGHT;
+    
+    int mapHeight = 0;
+    if ([[self.meetingsArray objectAtIndex:indexPath.row] location])
+        mapHeight = 101;
+    
+    return size.height + MARGIN_TOP + MARGIN_BOTTOM + DATE_HEIGHT + mapHeight + 0.5;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

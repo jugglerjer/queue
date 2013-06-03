@@ -41,6 +41,12 @@
 		3F98A2EC17529196006A3668 /* timeline-inner-shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F98A2EB17529196006A3668 /* timeline-inner-shadow.png */; };
 		3F98A2EF17529A32006A3668 /* MeetingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F98A2EE17529A32006A3668 /* MeetingCell.m */; };
 		3F98A2F11752ED3A006A3668 /* expand-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F98A2F01752ED39006A3668 /* expand-button.png */; };
+		3F9EF883175C0AB10089EC2A /* location-disabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F9EF881175C0AB10089EC2A /* location-disabled@2x.png */; };
+		3F9EF884175C0AB10089EC2A /* location-search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F9EF882175C0AB10089EC2A /* location-search@2x.png */; };
+		3F9EF887175C10BD0089EC2A /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F9EF886175C10BD0089EC2A /* Location.m */; };
+		3F9EF889175C344A0089EC2A /* clear-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F9EF888175C344A0089EC2A /* clear-button@2x.png */; };
+		3F9EF88C175C387C0089EC2A /* Meeting.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F9EF88B175C387C0089EC2A /* Meeting.m */; };
+		3F9EF88E175C40460089EC2A /* cancel-button-dark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F9EF88D175C40460089EC2A /* cancel-button-dark@2x.png */; };
 		3FA1018C17447769007D2520 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA1018B17447769007D2520 /* UIKit.framework */; };
 		3FA1018E17447769007D2520 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA1018D17447769007D2520 /* Foundation.framework */; };
 		3FA1019017447769007D2520 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA1018F17447769007D2520 /* CoreGraphics.framework */; };
@@ -78,7 +84,6 @@
 		3FE80D04174DF4F60009D61D /* queue-row-background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80D03174DF4F60009D61D /* queue-row-background@2x.png */; };
 		3FE80D07174F0D380009D61D /* QueueContactCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE80D06174F0D380009D61D /* QueueContactCell.m */; };
 		3FE80D09174F12390009D61D /* contact-avatar-placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80D08174F12390009D61D /* contact-avatar-placeholder@2x.png */; };
-		3FF2C01B1749BDAB007203D8 /* Meeting.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2C01A1749BDAB007203D8 /* Meeting.m */; };
 		3FF2C0211749D74E007203D8 /* AddMeetingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2C0201749D74E007203D8 /* AddMeetingViewController.m */; };
 		3FF2C027174B52DC007203D8 /* TimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2C026174B52DC007203D8 /* TimelineViewController.m */; };
 /* End PBXBuildFile section */
@@ -134,6 +139,14 @@
 		3F98A2ED17529A32006A3668 /* MeetingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeetingCell.h; sourceTree = "<group>"; };
 		3F98A2EE17529A32006A3668 /* MeetingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeetingCell.m; sourceTree = "<group>"; };
 		3F98A2F01752ED39006A3668 /* expand-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "expand-button.png"; path = "Queue/expand-button.png"; sourceTree = "<group>"; };
+		3F9EF881175C0AB10089EC2A /* location-disabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "location-disabled@2x.png"; path = "Queue/location-disabled@2x.png"; sourceTree = "<group>"; };
+		3F9EF882175C0AB10089EC2A /* location-search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "location-search@2x.png"; path = "Queue/location-search@2x.png"; sourceTree = "<group>"; };
+		3F9EF885175C10BD0089EC2A /* Location.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Location.h; sourceTree = "<group>"; };
+		3F9EF886175C10BD0089EC2A /* Location.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Location.m; sourceTree = "<group>"; };
+		3F9EF888175C344A0089EC2A /* clear-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "clear-button@2x.png"; path = "Queue/clear-button@2x.png"; sourceTree = "<group>"; };
+		3F9EF88A175C387B0089EC2A /* Meeting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Meeting.h; sourceTree = "<group>"; };
+		3F9EF88B175C387C0089EC2A /* Meeting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Meeting.m; sourceTree = "<group>"; };
+		3F9EF88D175C40460089EC2A /* cancel-button-dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cancel-button-dark@2x.png"; path = "Queue/cancel-button-dark@2x.png"; sourceTree = "<group>"; };
 		3FA1018817447769007D2520 /* Queue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Queue.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FA1018B17447769007D2520 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		3FA1018D17447769007D2520 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -183,8 +196,6 @@
 		3FE80D05174F0D380009D61D /* QueueContactCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QueueContactCell.h; sourceTree = "<group>"; };
 		3FE80D06174F0D380009D61D /* QueueContactCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QueueContactCell.m; sourceTree = "<group>"; };
 		3FE80D08174F12390009D61D /* contact-avatar-placeholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "contact-avatar-placeholder@2x.png"; path = "Queue/contact-avatar-placeholder@2x.png"; sourceTree = "<group>"; };
-		3FF2C0191749BDAB007203D8 /* Meeting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Meeting.h; sourceTree = "<group>"; };
-		3FF2C01A1749BDAB007203D8 /* Meeting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Meeting.m; sourceTree = "<group>"; };
 		3FF2C01F1749D74E007203D8 /* AddMeetingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddMeetingViewController.h; sourceTree = "<group>"; };
 		3FF2C0201749D74E007203D8 /* AddMeetingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddMeetingViewController.m; sourceTree = "<group>"; };
 		3FF2C025174B52DC007203D8 /* TimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineViewController.h; sourceTree = "<group>"; };
@@ -310,8 +321,10 @@
 				3FABEE7B174823BA00BBB760 /* Queue.m */,
 				3FABEE77174822C800BBB760 /* Contact.h */,
 				3FABEE78174822C800BBB760 /* Contact.m */,
-				3FF2C0191749BDAB007203D8 /* Meeting.h */,
-				3FF2C01A1749BDAB007203D8 /* Meeting.m */,
+				3F9EF88A175C387B0089EC2A /* Meeting.h */,
+				3F9EF88B175C387C0089EC2A /* Meeting.m */,
+				3F9EF885175C10BD0089EC2A /* Location.h */,
+				3F9EF886175C10BD0089EC2A /* Location.m */,
 				3FABEE741748130F00BBB760 /* Queue.xcdatamodeld */,
 				3FA1019217447769007D2520 /* Supporting Files */,
 				3FE80CFE174DE8A30009D61D /* QueueBarButtonItem.h */,
@@ -358,6 +371,10 @@
 		3FE80CE4174DBFA50009D61D /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				3F9EF88D175C40460089EC2A /* cancel-button-dark@2x.png */,
+				3F9EF888175C344A0089EC2A /* clear-button@2x.png */,
+				3F9EF881175C0AB10089EC2A /* location-disabled@2x.png */,
+				3F9EF882175C0AB10089EC2A /* location-search@2x.png */,
 				3F934448175AE968000FD331 /* location-enabled@2x.png */,
 				3F97764617572C4900E6B5B7 /* light-background@2x.png */,
 				3F977642175726B000E6B5B7 /* calendar_full@2x.png */,
@@ -489,6 +506,10 @@
 				3F97764717572C4900E6B5B7 /* light-background@2x.png in Resources */,
 				3F934449175AE968000FD331 /* location-enabled@2x.png in Resources */,
 				3F93444D175AF1B2000FD331 /* GoogleMaps.bundle in Resources */,
+				3F9EF883175C0AB10089EC2A /* location-disabled@2x.png in Resources */,
+				3F9EF884175C0AB10089EC2A /* location-search@2x.png in Resources */,
+				3F9EF889175C344A0089EC2A /* clear-button@2x.png in Resources */,
+				3F9EF88E175C40460089EC2A /* cancel-button-dark@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -532,7 +553,6 @@
 				3FABEE79174822C800BBB760 /* Contact.m in Sources */,
 				3FABEE7C174823BA00BBB760 /* Queue.m in Sources */,
 				3FABEE7F17483ED800BBB760 /* QueuesViewController.m in Sources */,
-				3FF2C01B1749BDAB007203D8 /* Meeting.m in Sources */,
 				3FF2C0211749D74E007203D8 /* AddMeetingViewController.m in Sources */,
 				3FF2C027174B52DC007203D8 /* TimelineViewController.m in Sources */,
 				3FE80D00174DE8A30009D61D /* QueueBarButtonItem.m in Sources */,
@@ -543,6 +563,8 @@
 				3F934445175ADDF2000FD331 /* SBJsonBase.m in Sources */,
 				3F934446175ADDF2000FD331 /* SBJsonParser.m in Sources */,
 				3F934447175ADDF2000FD331 /* SBJsonWriter.m in Sources */,
+				3F9EF887175C10BD0089EC2A /* Location.m in Sources */,
+				3F9EF88C175C387C0089EC2A /* Meeting.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

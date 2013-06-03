@@ -8,7 +8,6 @@
 
 #import "AddMeetingViewController.h"
 #import "QueueBarButtonItem.h"
-#import "LocationChooserViewController.h"
 #import "Meeting.h"
 #import "Contact.h"
 
@@ -23,13 +22,12 @@
 @property (strong, nonatomic) UILabel * dateLabel;
 @property (strong, nonatomic) LocationChooserViewController *locationChooser;
 @property (strong, nonatomic) UIScrollView *scrollView;
+@property (strong, nonatomic) UIButton *locationExpanderButton;
 @property BOOL isKeyboardVisible;
 @property BOOL isDatePickerVisible;
 @property BOOL wasKeyboardVisible;
 @property BOOL wasDatePickerVisible;
 @property BOOL isLocationExpanded;
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
 
@@ -50,6 +48,7 @@ static CGFloat keyboardHeight = 216;
 {
     self.meeting.note = self.textView.text;
     [self.contact addMeetingsObject:self.meeting];
+    [self.locationChooser clearLocations];
     NSError *error = nil;
     if (![self.managedObjectContext save:&error]) {
         // Handle the error.
@@ -77,6 +76,7 @@ static CGFloat keyboardHeight = 216;
 
 - (void)cancel
 {
+    [self.locationChooser clearLocations];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -99,9 +99,10 @@ static CGFloat keyboardHeight = 216;
 
 #define PLACE_TEXT_MARGIN_LEFT       48
 #define PLACE_TEXT_MARGIN_RIGHT      48
-#define PLACE_TEXT_MARGIN_TOP        20
-#define PLACE_TEXT_MARGIN_BOTTOM     20
-#define PLACE_TEXT_HEIGHT            15
+#define PLACE_TEXT_MARGIN_TOP        14
+#define PLACE_TEXT_MARGIN_BOTTOM     14
+#define PLACE_TEXT_HEIGHT            18
+#define PLACE_SUBTEXT_HEIGHT         15
 
 #define ICON_HEIGHT                  14
 #define ICON_WIDTH                   13
@@ -218,18 +219,22 @@ static CGFloat keyboardHeight = 216;
     locationFrame.origin.y = locationFrame.origin.y + dateViewContainer.frame.size.height + noteViewContainer.frame.size.height;
     locationFrame.size.height = locationFrame.size.height;
     LocationChooserViewController *locationChooser = [[LocationChooserViewController alloc] init];
+    locationChooser.managedObjectContext = self.managedObjectContext;
+    locationChooser.meeting = self.meeting;
     locationChooser.view.frame = locationFrame;
+    locationChooser.delegate = self;
     self.locationChooser = locationChooser;
     [self.scrollView addSubview:self.locationChooser.view];
     
-    CGRect buttonFrame = self.locationChooser.view.frame;
-    buttonFrame.size.height = PLACE_TEXT_MARGIN_TOP + 2*PLACE_TEXT_HEIGHT + PLACE_TEXT_MARGIN_BOTTOM;
-    UIButton *scrollButton = [[UIButton alloc] initWithFrame:buttonFrame];
-    [scrollButton addTarget:self action:@selector(scrollMeetingView) forControlEvents:UIControlEventTouchUpInside];
-    [self.scrollView addSubview:scrollButton];
+//    CGRect buttonFrame = self.locationChooser.view.frame;
+//    buttonFrame.size.height = PLACE_TEXT_MARGIN_TOP + PLACE_TEXT_HEIGHT + PLACE_SUBTEXT_HEIGHT + PLACE_TEXT_MARGIN_BOTTOM;
+//    UIButton *scrollButton = [[UIButton alloc] initWithFrame:buttonFrame];
+//    [scrollButton addTarget:self action:@selector(scrollMeetingView) forControlEvents:UIControlEventTouchUpInside];
+//    self.locationExpanderButton = scrollButton;
+//    [self.scrollView addSubview:scrollButton];
     
     UIDatePicker *datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
-                                                                              self.view.bounds.size.height - keyboardHeight - self.navigationController.navigationBar.frame.size.height,
+                                                                              self.view.bounds.size.height,
                                                                               self.view.bounds.size.width,
                                                                               keyboardHeight)];
     datePicker.datePickerMode = UIDatePickerModeDate;
@@ -239,8 +244,12 @@ static CGFloat keyboardHeight = 216;
     self.datePicker = datePicker;
     [self.view addSubview:self.datePicker];
     
-    self.isDatePickerVisible = YES;
+    self.isDatePickerVisible = NO;
     self.isKeyboardVisible = NO;
+    
+    if (self.editMeetingType == QueueEditMeetingTypeAdd) {
+        [self.textView becomeFirstResponder];
+    }
     
     [self registerForKeyboardNotifications];
 }
@@ -252,7 +261,7 @@ static CGFloat keyboardHeight = 216;
 
 - (CGFloat)noteViewContainerHeight
 {
-    return self.view.bounds.size.height - keyboardHeight - self.navigationController.navigationBar.frame.size.height - PLACE_TEXT_HEIGHT - PLACE_TEXT_MARGIN_TOP - PLACE_TEXT_MARGIN_BOTTOM - [self dateViewContainerHeight];
+    return self.view.bounds.size.height - keyboardHeight - self.navigationController.navigationBar.frame.size.height - NOTE_TEXT_HEIGHT - NOTE_TEXT_MARGIN_TOP - NOTE_TEXT_MARGIN_BOTTOM - [self dateViewContainerHeight];
 }
 
 
@@ -263,20 +272,58 @@ static CGFloat keyboardHeight = 216;
 }
 
 #pragma mark - Scroll View Delegate Methods
+- (void)locationChooser:(LocationChooserViewController *)locationChooser didSelectLocation:(Location *)location forMeeting:(Meeting *)meeting
+{
+    meeting.location = location;
+    [self contractLocation];
+}
+
+- (void)locationChooser:(LocationChooserViewController *)locationChooser didRemoveLocation:(Location *)location forMeeting:(Meeting *)meeting
+{
+    meeting.location = nil;
+}
+
+- (void)locationChooserShouldBecomeActive:(LocationChooserViewController *)locationChooser
+{
+    [self expandLocation];
+}
+
+- (void)locationChooserShouldBecomeInactive:(LocationChooserViewController *)locationChooser
+{
+    [self contractLocation];
+}
+
 - (void)scrollMeetingView
 {
     if (self.isLocationExpanded)
     {
-        [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
-        [self showActiveInputView];
-        self.isLocationExpanded = NO;
+        [self contractLocation];
     }
     else
     {
-        [self.scrollView setContentOffset:CGPointMake(0, [self dateViewContainerHeight] + [self noteViewContainerHeight] + self.navigationController.navigationBar.frame.size.height) animated:YES];
-        [self hideActiveInputView];
-        self.isLocationExpanded = YES;
+        [self expandLocation];
     }
+}
+
+- (void)expandLocation
+{
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    [self.scrollView setContentOffset:CGPointMake(0, [self dateViewContainerHeight] + [self noteViewContainerHeight]) animated:YES];
+    [self hideActiveInputView];
+    [self.locationChooser updateLocationViewMode:LocationChooserViewModeLocationSearch];
+    [self.locationChooser activateWithAnimation:YES];
+    self.locationExpanderButton.hidden = YES;
+    self.isLocationExpanded = YES;
+}
+
+- (void)contractLocation
+{
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+//    [self showActiveInputView];
+    [self.locationChooser resignWithAnimation:YES];
+    self.locationExpanderButton.hidden = NO;
+    self.isLocationExpanded = NO;
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
