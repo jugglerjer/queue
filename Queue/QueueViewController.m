@@ -310,6 +310,31 @@ static CGFloat contactRowHeight = 72.0f;
     return contactRowHeight;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.5;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 0.5;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *tableTopLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 0.5)];
+    tableTopLine.backgroundColor = [UIColor blackColor];
+    tableTopLine.alpha = 0.1;
+    return tableTopLine;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 0.5)];
+    footer.backgroundColor = [UIColor whiteColor];
+    footer.alpha = 0.2;
+    return footer;
+}
 
 # pragma mark - Queue Row Selection Methods
 

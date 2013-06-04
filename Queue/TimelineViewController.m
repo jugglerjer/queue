@@ -338,8 +338,16 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *MeetingCellIdentifier = @"MeetingCell";
-    MeetingCell *cell = [tableView dequeueReusableCellWithIdentifier:MeetingCellIdentifier];
+    NSString *cellHeightString = [[NSNumber numberWithFloat:[self tableView:tableView heightForRowAtIndexPath:indexPath]] stringValue];
+    NSString *MeetingCellIdentifier = [NSString stringWithFormat:@"MeetingCell%@", cellHeightString];
+    MeetingCell *cell;
+    
+    // Make sure we're not dequeueing a cell that's still visible
+//    if ([self.meetingsArray count] > [[tableView visibleCells] count] + 2)
+        cell = [tableView dequeueReusableCellWithIdentifier:MeetingCellIdentifier];
+//    else
+//        cell = nil;
+    
     if (cell == nil)
     {
         cell = [[MeetingCell alloc] initWithReuseIdentifier:MeetingCellIdentifier];
@@ -352,26 +360,7 @@
     
     lineFrame.origin.y = [self tableView:tableView heightForRowAtIndexPath:indexPath] - 0.5;
     cell.bottomLine.frame = lineFrame;
-    
-//    if (indexPath.row == 0)
-//    {
-//        lineFrame.origin.y = -0.5;
-//        cell.tableTopLine.frame = lineFrame;
-//        cell.tableTopLine.alpha = 0.1;
-//    }
-//    
-//    if (indexPath.row == [self.meetingsArray count] - 1)
-//    {
-//        lineFrame.origin.y = [self tableView:tableView heightForRowAtIndexPath:indexPath] + 0.5;
-//        cell.tableBottomLine.frame = lineFrame;
-//        cell.tableBottomLine.alpha = 0.2;
-//    }
-    
-//    CGRect timelineFrame = cell.timeline.frame;
-//    timelineFrame.size.height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
-//    cell.timeline.frame = timelineFrame;
-    
-    cell.clipsToBounds = NO;
+
     return cell;
 }
 

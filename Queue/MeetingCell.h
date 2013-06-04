@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
+#import <GoogleMaps/GoogleMaps.h>
 @class Meeting;
 
 @interface MeetingCell : UITableViewCell
@@ -22,6 +23,7 @@
 @property (strong, nonatomic) UIView *mapTopLine;
 @property (strong, nonatomic) UIView *mapBottomLine;
 @property (strong, nonatomic) UIView *timeline;
+@property (strong, nonatomic) GMSMapView *mapView_;
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
 - (void)configureWithMeeting:(Meeting *)meeting;

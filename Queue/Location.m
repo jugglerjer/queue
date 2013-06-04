@@ -73,7 +73,7 @@
     
     self.latitude = [[[result objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"];
     self.longitude = [[[result objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"];
-    self.streetAddress = [addressComponents objectForKey:@"street_address"];
+    self.streetAddress = [addressComponents objectForKey:@"street_number"];
     self.route = [addressComponents objectForKey:@"route"];
     self.neighborhood = [addressComponents objectForKey:@"neighborhood"];
     self.locality = [addressComponents objectForKey:@"locality"];
@@ -88,7 +88,7 @@
 - (void)populateWithGooglePlacesResult:(NSDictionary *)result
 {
     self.name = [result objectForKey:@"name"];
-    self.formattedAddress = [result objectForKey:@"formatted_address"];
+    self.formattedAddress = [result objectForKey:@"formatted_address"] ? [result objectForKey:@"formatted_address"] : [result objectForKey:@"vicinity"];
     self.latitude = [NSNumber numberWithDouble:[[[[result objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue]];
     self.longitude = [NSNumber numberWithDouble:[[[[result objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue]];
 }
@@ -99,7 +99,7 @@
 // -------------------------------------------------------------
 - (NSString *)title
 {
-    if (self.name)
+    if (![self.name isEqualToString:@""] && self.name)
         return self.name;
     else if (self.streetAddress && self.route)
         return [NSString stringWithFormat:@"%@ %@", self.streetAddress, self.route];

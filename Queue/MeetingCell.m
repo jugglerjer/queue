@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 Lubin Labs. All rights reserved.
 //
 
-#import <GoogleMaps/GoogleMaps.h>
 #import "MeetingCell.h"
 #import "Meeting.h"
 #import "Location.h"
@@ -26,7 +25,7 @@
 
 @implementation MeetingCell
 
-GMSMapView *mapView_;
+@synthesize mapView_;
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -63,7 +62,7 @@ GMSMapView *mapView_;
         mapView_.settings.scrollGestures = NO;
         mapView_.settings.zoomGestures = NO;
         mapView_.userInteractionEnabled = NO;
-        [self addSubview:mapView_];
+//        [self addSubview:mapView_];
         
         CGRect lineFrame = CGRectMake(0,0,self.bounds.size.width, 0.5);
 
@@ -121,23 +120,34 @@ GMSMapView *mapView_;
     [self.noteLabel sizeToFit];
     
     NSString *locationString;
+    CGRect mapFrame;
+    GMSCameraPosition *camera;
+    [mapView_ setCamera:nil];
+    [mapView_ removeFromSuperview];
+    [mapView_ clear];
+    
+    NSDateFormatter *meetingDateFormatter = [[NSDateFormatter alloc] init];
+    [meetingDateFormatter setDateFormat:@"MMMM d, y"];
+    NSString *dateString = [meetingDateFormatter stringFromDate:meeting.date];
+    
     if (meeting.location) {
         
         CGRect lineFrame = CGRectMake(0,0,self.bounds.size.width, 0.5);
         
         lineFrame.origin.y = self.noteLabel.frame.origin.y + self.noteLabel.frame.size.height + MARGIN_BOTTOM;
         self.mapTopLine.frame = lineFrame;
+        self.mapTopLine.alpha = 0.1;
         
         lineFrame.origin.y = self.noteLabel.frame.origin.y + self.noteLabel.frame.size.height + MARGIN_BOTTOM + 0.5;
         self.mapBottomLine.frame = lineFrame;
-        
-        CGRect mapFrame = CGRectMake(0, self.noteLabel.frame.origin.y + self.noteLabel.frame.size.height + MARGIN_BOTTOM + 1, self.frame.size.width, MAP_HEIGHT);
-        GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:[meeting.location.latitude doubleValue]
+        self.mapBottomLine.alpha = 0.2;
+    
+        mapFrame = CGRectMake(0, self.noteLabel.frame.origin.y + self.noteLabel.frame.size.height + MARGIN_BOTTOM + 1, self.frame.size.width, MAP_HEIGHT);
+        camera = [GMSCameraPosition cameraWithLatitude:[meeting.location.latitude doubleValue]
                                                                 longitude:[meeting.location.longitude doubleValue]
                                                                      zoom:15];
-        mapView_.frame = mapFrame;
-        [mapView_ setCamera:camera];
-        [mapView_ clear];
+        [self addSubview:mapView_];
+        [mapView_ performSelector:@selector(startRendering) onThread:[NSThread new] withObject:nil waitUntilDone:NO];
         
         GMSMarker *marker = [[GMSMarker alloc] init];
         marker.position = CLLocationCoordinate2DMake([meeting.location.latitude doubleValue], [meeting.location.longitude doubleValue]);
@@ -146,16 +156,21 @@ GMSMapView *mapView_;
         marker.map = mapView_;
         
         locationString = [meeting.location title];
+        self.dateLabel.text = [NSString stringWithFormat:@"%@ | %@", dateString, locationString];
+    }
+    else {
+        self.mapTopLine.alpha = 0;
+        self.mapBottomLine.alpha = 0;
+        mapFrame = CGRectMake(0, self.noteLabel.frame.origin.y + self.noteLabel.frame.size.height + MARGIN_BOTTOM + 1, self.frame.size.width, 0);
+        camera = nil;
+//        [mapView_ stopRendering];
+        self.dateLabel.text = dateString;
     }
     
-    NSDateFormatter *meetingDateFormatter = [[NSDateFormatter alloc] init];
-    [meetingDateFormatter setDateFormat:@"MMMM d, y"];
-    NSString *dateString = [meetingDateFormatter stringFromDate:meeting.date];
-    
-    if (meeting.location)
-        self.dateLabel.text = [NSString stringWithFormat:@"%@ | %@", dateString, locationString];
-    else
-        self.dateLabel.text = dateString;
+    [mapView_ setFrame:mapFrame];
+    [mapView_ setCamera:camera];
+    [mapView_ stopRendering];
+//    [mapView_ performSelector:@selector(stopRendering) withObject:nil afterDelay:0.4];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

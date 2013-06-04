@@ -49,7 +49,8 @@
 static CGFloat keyboardHeight = 216;
 GMSMapView *mapView_;
 static NSString *const googleGeocodeURL =  @"https://maps.googleapis.com/maps/api/geocode/json?";
-static NSString *const googlePlacesURL = @"https://maps.googleapis.com/maps/api/place/textsearch/json?key=AIzaSyDJk6VmHmcNveBQjDV91rJ3U4ExV0b4vIc";
+static NSString *const googlePlacesTextSearchURL = @"https://maps.googleapis.com/maps/api/place/textsearch/json?key=AIzaSyDJk6VmHmcNveBQjDV91rJ3U4ExV0b4vIc";
+static NSString *const googlePlacesNearbySearchURL = @"https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyDJk6VmHmcNveBQjDV91rJ3U4ExV0b4vIc";
 
 // Start the location manager
 - (void)startStandardUpdates
@@ -94,13 +95,22 @@ static NSString *const googlePlacesURL = @"https://maps.googleapis.com/maps/api/
 {
     LLDataDownloader *downloader = [[LLDataDownloader alloc] init];
     downloader.delegate = self;
+    
     if (defaultLocation)
         downloader.identifier = kDefaultLocationsDownloader;
     else
         downloader.identifier = kSearchLocationsDownloader;
+    
     NSString *query = [self.locationTitleView.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSString *url = [NSString stringWithFormat:@"%@&query=%@&location=%f,%f&radius=1000&sensor=true",
-                     googlePlacesURL,
+    NSString *url;
+    if ([query isEqualToString:@""] || nil == query)
+        url = [NSString stringWithFormat:@"%@&location=%f,%f&radius=1000&sensor=true",
+                         googlePlacesNearbySearchURL,
+                         [self.location.latitude doubleValue],
+                         [self.location.longitude doubleValue]];
+    else
+        url = [NSString stringWithFormat:@"%@&query=%@&location=%f,%f&radius=1000&sensor=true",
+                     googlePlacesTextSearchURL,
                      query,
                      [self.location.latitude doubleValue],
                      [self.location.longitude doubleValue]];
@@ -176,7 +186,8 @@ static NSString *const googlePlacesURL = @"https://maps.googleapis.com/maps/api/
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:[self.location.latitude doubleValue]
                                                             longitude:[self.location.longitude doubleValue]
                                                                  zoom:15];
-    [mapView_ setCamera:camera];
+//    [mapView_ setCamera:camera];
+    [mapView_ animateToCameraPosition:camera];
     
     [mapView_ clear];
     
@@ -252,7 +263,7 @@ static NSString *const googlePlacesURL = @"https://maps.googleapis.com/maps/api/
     [self.locationTitleView becomeFirstResponder];
     
     double duration;
-    if (animation) duration = 0.4;
+    if (animation) duration = 0.25;
     else duration = 0.0;
     
     [UIView animateWithDuration:duration
@@ -303,7 +314,7 @@ static NSString *const googlePlacesURL = @"https://maps.googleapis.com/maps/api/
     [self.locationTitleView resignFirstResponder];
     
     double duration;
-    if (animation) duration = 0.4;
+    if (animation) duration = 0.25;
     else duration = 0.0;
     
     [UIView animateWithDuration:duration
