@@ -15,8 +15,8 @@
 
 #define PLACE_TEXT_MARGIN_LEFT       48
 #define PLACE_TEXT_MARGIN_RIGHT      48
-#define PLACE_TEXT_MARGIN_TOP        14
-#define PLACE_TEXT_MARGIN_BOTTOM     14
+#define PLACE_TEXT_MARGIN_TOP        10.5
+#define PLACE_TEXT_MARGIN_BOTTOM     10.5
 #define PLACE_TEXT_HEIGHT            18
 #define PLACE_SUBTEXT_HEIGHT         15
 
@@ -37,7 +37,7 @@
 @property (strong, nonatomic) UITableView *searchResultsTable;
 @property (strong, nonatomic) NSMutableArray *searchResultsArray;
 @property (strong, nonatomic) NSMutableArray *locationsToClear;
-@property (strong, nonatomic) UIImageView *modeIconView;
+@property (strong, nonatomic) UIButton *modeIconView;
 @property (strong, nonatomic) UIButton *clearButton;
 @property BOOL isLocationEnabled;
 @property BOOL isActive;
@@ -228,7 +228,9 @@ static NSString *const googlePlacesNearbySearchURL = @"https://maps.googleapis.c
     UIImage *iconImage = [UIImage imageNamed:iconName];
     
     // Assign the image to our icon image view
-    self.modeIconView.image = iconImage;
+    [self.modeIconView setImage:iconImage forState:UIControlStateNormal];
+    
+    self.viewMode = mode;
 }
 
 - (void)changeViewState
@@ -371,9 +373,10 @@ static NSString *const googlePlacesNearbySearchURL = @"https://maps.googleapis.c
                                     ((PLACE_TEXT_MARGIN_TOP + PLACE_SUBTEXT_HEIGHT + PLACE_TEXT_HEIGHT + PLACE_TEXT_MARGIN_BOTTOM) - ICON_HEIGHT)/2,
                                     ICON_WIDTH,
                                     ICON_HEIGHT);
-    UIImageView *locationIcon = [[UIImageView alloc] initWithFrame:iconFrame];
+    UIButton *locationIcon = [[UIButton alloc] initWithFrame:iconFrame];
     self.modeIconView = locationIcon;
     [self updateLocationViewMode:LocationChooserViewModeLocationDisabled];
+    [self.modeIconView addTarget:self action:@selector(shouldShowMethodChooser) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.modeIconView];
     
     CGRect clearButtonFrame = CGRectMake(self.view.frame.size.width - (PLACE_TEXT_MARGIN_RIGHT - CLEAR_BUTTON_WIDTH)/2 - CLEAR_BUTTON_WIDTH,
@@ -475,6 +478,14 @@ static NSString *const googlePlacesNearbySearchURL = @"https://maps.googleapis.c
     [self resignWithAnimation:YES];
 }
 
+- (void)shouldShowMethodChooser
+{
+    if (!self.isActive) {
+        if ([_delegate respondsToSelector:@selector(locationChooserShouldShowMethodChooser:)])
+            [_delegate locationChooserShouldShowMethodChooser:self];
+    }
+}
+
 #pragma mark - Search Result Management Methods
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
@@ -532,6 +543,7 @@ static NSString *const googlePlacesNearbySearchURL = @"https://maps.googleapis.c
         [_delegate locationChooser:self didSelectLocation:self.location forMeeting:self.meeting];
     }
     
+    [self.locationManager stopUpdatingLocation];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

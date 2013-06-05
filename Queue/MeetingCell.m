@@ -57,11 +57,15 @@
         self.noteLabel = noteLabel;
         [self addSubview:self.noteLabel];
         
-        CGRect mapFrame = CGRectMake(0, self.noteLabel.frame.origin.y + self.noteLabel.frame.size.height + MARGIN_BOTTOM + 1, self.frame.size.width, 0);
-        mapView_ = [GMSMapView mapWithFrame:mapFrame camera:nil];
-        mapView_.settings.scrollGestures = NO;
-        mapView_.settings.zoomGestures = NO;
-        mapView_.userInteractionEnabled = NO;
+        CGRect mapFrame = CGRectMake(0, self.noteLabel.frame.origin.y + self.noteLabel.frame.size.height + MARGIN_BOTTOM + 0.5, self.frame.size.width, 0);
+        UIImageView *mapView = [[UIImageView alloc] initWithFrame:mapFrame];
+        mapView.backgroundColor = [UIColor colorWithRed:235.0/255.0 green:235.0/255.0 blue:235.0/255.0 alpha:1];
+        self.mapView = mapView;
+        [self addSubview:self.mapView];
+//        mapView_ = [GMSMapView mapWithFrame:mapFrame camera:nil];
+//        mapView_.settings.scrollGestures = NO;
+//        mapView_.settings.zoomGestures = NO;
+//        mapView_.userInteractionEnabled = NO;
 //        [self addSubview:mapView_];
         
         CGRect lineFrame = CGRectMake(0,0,self.bounds.size.width, 0.5);
@@ -78,11 +82,17 @@
         self.bottomLine = bottomLine;
         [self addSubview:self.bottomLine];
     
-        UIView *mapTopLine = [[UIView alloc] initWithFrame:lineFrame];
-        mapTopLine.backgroundColor = [UIColor whiteColor];
-        mapTopLine.alpha = 0.2;
-        self.mapTopLine = mapTopLine;
-        [self addSubview:self.mapTopLine];
+        UIView *mapTopLineDark = [[UIView alloc] initWithFrame:lineFrame];
+        mapTopLineDark.backgroundColor = [UIColor whiteColor];
+        mapTopLineDark.alpha = 0.2;
+        self.mapTopLineDark = mapTopLineDark;
+        [self addSubview:self.mapTopLineDark];
+        
+        UIView *mapTopLineLight = [[UIView alloc] initWithFrame:lineFrame];
+        mapTopLineLight.backgroundColor = [UIColor whiteColor];
+        mapTopLineLight.alpha = 0.2;
+        self.mapTopLineLight = mapTopLineLight;
+        [self addSubview:self.mapTopLineLight];
         
         UIView *mapBottomLine = [[UIView alloc] initWithFrame:lineFrame];
         mapBottomLine.backgroundColor = [UIColor blackColor];
@@ -121,10 +131,10 @@
     
     NSString *locationString;
     CGRect mapFrame;
-    GMSCameraPosition *camera;
-    [mapView_ setCamera:nil];
-    [mapView_ removeFromSuperview];
-    [mapView_ clear];
+//    GMSCameraPosition *camera;
+//    [mapView_ setCamera:nil];
+//    [mapView_ removeFromSuperview];
+//    [mapView_ clear];
     
     NSDateFormatter *meetingDateFormatter = [[NSDateFormatter alloc] init];
     [meetingDateFormatter setDateFormat:@"MMMM d, y"];
@@ -135,41 +145,46 @@
         CGRect lineFrame = CGRectMake(0,0,self.bounds.size.width, 0.5);
         
         lineFrame.origin.y = self.noteLabel.frame.origin.y + self.noteLabel.frame.size.height + MARGIN_BOTTOM;
-        self.mapTopLine.frame = lineFrame;
-        self.mapTopLine.alpha = 0.1;
+        self.mapTopLineDark.frame = lineFrame;
+        self.mapTopLineDark.alpha = 0.1;
+        
+//        lineFrame.origin.y = self.noteLabel.frame.origin.y + self.noteLabel.frame.size.height + MARGIN_BOTTOM + 0.5;
+//        self.mapTopLineDark.frame = lineFrame;
+//        self.mapTopLineDark.alpha = 0.1;
         
         lineFrame.origin.y = self.noteLabel.frame.origin.y + self.noteLabel.frame.size.height + MARGIN_BOTTOM + 0.5;
+//        lineFrame.origin.y = MAP_HEIGHT - 0.5;
         self.mapBottomLine.frame = lineFrame;
         self.mapBottomLine.alpha = 0.2;
     
-        mapFrame = CGRectMake(0, self.noteLabel.frame.origin.y + self.noteLabel.frame.size.height + MARGIN_BOTTOM + 1, self.frame.size.width, MAP_HEIGHT);
-        camera = [GMSCameraPosition cameraWithLatitude:[meeting.location.latitude doubleValue]
-                                                                longitude:[meeting.location.longitude doubleValue]
-                                                                     zoom:15];
-        [self addSubview:mapView_];
-        [mapView_ performSelector:@selector(startRendering) onThread:[NSThread new] withObject:nil waitUntilDone:NO];
-        
-        GMSMarker *marker = [[GMSMarker alloc] init];
-        marker.position = CLLocationCoordinate2DMake([meeting.location.latitude doubleValue], [meeting.location.longitude doubleValue]);
-        marker.title = [meeting.location title];
-        marker.snippet = [meeting.location subtitle];
-        marker.map = mapView_;
+        mapFrame = CGRectMake(0, self.noteLabel.frame.origin.y + self.noteLabel.frame.size.height + MARGIN_BOTTOM + 0.5, self.frame.size.width, MAP_HEIGHT);
+//        camera = [GMSCameraPosition cameraWithLatitude:[meeting.location.latitude doubleValue]
+//                                                                longitude:[meeting.location.longitude doubleValue]
+//                                                                     zoom:15];
+//        [self addSubview:mapView_];
+//        [mapView_ performSelector:@selector(startRendering) onThread:[NSThread new] withObject:nil waitUntilDone:NO];
+//        
+//        GMSMarker *marker = [[GMSMarker alloc] init];
+//        marker.position = CLLocationCoordinate2DMake([meeting.location.latitude doubleValue], [meeting.location.longitude doubleValue]);
+//        marker.title = [meeting.location title];
+//        marker.snippet = [meeting.location subtitle];
+//        marker.map = mapView_;
         
         locationString = [meeting.location title];
         self.dateLabel.text = [NSString stringWithFormat:@"%@ | %@", dateString, locationString];
     }
     else {
-        self.mapTopLine.alpha = 0;
+        self.mapTopLineDark.alpha = 0;
         self.mapBottomLine.alpha = 0;
-        mapFrame = CGRectMake(0, self.noteLabel.frame.origin.y + self.noteLabel.frame.size.height + MARGIN_BOTTOM + 1, self.frame.size.width, 0);
-        camera = nil;
+        mapFrame = CGRectMake(0, self.noteLabel.frame.origin.y + self.noteLabel.frame.size.height + MARGIN_BOTTOM + 0.5, self.frame.size.width, 0);
+//        camera = nil;
 //        [mapView_ stopRendering];
         self.dateLabel.text = dateString;
     }
     
-    [mapView_ setFrame:mapFrame];
-    [mapView_ setCamera:camera];
-    [mapView_ stopRendering];
+    [self.mapView setFrame:mapFrame];
+//    [mapView_ setCamera:camera];
+//    [mapView_ stopRendering];
 //    [mapView_ performSelector:@selector(stopRendering) withObject:nil afterDelay:0.4];
 }
 

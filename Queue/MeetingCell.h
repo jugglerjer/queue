@@ -9,9 +9,10 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import <GoogleMaps/GoogleMaps.h>
+#import "LLDataDownloader.h" 
 @class Meeting;
 
-@interface MeetingCell : UITableViewCell
+@interface MeetingCell : UITableViewCell <LLDataDownloaderDelegate>
 
 @property (strong, nonatomic) UILabel *noteLabel;
 @property (strong, nonatomic) UILabel *dateLabel;
@@ -20,10 +21,12 @@
 @property (strong, nonatomic) UIView *bottomLine;
 @property (strong, nonatomic) UIView *tableTopLine;
 @property (strong, nonatomic) UIView *tableBottomLine;
-@property (strong, nonatomic) UIView *mapTopLine;
+@property (strong, nonatomic) UIView *mapTopLineDark;
+@property (strong, nonatomic) UIView *mapTopLineLight;
 @property (strong, nonatomic) UIView *mapBottomLine;
 @property (strong, nonatomic) UIView *timeline;
 @property (strong, nonatomic) GMSMapView *mapView_;
+@property (strong, nonatomic) UIImageView *mapView;
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
 - (void)configureWithMeeting:(Meeting *)meeting;

@@ -28,6 +28,7 @@ typedef enum
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) Meeting *meeting;
 @property (strong, nonatomic) Location *location;
+@property LocationChooserViewMode viewMode;
 
 - (void)activateWithAnimation:(BOOL)animation;
 - (void)resignWithAnimation:(BOOL)animation;
@@ -38,6 +39,7 @@ typedef enum
 
 @protocol LocationChooseViewControllerDelegate <NSObject>
 
+- (void)locationChooserShouldShowMethodChooser:(LocationChooserViewController *)locationChooser;
 - (void)locationChooserShouldBecomeActive:(LocationChooserViewController *)locationChooser;
 - (void)locationChooserShouldBecomeInactive:(LocationChooserViewController *)locationChooser;
 - (void)locationChooser:(LocationChooserViewController *)locationChooser didSelectLocation:(Location *)location forMeeting:(Meeting *)meeting;

@@ -23,6 +23,7 @@
 @property (strong, nonatomic) LocationChooserViewController *locationChooser;
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) UIButton *locationExpanderButton;
+@property (strong, nonatomic) UIImageView *meetingChooser;
 @property BOOL isKeyboardVisible;
 @property BOOL isDatePickerVisible;
 @property BOOL wasKeyboardVisible;
@@ -226,6 +227,14 @@ static CGFloat keyboardHeight = 216;
     self.locationChooser = locationChooser;
     [self.scrollView addSubview:self.locationChooser.view];
     
+    UIImage *imageForStretch = [UIImage imageNamed:@"white-bubble@2x.png"];
+    UIImage *stretchableImage = [imageForStretch resizableImageWithCapInsets:UIEdgeInsetsMake(13, 51, 28, 14)];
+    UIImageView *bubble = [[UIImageView alloc] initWithImage:stretchableImage];
+    bubble.alpha = 0;
+    bubble.hidden = YES;
+    self.meetingChooser = bubble;
+    [self.view addSubview:self.meetingChooser];
+    
 //    CGRect buttonFrame = self.locationChooser.view.frame;
 //    buttonFrame.size.height = PLACE_TEXT_MARGIN_TOP + PLACE_TEXT_HEIGHT + PLACE_SUBTEXT_HEIGHT + PLACE_TEXT_MARGIN_BOTTOM;
 //    UIButton *scrollButton = [[UIButton alloc] initWithFrame:buttonFrame];
@@ -291,6 +300,29 @@ static CGFloat keyboardHeight = 216;
 - (void)locationChooserShouldBecomeInactive:(LocationChooserViewController *)locationChooser
 {
     [self contractLocation];
+}
+
+- (void)locationChooserShouldShowMethodChooser:(LocationChooserViewController *)locationChooser
+{
+    [self showMethodChooser];
+}
+
+- (void)showMethodChooser
+{
+    self.meetingChooser.hidden = NO;
+    [UIView animateWithDuration:0.4
+                     animations:^{
+                         self.meetingChooser.alpha = 1;
+                     }];
+}
+
+- (void)hideMethodChooser
+{
+    self.meetingChooser.hidden = YES;
+    [UIView animateWithDuration:0.4
+                     animations:^{
+                         self.meetingChooser.alpha = 0;
+                     }];
 }
 
 - (void)scrollMeetingView

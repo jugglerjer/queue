@@ -13,6 +13,7 @@
 #import "MeetingCell.h"  
 #import "Contact.h"
 #import "Meeting.h"
+#import "Location.h"
 
 #define kDateRow    0
 #define kNoteRow    1
@@ -34,10 +35,13 @@
 @property (strong, nonatomic) NSMutableArray * meetingsArray;
 @property (strong, nonatomic) UIButton *arrowButton;
 @property (strong, nonatomic) UIImageView *toolBelt;
+@property (strong, nonatomic) NSMutableDictionary *mapDataDictionary;
 
 @end
 
 @implementation TimelineViewController
+
+static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDJk6VmHmcNveBQjDV91rJ3U4ExV0b4vIc&size=320x100&scale=2&sensor=true&zoom=15&visual_refresh=true";
 
 - (id)initWithContact:(Contact *)contact
 {
@@ -45,6 +49,7 @@
     {
         self.contact = contact;
         self.meetingsArray = [NSMutableArray arrayWithArray:[contact sortedMeetings]];
+        self.mapDataDictionary = [NSMutableDictionary dictionaryWithCapacity:[self.meetingsArray count]];
     }
     return self;
 }
@@ -356,12 +361,50 @@
     Meeting *meeting = [self.meetingsArray objectAtIndex:indexPath.row];
     [cell configureWithMeeting:meeting];
     
+    // If the meeting has a location,
+    // start downloading the map
+    // or show a map that's already been downloaded
+    if (meeting.location)
+    {
+        if ([self.mapDataDictionary objectForKey:[NSNumber numberWithInt:indexPath.row]])
+        {
+            cell.mapView.alpha = 0;
+            cell.mapView.image = [UIImage imageWithData:[self.mapDataDictionary objectForKey:[NSNumber numberWithInt:indexPath.row]]];
+            [UIView animateWithDuration:0.4 animations:^{cell.mapView.alpha = 1;}];
+        }
+        else
+        {
+            LLDataDownloader *mapDownloader = [[LLDataDownloader alloc] init];
+            mapDownloader.delegate = self;
+            mapDownloader.identifier = indexPath.row;
+            NSString *url = [NSString stringWithFormat:@"%@&markers=color:red|%f,%f", googleStaticMapURL, [meeting.location.latitude doubleValue], [meeting.location.longitude doubleValue]];
+            [mapDownloader getDataWithURL:[url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+        }
+    }
+    
     CGRect lineFrame = CGRectMake(0,0,cell.bounds.size.width, 0.5);
     
     lineFrame.origin.y = [self tableView:tableView heightForRowAtIndexPath:indexPath] - 0.5;
     cell.bottomLine.frame = lineFrame;
 
     return cell;
+}
+
+// -------------------------------------
+// Adds a Google Static Map to the cell
+// once the map data has downloaded
+// -------------------------------------
+- (void)dataHasFinishedDownloadingForDownloader:(LLDataDownloader *)downloader withResult:(BOOL)result andData:(NSData *)data
+{
+    if (result)
+    {
+        UIImage *imageTemp = [UIImage imageWithData:data];
+        if (imageTemp != nil)
+        {
+            [self.mapDataDictionary setObject:data forKey:[NSNumber numberWithInt:downloader.identifier]];
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:downloader.identifier inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        }
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -411,9 +454,9 @@
     
     int mapHeight = 0;
     if ([[self.meetingsArray objectAtIndex:indexPath.row] location])
-        mapHeight = 101;
+        mapHeight = 100.5;
     
-    return size.height + MARGIN_TOP + MARGIN_BOTTOM + DATE_HEIGHT + mapHeight + 0.5;
+    return size.height + MARGIN_TOP + MARGIN_BOTTOM + DATE_HEIGHT + mapHeight + 1;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

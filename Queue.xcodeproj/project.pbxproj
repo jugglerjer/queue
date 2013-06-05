@@ -47,6 +47,7 @@
 		3F9EF889175C344A0089EC2A /* clear-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F9EF888175C344A0089EC2A /* clear-button@2x.png */; };
 		3F9EF88C175C387C0089EC2A /* Meeting.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F9EF88B175C387C0089EC2A /* Meeting.m */; };
 		3F9EF88E175C40460089EC2A /* cancel-button-dark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F9EF88D175C40460089EC2A /* cancel-button-dark@2x.png */; };
+		3F9EF890175DC3040089EC2A /* white-bubble@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F9EF88F175DC3040089EC2A /* white-bubble@2x.png */; };
 		3FA1018C17447769007D2520 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA1018B17447769007D2520 /* UIKit.framework */; };
 		3FA1018E17447769007D2520 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA1018D17447769007D2520 /* Foundation.framework */; };
 		3FA1019017447769007D2520 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA1018F17447769007D2520 /* CoreGraphics.framework */; };
@@ -147,6 +148,7 @@
 		3F9EF88A175C387B0089EC2A /* Meeting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Meeting.h; sourceTree = "<group>"; };
 		3F9EF88B175C387C0089EC2A /* Meeting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Meeting.m; sourceTree = "<group>"; };
 		3F9EF88D175C40460089EC2A /* cancel-button-dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cancel-button-dark@2x.png"; path = "Queue/cancel-button-dark@2x.png"; sourceTree = "<group>"; };
+		3F9EF88F175DC3040089EC2A /* white-bubble@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "white-bubble@2x.png"; path = "Queue/white-bubble@2x.png"; sourceTree = "<group>"; };
 		3FA1018817447769007D2520 /* Queue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Queue.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FA1018B17447769007D2520 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		3FA1018D17447769007D2520 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -371,6 +373,7 @@
 		3FE80CE4174DBFA50009D61D /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				3F9EF88F175DC3040089EC2A /* white-bubble@2x.png */,
 				3F9EF88D175C40460089EC2A /* cancel-button-dark@2x.png */,
 				3F9EF888175C344A0089EC2A /* clear-button@2x.png */,
 				3F9EF881175C0AB10089EC2A /* location-disabled@2x.png */,
@@ -510,6 +513,7 @@
 				3F9EF884175C0AB10089EC2A /* location-search@2x.png in Resources */,
 				3F9EF889175C344A0089EC2A /* clear-button@2x.png in Resources */,
 				3F9EF88E175C40460089EC2A /* cancel-button-dark@2x.png in Resources */,
+				3F9EF890175DC3040089EC2A /* white-bubble@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
