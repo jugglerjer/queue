@@ -227,7 +227,7 @@ static CGFloat keyboardHeight = 216;
     self.locationChooser = locationChooser;
     [self.scrollView addSubview:self.locationChooser.view];
     
-    UIImage *imageForStretch = [UIImage imageNamed:@"white-bubble@2x.png"];
+    UIImage *imageForStretch = [UIImage imageNamed:@"white-bubble.png"];
     UIImage *stretchableImage = [imageForStretch resizableImageWithCapInsets:UIEdgeInsetsMake(13, 51, 28, 14)];
     UIImageView *bubble = [[UIImageView alloc] initWithImage:stretchableImage];
     bubble.alpha = 0;
@@ -304,7 +304,7 @@ static CGFloat keyboardHeight = 216;
 
 - (void)locationChooserShouldShowMethodChooser:(LocationChooserViewController *)locationChooser
 {
-    [self showMethodChooser];
+//    [self showMethodChooser];
 }
 
 - (void)showMethodChooser

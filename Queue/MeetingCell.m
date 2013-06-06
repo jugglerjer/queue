@@ -58,9 +58,13 @@
         [self addSubview:self.noteLabel];
         
         CGRect mapFrame = CGRectMake(0, self.noteLabel.frame.origin.y + self.noteLabel.frame.size.height + MARGIN_BOTTOM + 0.5, self.frame.size.width, 0);
+        UIView *mapViewBackground = [[UIView alloc] initWithFrame:mapFrame];
+        mapViewBackground.backgroundColor = [UIColor colorWithRed:235.0/255.0 green:235.0/255.0 blue:235.0/255.0 alpha:1];
         UIImageView *mapView = [[UIImageView alloc] initWithFrame:mapFrame];
-        mapView.backgroundColor = [UIColor colorWithRed:235.0/255.0 green:235.0/255.0 blue:235.0/255.0 alpha:1];
+        mapView.backgroundColor = [UIColor clearColor];
+        self.mapViewBackground = mapViewBackground;
         self.mapView = mapView;
+        [self addSubview:self.mapViewBackground];
         [self addSubview:self.mapView];
 //        mapView_ = [GMSMapView mapWithFrame:mapFrame camera:nil];
 //        mapView_.settings.scrollGestures = NO;
@@ -182,6 +186,7 @@
         self.dateLabel.text = dateString;
     }
     
+    [self.mapViewBackground setFrame:mapFrame];
     [self.mapView setFrame:mapFrame];
 //    [mapView_ setCamera:camera];
 //    [mapView_ stopRendering];

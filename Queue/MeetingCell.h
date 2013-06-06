@@ -27,6 +27,7 @@
 @property (strong, nonatomic) UIView *timeline;
 @property (strong, nonatomic) GMSMapView *mapView_;
 @property (strong, nonatomic) UIImageView *mapView;
+@property (strong, nonatomic) UIView *mapViewBackground;
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
 - (void)configureWithMeeting:(Meeting *)meeting;
