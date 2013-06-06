@@ -16,6 +16,7 @@
 @dynamic firstName;
 @dynamic lastName;
 @dynamic fullName;
+@dynamic note;
 @dynamic addressBookID;
 @dynamic meetInterval;
 @dynamic dateAdded;

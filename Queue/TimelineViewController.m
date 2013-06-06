@@ -8,6 +8,7 @@
 
 #import "TimelineViewController.h"
 #import "AddMeetingViewController.h"
+#import "AddContactViewController.h"
 #import "QueueViewController.h"
 #import "QueueBarButtonItem.h"
 #import "MeetingCell.h"  
@@ -72,7 +73,11 @@ static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/a
 
 - (void)showSettings
 {
-    
+    AddContactViewController *addContactController = [[AddContactViewController alloc] init];
+    addContactController.managedObjectContext = self.managedObjectContext;
+    addContactController.contact = self.contact;
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:addContactController];
+    [self.queueViewController.navigationController presentViewController:navController animated:YES completion:nil];
 }
 
 - (void)contactContact
@@ -275,7 +280,7 @@ static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/a
         [toolbeltButton addTarget:self action:NSSelectorFromString([buttonSelectorsArray objectAtIndex:i]) forControlEvents:UIControlEventTouchUpInside];
         toolbeltButton.showsTouchWhenHighlighted = YES;
         
-        if (i == 1 || i == 2 || i == 3)
+        if (i == 1 || i == 3)
             [toolbeltButton setEnabled:NO];
         
         [self.toolBelt addSubview:toolbeltButton];

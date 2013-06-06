@@ -48,6 +48,7 @@
 		3F9EF88C175C387C0089EC2A /* Meeting.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F9EF88B175C387C0089EC2A /* Meeting.m */; };
 		3F9EF88E175C40460089EC2A /* cancel-button-dark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F9EF88D175C40460089EC2A /* cancel-button-dark@2x.png */; };
 		3F9EF890175DC3040089EC2A /* white-bubble@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F9EF88F175DC3040089EC2A /* white-bubble@2x.png */; };
+		3F9EF893176057440089EC2A /* AddContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F9EF892176057430089EC2A /* AddContactViewController.m */; };
 		3FA1018C17447769007D2520 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA1018B17447769007D2520 /* UIKit.framework */; };
 		3FA1018E17447769007D2520 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA1018D17447769007D2520 /* Foundation.framework */; };
 		3FA1019017447769007D2520 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA1018F17447769007D2520 /* CoreGraphics.framework */; };
@@ -149,6 +150,8 @@
 		3F9EF88B175C387C0089EC2A /* Meeting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Meeting.m; sourceTree = "<group>"; };
 		3F9EF88D175C40460089EC2A /* cancel-button-dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cancel-button-dark@2x.png"; path = "Queue/cancel-button-dark@2x.png"; sourceTree = "<group>"; };
 		3F9EF88F175DC3040089EC2A /* white-bubble@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "white-bubble@2x.png"; path = "Queue/white-bubble@2x.png"; sourceTree = "<group>"; };
+		3F9EF891176057420089EC2A /* AddContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddContactViewController.h; sourceTree = "<group>"; };
+		3F9EF892176057430089EC2A /* AddContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddContactViewController.m; sourceTree = "<group>"; };
 		3FA1018817447769007D2520 /* Queue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Queue.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FA1018B17447769007D2520 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		3FA1018D17447769007D2520 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -319,6 +322,8 @@
 				3FF2C0201749D74E007203D8 /* AddMeetingViewController.m */,
 				3F97763F175723C200E6B5B7 /* LocationChooserViewController.h */,
 				3F977640175723C200E6B5B7 /* LocationChooserViewController.m */,
+				3F9EF891176057420089EC2A /* AddContactViewController.h */,
+				3F9EF892176057430089EC2A /* AddContactViewController.m */,
 				3FABEE7A174823BA00BBB760 /* Queue.h */,
 				3FABEE7B174823BA00BBB760 /* Queue.m */,
 				3FABEE77174822C800BBB760 /* Contact.h */,
@@ -569,6 +574,7 @@
 				3F934447175ADDF2000FD331 /* SBJsonWriter.m in Sources */,
 				3F9EF887175C10BD0089EC2A /* Location.m in Sources */,
 				3F9EF88C175C387C0089EC2A /* Meeting.m in Sources */,
+				3F9EF893176057440089EC2A /* AddContactViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -20,6 +20,7 @@
 @property (nonatomic, retain) NSString * firstName;
 @property (nonatomic, retain) NSString * lastName;
 @property (nonatomic, retain) NSString * fullName;
+@property (nonatomic, retain) NSString * note;
 @property (nonatomic, retain) NSNumber * addressBookID;
 @property (nonatomic, retain) NSNumber * meetInterval;
 @property (nonatomic, retain) NSDate   * dateAdded;
