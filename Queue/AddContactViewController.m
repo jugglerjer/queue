@@ -54,6 +54,9 @@
 #define REMINDER_ICON_HEIGHT         16
 #define REMINDER_ICON_WIDTH          17.5
 
+#define REMINDER_BUTTON_ICON_HEIGHT     20
+#define REMINDER_BUTTON_ICON_WIDTH      18
+
 #define THUMBNAIL_HEIGHT             30
 #define THUMBNAIL_WIDTH              30
 
@@ -64,7 +67,7 @@
 #define kNumberOfButtonRows            2
 #define kNumberOfButtonColumns         2
 #define kReminderDayOfButton           0
-#define KReminderDayBeforeButton       1
+#define kReminderDayBeforeButton       1
 #define kReminderWeekBeforeButton      2
 #define kReminderWeekAfterButton       3
 
@@ -74,6 +77,7 @@
 @property (strong, nonatomic) UILabel *intervalLabel;
 @property (strong, nonatomic) UITextView *noteTextView;
 @property (strong, nonatomic) UILabel *reminderLabel;
+@property (strong, nonatomic) UIImageView *reminderIcon;
 
 @property (strong, nonatomic) UIDatePicker *dueDatePicker;
 @property (strong, nonatomic) UIPickerView *intervalPicker;
@@ -82,7 +86,12 @@
 @property (strong, nonatomic) NSArray *timeUnit;
 @property (strong, nonatomic) NSArray *timeType;
 
+@property (strong, nonatomic) NSMutableArray *reminderArray;
 @property (strong, nonatomic) NSNumber *originalMeetInterval;
+@property (strong, nonatomic) NSNumber *originalHasReminderDayOf;
+@property (strong, nonatomic) NSNumber *originalHasReminderDayBefore;
+@property (strong, nonatomic) NSNumber *originalHasReminderWeekBefore;
+@property (strong, nonatomic) NSNumber *originalHasReminderWeekAfter;
 
 @property BOOL isDueDatePickerVisible;
 @property BOOL isIntervalPickerVisible;
@@ -124,6 +133,10 @@ static CGFloat keyboardHeight = 216;
 - (void)close
 {
     self.contact.meetInterval = self.originalMeetInterval;
+    self.contact.hasReminderDayOf = self.originalHasReminderDayOf;
+    self.contact.hasReminderDayBefore = self.originalHasReminderDayBefore;
+    self.contact.hasReminderWeekBefore = self.originalHasReminderWeekBefore;
+    self.contact.hasReminderWeekAfter = self.originalHasReminderWeekAfter;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -133,8 +146,13 @@ static CGFloat keyboardHeight = 216;
     
     // Set up any necessary temporary data
     self.originalMeetInterval = [self.contact.meetInterval copy];
-    self.reminderEnabledButtonImages = @[@"reminder-day-of-enabled.png", @"reminder-day-of-enabled.png", @"reminder-day-of-enabled.png", @"reminder-day-of-enabled.png"];
-    self.reminderDisabledButtonImages = @[@"reminder-day-of-disabled.png", @"reminder-day-of-disabled.png", @"reminder-day-of-disabled.png", @"reminder-day-of-disabled.png"];
+    self.originalHasReminderDayOf = [self.contact.hasReminderDayOf copy];
+    self.originalHasReminderDayBefore = [self.contact.hasReminderDayBefore copy];
+    self.originalHasReminderWeekBefore = [self.contact.hasReminderWeekBefore copy];
+    self.originalHasReminderWeekAfter = [self.contact.hasReminderWeekAfter copy];
+    self.reminderEnabledButtonImages = @[@"reminder-day-of-enabled.png", @"reminder-day-before-enabled.png", @"reminder-week-enabled.png", @"reminder-week-enabled.png"];
+    self.reminderDisabledButtonImages = @[@"reminder-day-of-disabled.png", @"reminder-day-before-disabled.png", @"reminder-week-disabled.png", @"reminder-week-disabled.png"];
+    self.reminderArray = [NSMutableArray arrayWithArray:@[self.contact.hasReminderDayOf, self.contact.hasReminderDayBefore, self.contact.hasReminderWeekBefore, self.contact.hasReminderWeekAfter]];
 
 	
     // Give the view a light background patter & a title
@@ -152,7 +170,9 @@ static CGFloat keyboardHeight = 216;
     // Add the text-based sections
     // -----------------------------------------------
     UIFont *font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    UIFont *smallFont = [UIFont fontWithName:@"HelveticaNeue-Light" size:12.0];
     UIColor *textColor = [UIColor colorWithRed:165.0/255.0 green:165.0/255.0 blue:165.0/255.0 alpha:1];
+    UIColor *lightTextColor = [UIColor colorWithRed:185.0/255.0 green:185.0/255.0 blue:185.0/255.0 alpha:1];
     UIView *dividerLine = [[UIView alloc] init];
     dividerLine.backgroundColor = [UIColor blackColor];
     dividerLine.alpha = 0.2;
@@ -182,8 +202,8 @@ static CGFloat keyboardHeight = 216;
     intervalLabel.text = [self intervalLabelText];
     self.intervalLabel = intervalLabel;
     
-    dueDateLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:12.0];;
-    dueDateLabel.textColor = [UIColor colorWithRed:185.0/255.0 green:185.0/255.0 blue:185.0/255.0 alpha:1];;
+    dueDateLabel.font = smallFont;
+    dueDateLabel.textColor = lightTextColor;
     dueDateLabel.text = [self dueDateLabelText];
     self.dueDateLabel = dueDateLabel;
     
@@ -302,7 +322,7 @@ static CGFloat keyboardHeight = 216;
 
 
     // Add the reminder section
-    UIView *reminderViewContainer = [[UIView alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
+    UIControl *reminderViewContainer = [[UIControl alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
                                                                              self.view.bounds.origin.y + [self dueDateViewContainerHeight] + [self intervalViewContainerHeight] + [self noteViewContainerHeight],
                                                                              self.view.frame.size.width, [self reminderViewContainerHeight])];
     
@@ -323,6 +343,7 @@ static CGFloat keyboardHeight = 216;
     
     CGFloat reminderButtonHeight = (reminderViewContainer.frame.size.height - (REMINDER_MARGIN_TOP + REMINDER_TEXT_HEIGHT + REMINDER_MARGIN_BOTTOM)) / 2;
     CGFloat reminderButtonWidth = reminderViewContainer.frame.size.width / 2;
+    NSArray *buttonStrings = @[@"Due Date", @"Day Before Due", @"Week Before Due", @"Week Overdue"];
     
     for (int r = 0; r < kNumberOfButtonRows; r++)
     {
@@ -332,14 +353,26 @@ static CGFloat keyboardHeight = 216;
             CGFloat buttonOriginY = (REMINDER_MARGIN_TOP + REMINDER_TEXT_HEIGHT + REMINDER_MARGIN_BOTTOM) + (reminderButtonHeight * r);
             UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(buttonOriginX, buttonOriginY, reminderButtonWidth, reminderButtonHeight)];
             
-            // TODO add target
+            // Add target
+            [button addTarget:self action:@selector(didTapReminderButton:) forControlEvents:UIControlEventTouchUpInside];
             
             // Add image
-//            int index = r * kNumberOfButtonColumns + c;
-            UIImage *buttonImage = [UIImage imageNamed:@"reminder-day-of-disabled.png"];
+            int index = r * kNumberOfButtonColumns + c;
+            UIImage *buttonImage = [self reminderImageForIndex:index];
+            NSString *buttonText = [buttonStrings objectAtIndex:index];
             button.contentMode = UIViewContentModeCenter;
             [button setImage:buttonImage forState:UIControlStateNormal];
+            button.titleLabel.font = font;
+            [button setTitle:buttonText forState:UIControlStateNormal];
+            [button setTitleColor:textColor forState:UIControlStateNormal];
             button.showsTouchWhenHighlighted = YES;
+            
+            UIEdgeInsets titleInsets = UIEdgeInsetsMake(20, -1 * buttonImage.size.width, -20, 0);
+            button.titleEdgeInsets = titleInsets;
+            UIEdgeInsets imageInsets = UIEdgeInsetsMake(-25, 0, 0, -button.titleLabel.bounds.size.width);
+            button.imageEdgeInsets = imageInsets;
+            
+            button.tag = index;
             
             [reminderViewContainer addSubview:button];
         }
@@ -350,10 +383,9 @@ static CGFloat keyboardHeight = 216;
     reminderLabel.font = font;
     reminderLabel.textColor = textColor;
     reminderLabel.backgroundColor = [UIColor clearColor];
-    reminderLabel.text = @"Remind me to catch up";
     self.reminderLabel = reminderLabel;
-    
-    reminderIcon.image = [UIImage imageNamed:@"reminder-icon.png"];
+    self.reminderIcon = reminderIcon;
+    [self updateReminderHeader];
 
     reminderDividerLineTop.backgroundColor = [UIColor blackColor];
     reminderDividerLineTop.alpha = 0.2;
@@ -364,8 +396,10 @@ static CGFloat keyboardHeight = 216;
     UIImageView *innerShadowView = [[UIImageView alloc] initWithImage:innerShadow];
     innerShadowView.frame = reminderViewContainer.bounds;
     
-    [reminderViewContainer addSubview:reminderLabel];
-    [reminderViewContainer addSubview:reminderIcon];
+    [reminderViewContainer addTarget:self action:@selector(shouldEditReminderPreferences) forControlEvents:UIControlEventTouchUpInside];
+    
+    [reminderViewContainer addSubview:self.reminderLabel];
+    [reminderViewContainer addSubview:self.reminderIcon];
     [reminderViewContainer addSubview:reminderDividerLineTop];
     [reminderViewContainer addSubview:reminderDividerLineBottom];
     [reminderViewContainer addSubview:innerShadowView];
@@ -678,6 +712,22 @@ static CGFloat keyboardHeight = 216;
     }
 }
 
+- (void)shouldEditReminderPreferences
+{
+    if (self.isDueDatePickerVisible)
+    {
+        [self hideDueDatePickerAnimated:YES completion:^{[self.noteTextView becomeFirstResponder];}];
+    }
+    else if (self.isIntervalPickerVisible)
+    {
+        [self hideIntervalPickerAnimated:YES completion:^{[self.noteTextView becomeFirstResponder];}];
+    }
+    else if (self.isKeyboardVisible)
+    {
+        [self.noteTextView resignFirstResponder];
+    }
+}
+
 - (void)registerForKeyboardNotifications
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -774,5 +824,92 @@ static CGFloat keyboardHeight = 216;
     }
 }
 
+// ------------------------------
+// Handle changing reminder
+// notification preferences
+// ------------------------------
+
+#pragma mark - Reminder Notification Methods
+
+- (UIImage *)reminderImageForIndex:(NSInteger)index
+{
+    BOOL isEnabled = [[self.reminderArray objectAtIndex:index] boolValue];
+    if (isEnabled)
+        return [UIImage imageNamed:[self.reminderEnabledButtonImages objectAtIndex:index]];
+    else
+        return [UIImage imageNamed:[self.reminderDisabledButtonImages objectAtIndex:index]];
+}
+
+- (void)updateReminderHeader
+{
+    BOOL remindersEnabled = [self remindersEnabled];
+    if (remindersEnabled)
+    {
+        [self.reminderIcon setImage:[UIImage imageNamed:@"reminder-icon.png"]];
+        self.reminderLabel.text = @"Remind me to catch up";
+    }
+    else
+    {
+        [self.reminderIcon setImage:[UIImage imageNamed:@"reminder-icon-disabled.png"]];
+        self.reminderLabel.text = @"Don't remind me to catch up";
+    }
+}
+
+- (void)didTapReminderButton:(UIButton *)sender
+{
+    [self toggleReminderPreferenceForReminderIndex:sender.tag];
+    [sender setImage:[self reminderImageForIndex:sender.tag] forState:UIControlStateNormal];
+    [self updateReminderHeader];
+}
+
+- (BOOL)remindersEnabled
+{
+    BOOL remindersEnabled = NO;
+    for (NSNumber *preference in self.reminderArray)
+    {
+        if ([preference boolValue])
+        {
+            remindersEnabled = YES;
+            break;
+        }
+    }
+    return remindersEnabled;
+}
+
+- (void)toggleReminderPreferenceForReminderIndex:(NSInteger)index
+{
+    BOOL reminderPreference = [[self.reminderArray objectAtIndex:index] boolValue];
+    BOOL newPreference;
+    if (reminderPreference)
+        newPreference = NO;
+    else
+        newPreference = YES;
+        
+    switch (index)
+    {
+        case kReminderDayOfButton:
+            self.contact.hasReminderDayOf = [NSNumber numberWithBool:newPreference];
+            [self.reminderArray replaceObjectAtIndex:index withObject:self.contact.hasReminderDayOf];
+            break;
+            
+        case kReminderDayBeforeButton:
+            self.contact.hasReminderDayBefore = [NSNumber numberWithBool:newPreference];
+            [self.reminderArray replaceObjectAtIndex:index withObject:self.contact.hasReminderDayBefore];
+            break;
+            
+        case kReminderWeekBeforeButton:
+            self.contact.hasReminderWeekBefore = [NSNumber numberWithBool:newPreference];
+            [self.reminderArray replaceObjectAtIndex:index withObject:self.contact.hasReminderWeekBefore];
+            break;
+            
+        case kReminderWeekAfterButton:
+            self.contact.hasReminderWeekAfter = [NSNumber numberWithBool:newPreference];
+            [self.reminderArray replaceObjectAtIndex:index withObject:self.contact.hasReminderWeekAfter];
+            break;
+            
+        default:
+            break;
+    }
+}
 
 @end

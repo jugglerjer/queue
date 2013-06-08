@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F3264971763A328000BCF83 /* reminder-day-of-disabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F3264961763A328000BCF83 /* reminder-day-of-disabled@2x.png */; };
+		3F3264991763A37F000BCF83 /* reminder-day-of-enabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F3264981763A37F000BCF83 /* reminder-day-of-enabled@2x.png */; };
+		3F32649C1763AAD6000BCF83 /* reminder-day-before-disabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F32649A1763AAD6000BCF83 /* reminder-day-before-disabled@2x.png */; };
+		3F32649D1763AAD6000BCF83 /* reminder-day-before-enabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F32649B1763AAD6000BCF83 /* reminder-day-before-enabled@2x.png */; };
+		3F3264A01763AC40000BCF83 /* reminder-week-disabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F32649E1763AC40000BCF83 /* reminder-week-disabled@2x.png */; };
+		3F3264A11763AC40000BCF83 /* reminder-week-enabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F32649F1763AC40000BCF83 /* reminder-week-enabled@2x.png */; };
 		3F5FA4AC17544283002A0F5B /* expanded-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F5FA4AB17544283002A0F5B /* expanded-button@2x.png */; };
 		3F5FA4AE17544C6F002A0F5B /* contract-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F5FA4AD17544C6F002A0F5B /* contract-button@2x.png */; };
 		3F5FA4B4175458FE002A0F5B /* add-meeting-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F5FA4AF175458FD002A0F5B /* add-meeting-button@2x.png */; };
@@ -78,9 +84,6 @@
 		3FAC625B1762FC7D00E20373 /* IntervalPicker.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3FAC625A1762FC7D00E20373 /* IntervalPicker.plist */; };
 		3FAC625E1762FD0600E20373 /* NSArray-SortUsingArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FAC625D1762FD0600E20373 /* NSArray-SortUsingArray.m */; };
 		3FAC625F1763017F00E20373 /* NSArray-SortUsingArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FAC625D1762FD0600E20373 /* NSArray-SortUsingArray.m */; };
-		3FAC626617631AAA00E20373 /* reminder-day-of-disabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FAC626417631AAA00E20373 /* reminder-day-of-disabled@2x.png */; };
-		3FAC626717631AAA00E20373 /* reminder-day-of-enabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FAC626517631AAA00E20373 /* reminder-day-of-enabled@2x.png */; };
-		3FAC626917631B8F00E20373 /* due-date-reminder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FAC626817631B8F00E20373 /* due-date-reminder@2x.png */; };
 		3FE80CE6174DBFEC0009D61D /* nav-bar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CE5174DBFEC0009D61D /* nav-bar@2x.png */; };
 		3FE80CE8174DC82D0009D61D /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CE7174DC82D0009D61D /* back@2x.png */; };
 		3FE80CEC174DCBE90009D61D /* add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CEB174DCBE90009D61D /* add@2x.png */; };
@@ -110,6 +113,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3F3264961763A328000BCF83 /* reminder-day-of-disabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reminder-day-of-disabled@2x.png"; path = "Queue/reminder-day-of-disabled@2x.png"; sourceTree = "<group>"; };
+		3F3264981763A37F000BCF83 /* reminder-day-of-enabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reminder-day-of-enabled@2x.png"; path = "Queue/reminder-day-of-enabled@2x.png"; sourceTree = "<group>"; };
+		3F32649A1763AAD6000BCF83 /* reminder-day-before-disabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reminder-day-before-disabled@2x.png"; path = "Queue/reminder-day-before-disabled@2x.png"; sourceTree = "<group>"; };
+		3F32649B1763AAD6000BCF83 /* reminder-day-before-enabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reminder-day-before-enabled@2x.png"; path = "Queue/reminder-day-before-enabled@2x.png"; sourceTree = "<group>"; };
+		3F32649E1763AC40000BCF83 /* reminder-week-disabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reminder-week-disabled@2x.png"; path = "Queue/reminder-week-disabled@2x.png"; sourceTree = "<group>"; };
+		3F32649F1763AC40000BCF83 /* reminder-week-enabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reminder-week-enabled@2x.png"; path = "Queue/reminder-week-enabled@2x.png"; sourceTree = "<group>"; };
 		3F5FA4AB17544283002A0F5B /* expanded-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "expanded-button@2x.png"; path = "Queue/expanded-button@2x.png"; sourceTree = "<group>"; };
 		3F5FA4AD17544C6F002A0F5B /* contract-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "contract-button@2x.png"; path = "Queue/contract-button@2x.png"; sourceTree = "<group>"; };
 		3F5FA4AF175458FD002A0F5B /* add-meeting-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "add-meeting-button@2x.png"; path = "Queue/add-meeting-button@2x.png"; sourceTree = "<group>"; };
@@ -200,9 +209,6 @@
 		3FAC625A1762FC7D00E20373 /* IntervalPicker.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = IntervalPicker.plist; sourceTree = "<group>"; };
 		3FAC625C1762FD0600E20373 /* NSArray-SortUsingArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray-SortUsingArray.h"; sourceTree = "<group>"; };
 		3FAC625D1762FD0600E20373 /* NSArray-SortUsingArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray-SortUsingArray.m"; sourceTree = "<group>"; };
-		3FAC626417631AAA00E20373 /* reminder-day-of-disabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reminder-day-of-disabled@2x.png"; path = "Queue/reminder-day-of-disabled@2x.png"; sourceTree = "<group>"; };
-		3FAC626517631AAA00E20373 /* reminder-day-of-enabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reminder-day-of-enabled@2x.png"; path = "Queue/reminder-day-of-enabled@2x.png"; sourceTree = "<group>"; };
-		3FAC626817631B8F00E20373 /* due-date-reminder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "due-date-reminder@2x.png"; path = "Queue/due-date-reminder@2x.png"; sourceTree = "<group>"; };
 		3FE80CE5174DBFEC0009D61D /* nav-bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "nav-bar@2x.png"; path = "Queue/nav-bar@2x.png"; sourceTree = "<group>"; };
 		3FE80CE7174DC82D0009D61D /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "back@2x.png"; path = "Queue/back@2x.png"; sourceTree = "<group>"; };
 		3FE80CEB174DCBE90009D61D /* add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "add@2x.png"; path = "Queue/add@2x.png"; sourceTree = "<group>"; };
@@ -407,9 +413,12 @@
 		3FE80CE4174DBFA50009D61D /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				3FAC626817631B8F00E20373 /* due-date-reminder@2x.png */,
-				3FAC626417631AAA00E20373 /* reminder-day-of-disabled@2x.png */,
-				3FAC626517631AAA00E20373 /* reminder-day-of-enabled@2x.png */,
+				3F32649E1763AC40000BCF83 /* reminder-week-disabled@2x.png */,
+				3F32649F1763AC40000BCF83 /* reminder-week-enabled@2x.png */,
+				3F32649A1763AAD6000BCF83 /* reminder-day-before-disabled@2x.png */,
+				3F32649B1763AAD6000BCF83 /* reminder-day-before-enabled@2x.png */,
+				3F3264981763A37F000BCF83 /* reminder-day-of-enabled@2x.png */,
+				3F3264961763A328000BCF83 /* reminder-day-of-disabled@2x.png */,
 				3F5FA4B2175458FD002A0F5B /* settings-button@2x.png */,
 				3FAC62571762F8AD00E20373 /* reminder-icon-disabled@2x.png */,
 				3FAC62551762F78700E20373 /* reminder-icon@2x.png */,
@@ -558,6 +567,12 @@
 				3FAC62561762F78700E20373 /* reminder-icon@2x.png in Resources */,
 				3FAC62581762F8AD00E20373 /* reminder-icon-disabled@2x.png in Resources */,
 				3FAC625B1762FC7D00E20373 /* IntervalPicker.plist in Resources */,
+				3F3264971763A328000BCF83 /* reminder-day-of-disabled@2x.png in Resources */,
+				3F3264991763A37F000BCF83 /* reminder-day-of-enabled@2x.png in Resources */,
+				3F32649C1763AAD6000BCF83 /* reminder-day-before-disabled@2x.png in Resources */,
+				3F32649D1763AAD6000BCF83 /* reminder-day-before-enabled@2x.png in Resources */,
+				3F3264A01763AC40000BCF83 /* reminder-week-disabled@2x.png in Resources */,
+				3F3264A11763AC40000BCF83 /* reminder-week-enabled@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -566,9 +581,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FA101B417447769007D2520 /* InfoPlist.strings in Resources */,
-				3FAC626617631AAA00E20373 /* reminder-day-of-disabled@2x.png in Resources */,
-				3FAC626717631AAA00E20373 /* reminder-day-of-enabled@2x.png in Resources */,
-				3FAC626917631B8F00E20373 /* due-date-reminder@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

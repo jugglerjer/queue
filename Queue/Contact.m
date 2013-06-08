@@ -59,6 +59,10 @@ static double defaultMeetInterval = 3 * 30.5 * 24 * 60 * 60; /* 1 month ~ 31.5 d
 {
     self.meetInterval = [NSNumber numberWithDouble:defaultMeetInterval];
     self.dateAdded = [NSDate date];
+    self.hasReminderDayBefore = [NSNumber numberWithBool:YES];
+    self.hasReminderDayOf = [NSNumber numberWithBool:YES];
+    self.hasReminderWeekBefore = [NSNumber numberWithBool:NO];
+    self.hasReminderWeekAfter = [NSNumber numberWithBool:NO];
 }
 
 #pragma mark - Due Date Methods
