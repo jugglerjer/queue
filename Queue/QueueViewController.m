@@ -117,6 +117,7 @@ static CGFloat contactRowHeight = 72.0f;
 // -------------------------------------------------------------
 // Update a contact row
 // after a meeting is created or updated
+// or their settings are changed
 // -------------------------------------------------------------
 - (void)timelineViewController:(TimelineViewController *)timelineViewController didUpdateContact:(Contact *)contact withMeeting:(Meeting *)meeting
 {

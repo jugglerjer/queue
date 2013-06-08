@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "AddMeetingViewController.h"
+#import "AddContactViewController.h"
 #import "LLDataDownloader.h"
 @class Contact;
 @class Meeting;
@@ -15,7 +16,7 @@
 
 @protocol TimelineViewControllerDelegate;
 
-@interface TimelineViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, AddMeetingViewControllerDelegate, LLDataDownloaderDelegate>
+@interface TimelineViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, AddMeetingViewControllerDelegate, AddContactViewControllerDelegate, LLDataDownloaderDelegate>
 
 @property (weak, nonatomic) id<TimelineViewControllerDelegate> delegate;
 @property (strong, nonatomic) Contact * contact;

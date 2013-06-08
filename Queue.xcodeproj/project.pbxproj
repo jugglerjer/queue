@@ -72,6 +72,15 @@
 		3FABEE79174822C800BBB760 /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FABEE78174822C800BBB760 /* Contact.m */; };
 		3FABEE7C174823BA00BBB760 /* Queue.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FABEE7B174823BA00BBB760 /* Queue.m */; };
 		3FABEE7F17483ED800BBB760 /* QueuesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FABEE7E17483ED800BBB760 /* QueuesViewController.m */; };
+		3FAC62541762EA5500E20373 /* roundabout@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FAC62531762EA5500E20373 /* roundabout@2x.png */; };
+		3FAC62561762F78700E20373 /* reminder-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FAC62551762F78700E20373 /* reminder-icon@2x.png */; };
+		3FAC62581762F8AD00E20373 /* reminder-icon-disabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FAC62571762F8AD00E20373 /* reminder-icon-disabled@2x.png */; };
+		3FAC625B1762FC7D00E20373 /* IntervalPicker.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3FAC625A1762FC7D00E20373 /* IntervalPicker.plist */; };
+		3FAC625E1762FD0600E20373 /* NSArray-SortUsingArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FAC625D1762FD0600E20373 /* NSArray-SortUsingArray.m */; };
+		3FAC625F1763017F00E20373 /* NSArray-SortUsingArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FAC625D1762FD0600E20373 /* NSArray-SortUsingArray.m */; };
+		3FAC626617631AAA00E20373 /* reminder-day-of-disabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FAC626417631AAA00E20373 /* reminder-day-of-disabled@2x.png */; };
+		3FAC626717631AAA00E20373 /* reminder-day-of-enabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FAC626517631AAA00E20373 /* reminder-day-of-enabled@2x.png */; };
+		3FAC626917631B8F00E20373 /* due-date-reminder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FAC626817631B8F00E20373 /* due-date-reminder@2x.png */; };
 		3FE80CE6174DBFEC0009D61D /* nav-bar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CE5174DBFEC0009D61D /* nav-bar@2x.png */; };
 		3FE80CE8174DC82D0009D61D /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CE7174DC82D0009D61D /* back@2x.png */; };
 		3FE80CEC174DCBE90009D61D /* add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CEB174DCBE90009D61D /* add@2x.png */; };
@@ -185,6 +194,15 @@
 		3FABEE7B174823BA00BBB760 /* Queue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Queue.m; sourceTree = "<group>"; };
 		3FABEE7D17483ED700BBB760 /* QueuesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QueuesViewController.h; sourceTree = "<group>"; };
 		3FABEE7E17483ED800BBB760 /* QueuesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QueuesViewController.m; sourceTree = "<group>"; };
+		3FAC62531762EA5500E20373 /* roundabout@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "roundabout@2x.png"; path = "Queue/roundabout@2x.png"; sourceTree = "<group>"; };
+		3FAC62551762F78700E20373 /* reminder-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reminder-icon@2x.png"; path = "Queue/reminder-icon@2x.png"; sourceTree = "<group>"; };
+		3FAC62571762F8AD00E20373 /* reminder-icon-disabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reminder-icon-disabled@2x.png"; path = "Queue/reminder-icon-disabled@2x.png"; sourceTree = "<group>"; };
+		3FAC625A1762FC7D00E20373 /* IntervalPicker.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = IntervalPicker.plist; sourceTree = "<group>"; };
+		3FAC625C1762FD0600E20373 /* NSArray-SortUsingArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray-SortUsingArray.h"; sourceTree = "<group>"; };
+		3FAC625D1762FD0600E20373 /* NSArray-SortUsingArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray-SortUsingArray.m"; sourceTree = "<group>"; };
+		3FAC626417631AAA00E20373 /* reminder-day-of-disabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reminder-day-of-disabled@2x.png"; path = "Queue/reminder-day-of-disabled@2x.png"; sourceTree = "<group>"; };
+		3FAC626517631AAA00E20373 /* reminder-day-of-enabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reminder-day-of-enabled@2x.png"; path = "Queue/reminder-day-of-enabled@2x.png"; sourceTree = "<group>"; };
+		3FAC626817631B8F00E20373 /* due-date-reminder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "due-date-reminder@2x.png"; path = "Queue/due-date-reminder@2x.png"; sourceTree = "<group>"; };
 		3FE80CE5174DBFEC0009D61D /* nav-bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "nav-bar@2x.png"; path = "Queue/nav-bar@2x.png"; sourceTree = "<group>"; };
 		3FE80CE7174DC82D0009D61D /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "back@2x.png"; path = "Queue/back@2x.png"; sourceTree = "<group>"; };
 		3FE80CEB174DCBE90009D61D /* add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "add@2x.png"; path = "Queue/add@2x.png"; sourceTree = "<group>"; };
@@ -264,6 +282,7 @@
 				3FABEE271746012600BBB760 /* AddressBook.framework */,
 				3FABEE281746012600BBB760 /* AddressBookUI.framework */,
 				3FA1019117447769007D2520 /* Queue */,
+				3FAC62591762FC4900E20373 /* plists */,
 				3FE80CE4174DBFA50009D61D /* Images */,
 				3FA101AF17447769007D2520 /* QueueTests */,
 				3FA1018A17447769007D2520 /* Frameworks */,
@@ -333,6 +352,8 @@
 				3F9EF885175C10BD0089EC2A /* Location.h */,
 				3F9EF886175C10BD0089EC2A /* Location.m */,
 				3FABEE741748130F00BBB760 /* Queue.xcdatamodeld */,
+				3FAC625C1762FD0600E20373 /* NSArray-SortUsingArray.h */,
+				3FAC625D1762FD0600E20373 /* NSArray-SortUsingArray.m */,
 				3FA1019217447769007D2520 /* Supporting Files */,
 				3FE80CFE174DE8A30009D61D /* QueueBarButtonItem.h */,
 				3FE80CFF174DE8A30009D61D /* QueueBarButtonItem.m */,
@@ -375,9 +396,24 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		3FAC62591762FC4900E20373 /* plists */ = {
+			isa = PBXGroup;
+			children = (
+				3FAC625A1762FC7D00E20373 /* IntervalPicker.plist */,
+			);
+			name = plists;
+			sourceTree = "<group>";
+		};
 		3FE80CE4174DBFA50009D61D /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				3FAC626817631B8F00E20373 /* due-date-reminder@2x.png */,
+				3FAC626417631AAA00E20373 /* reminder-day-of-disabled@2x.png */,
+				3FAC626517631AAA00E20373 /* reminder-day-of-enabled@2x.png */,
+				3F5FA4B2175458FD002A0F5B /* settings-button@2x.png */,
+				3FAC62571762F8AD00E20373 /* reminder-icon-disabled@2x.png */,
+				3FAC62551762F78700E20373 /* reminder-icon@2x.png */,
+				3FAC62531762EA5500E20373 /* roundabout@2x.png */,
 				3F9EF88F175DC3040089EC2A /* white-bubble@2x.png */,
 				3F9EF88D175C40460089EC2A /* cancel-button-dark@2x.png */,
 				3F9EF888175C344A0089EC2A /* clear-button@2x.png */,
@@ -390,7 +426,6 @@
 				3F5FA4AF175458FD002A0F5B /* add-meeting-button@2x.png */,
 				3F5FA4B0175458FD002A0F5B /* delete-button@2x.png */,
 				3F5FA4B1175458FD002A0F5B /* email-button@2x.png */,
-				3F5FA4B2175458FD002A0F5B /* settings-button@2x.png */,
 				3F5FA4B3175458FE002A0F5B /* snooze-button@2x.png */,
 				3F5FA4AD17544C6F002A0F5B /* contract-button@2x.png */,
 				3F5FA4AB17544283002A0F5B /* expanded-button@2x.png */,
@@ -519,6 +554,10 @@
 				3F9EF889175C344A0089EC2A /* clear-button@2x.png in Resources */,
 				3F9EF88E175C40460089EC2A /* cancel-button-dark@2x.png in Resources */,
 				3F9EF890175DC3040089EC2A /* white-bubble@2x.png in Resources */,
+				3FAC62541762EA5500E20373 /* roundabout@2x.png in Resources */,
+				3FAC62561762F78700E20373 /* reminder-icon@2x.png in Resources */,
+				3FAC62581762F8AD00E20373 /* reminder-icon-disabled@2x.png in Resources */,
+				3FAC625B1762FC7D00E20373 /* IntervalPicker.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -527,6 +566,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FA101B417447769007D2520 /* InfoPlist.strings in Resources */,
+				3FAC626617631AAA00E20373 /* reminder-day-of-disabled@2x.png in Resources */,
+				3FAC626717631AAA00E20373 /* reminder-day-of-enabled@2x.png in Resources */,
+				3FAC626917631B8F00E20373 /* due-date-reminder@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -553,6 +595,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FAC625F1763017F00E20373 /* NSArray-SortUsingArray.m in Sources */,
 				3F93443B175ADBC5000FD331 /* LLDataDownloader.m in Sources */,
 				3FA1019817447769007D2520 /* main.m in Sources */,
 				3FA1019C17447769007D2520 /* LLAppDelegate.m in Sources */,
@@ -584,6 +627,7 @@
 			files = (
 				3FA101B717447769007D2520 /* QueueTests.m in Sources */,
 				3F93443A175AD9DE000FD331 /* LLDataDownloader.m in Sources */,
+				3FAC625E1762FD0600E20373 /* NSArray-SortUsingArray.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -23,9 +23,14 @@
 @property (nonatomic, retain) NSString * note;
 @property (nonatomic, retain) NSNumber * addressBookID;
 @property (nonatomic, retain) NSNumber * meetInterval;
+@property (nonatomic, retain) NSDate   * oneTimeDueDate;
 @property (nonatomic, retain) NSDate   * dateAdded;
 @property (nonatomic, retain) NSSet *queues;
 @property (nonatomic, retain) NSSet *meetings;
+@property (nonatomic, retain) NSNumber * hasReminderDayOf;
+@property (nonatomic, retain) NSNumber * hasReminderDayBefore;
+@property (nonatomic, retain) NSNumber * hasReminderWeekBefore;
+@property (nonatomic, retain) NSNumber * hasReminderWeekAfter;
 
 - (void)populateWithAddressBookRecord:(ABRecordRef)person;
 - (NSDate *)dueDate;

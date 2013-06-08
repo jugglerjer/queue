@@ -5,9 +5,14 @@
         <attribute name="dateAdded" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fullName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hasReminderDayBefore" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="hasReminderDayOf" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="hasReminderWeekAfter" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="hasReminderWeekBefore" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="meetInterval" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="note" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="oneTimeDueDate" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="meetings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Meeting" inverseName="contact" inverseEntity="Meeting" syncable="YES"/>
         <relationship name="queues" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Queue" inverseName="contacts" inverseEntity="Queue" syncable="YES"/>
     </entity>
@@ -36,7 +41,7 @@
         <relationship name="contacts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Contact" inverseName="queues" inverseEntity="Contact" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Contact" positionX="-36" positionY="204" width="128" height="180"/>
+        <element name="Contact" positionX="-36" positionY="204" width="128" height="255"/>
         <element name="Location" positionX="160" positionY="192" width="128" height="210"/>
         <element name="Meeting" positionX="160" positionY="192" width="128" height="120"/>
         <element name="Queue" positionX="160" positionY="192" width="128" height="73"/>

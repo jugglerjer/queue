@@ -19,13 +19,18 @@
 @dynamic note;
 @dynamic addressBookID;
 @dynamic meetInterval;
+@dynamic oneTimeDueDate;
 @dynamic dateAdded;
 @dynamic queues;
 @dynamic meetings;
+@dynamic hasReminderDayOf;
+@dynamic hasReminderDayBefore;
+@dynamic hasReminderWeekBefore;
+@dynamic hasReminderWeekAfter;
 
 #pragma mark - Data Population Methods
 
-static double defaultMeetInterval = 90 * 24 * 60 * 60; /* 3 months ~ 90 days */
+static double defaultMeetInterval = 3 * 30.5 * 24 * 60 * 60; /* 1 month ~ 31.5 days */
 
 // -------------------------------------------------------------
 // Populate a contact with the data from an address book record
@@ -63,6 +68,8 @@ static double defaultMeetInterval = 90 * 24 * 60 * 60; /* 3 months ~ 90 days */
 // -------------------------------------------------------------
 - (NSDate *)dueDate
 {
+    if (self.oneTimeDueDate)
+        return self.oneTimeDueDate;
     return [NSDate dateWithTimeInterval:[self.meetInterval doubleValue] sinceDate:[self lastMeetingDate]];
 }
 

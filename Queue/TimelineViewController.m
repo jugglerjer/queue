@@ -7,8 +7,6 @@
 //
 
 #import "TimelineViewController.h"
-#import "AddMeetingViewController.h"
-#import "AddContactViewController.h"
 #import "QueueViewController.h"
 #import "QueueBarButtonItem.h"
 #import "MeetingCell.h"  
@@ -76,6 +74,7 @@ static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/a
     AddContactViewController *addContactController = [[AddContactViewController alloc] init];
     addContactController.managedObjectContext = self.managedObjectContext;
     addContactController.contact = self.contact;
+    addContactController.delegate = self;
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:addContactController];
     [self.queueViewController.navigationController presentViewController:navController animated:YES completion:nil];
 }
@@ -211,6 +210,18 @@ static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/a
     // Update the contact's queue cell
     if ([self.delegate respondsToSelector:@selector(timelineViewController:didUpdateContact:withMeeting:)]) {
         [self.delegate timelineViewController:self didUpdateContact:contact withMeeting:meeting];
+    }
+}
+
+// -------------------------------------------------------------
+// Change the content of a contact's cell when their settings
+// are updated
+// -------------------------------------------------------------
+- (void)addContactViewController:(AddContactViewController *)addContactViewController didUpdateContact:(Contact *)contact
+{
+    // Update the contact's queue cell
+    if ([self.delegate respondsToSelector:@selector(timelineViewController:didUpdateContact:withMeeting:)]) {
+        [self.delegate timelineViewController:self didUpdateContact:contact withMeeting:nil];
     }
 }
 
