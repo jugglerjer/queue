@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface QueuesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface QueuesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 

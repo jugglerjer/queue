@@ -11,12 +11,13 @@
 #import "AddMeetingViewController.h"
 #import "TimelineViewController.h"
 @class Queue;
+@class LLPullNavigationTableView;
 
-@interface QueueViewController : UIViewController <ABPeoplePickerNavigationControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, TimelineViewControllerDelegate>
+@interface QueueViewController : UIViewController <ABPeoplePickerNavigationControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, TimelineViewControllerDelegate, UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) Queue *queue;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-@property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) LLPullNavigationTableView *tableView;
 @property (strong, nonatomic) NSIndexPath * selectedIndexPath;
 
 - (id)initWithQueue:(Queue *)queue;

@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LLPullNavigationController : UIViewController
+@interface LLPullNavigationController : UIViewController <UIScrollViewDelegate>
 
-@property NSMutableArray *subviews;
+- (id)initWithRootViewController:(UIViewController *)rootViewController;
+- (void)switchToViewController:(UIViewController *)newViewController animated:(BOOL)animated completion:(void (^)(void))completion;
+- (void)assumeScrollControl;
+- (void)resignScrollControl;
 
 @end

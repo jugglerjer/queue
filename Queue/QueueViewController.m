@@ -12,6 +12,8 @@
 #import "QueueBarButtonItem.h"
 #import "Contact.h"
 #import "Queue.h"
+#import "LLPullNavigationController.h"
+#import "LLPullNavigationTableView.h"
 
 @interface QueueViewController ()
 
@@ -21,6 +23,7 @@
 
 @property BOOL isScrollingToNewContact;
 @property BOOL isTimelineExpanded;
+@property BOOL isOutOfBounds;
 
 @end
 
@@ -337,6 +340,17 @@ static CGFloat contactRowHeight = 72.0f;
     return footer;
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    NSLog(@"%f, %f", scrollView.contentOffset.x, scrollView.contentOffset.y);
+    if (scrollView.contentOffset.y < 0)
+    {
+//        LLPullNavigationController *pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
+//        [scrollView setContentOffset:CGPointMake(scrollView.contentOffset.x, 0)];
+//        [pullController assumeScrollControl];
+    }
+}
+
 # pragma mark - Queue Row Selection Methods
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -421,7 +435,7 @@ static CGFloat contactRowHeight = 72.0f;
     [super viewDidLoad];
 	
     // Create a table view to hold the contacts
-    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
+    LLPullNavigationTableView *tableView = [[LLPullNavigationTableView alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
                                                                            self.view.bounds.origin.y,
                                                                            self.view.bounds.size.width,
                                                                            self.view.bounds.size.height - self.navigationController.navigationBar.frame.size.height)
@@ -430,6 +444,7 @@ static CGFloat contactRowHeight = 72.0f;
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     tableView.delegate = self;
     tableView.dataSource = self;
+    tableView.delaysContentTouches = NO;
     
     self.tableView = tableView;
     [self.view addSubview:self.tableView];

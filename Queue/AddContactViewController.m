@@ -419,6 +419,8 @@ static CGFloat keyboardHeight = 216;
     self.isKeyboardVisible = NO;
     
     [self registerForKeyboardNotifications];
+    
+    [self.noteTextView becomeFirstResponder];
 }
 
 // ------------------------------
@@ -716,11 +718,11 @@ static CGFloat keyboardHeight = 216;
 {
     if (self.isDueDatePickerVisible)
     {
-        [self hideDueDatePickerAnimated:YES completion:^{[self.noteTextView becomeFirstResponder];}];
+        [self hideDueDatePickerAnimated:YES completion:nil];
     }
     else if (self.isIntervalPickerVisible)
     {
-        [self hideIntervalPickerAnimated:YES completion:^{[self.noteTextView becomeFirstResponder];}];
+        [self hideIntervalPickerAnimated:YES completion:nil];
     }
     else if (self.isKeyboardVisible)
     {

@@ -13,6 +13,7 @@
 #import "Contact.h"
 #import "Meeting.h"
 #import "Location.h"
+#import "LLPullNavigationTableView.h"
 
 #define kDateRow    0
 #define kNoteRow    1

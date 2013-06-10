@@ -9,6 +9,7 @@
 #import "LLAppDelegate.h"
 #import <CoreData/CoreData.h>
 #import <GoogleMaps/GoogleMaps.h>
+#import "LLPullNavigationController.h"
 #import "QueuesViewController.h"
 
 @implementation LLAppDelegate
@@ -81,11 +82,11 @@
     queueTable.managedObjectContext = context;
     
     // Add the table to the nav controller
-    UINavigationController *aNavController = [[UINavigationController alloc] initWithRootViewController:queueTable];
-    self.navController = aNavController;
+    LLPullNavigationController *pullController = [[LLPullNavigationController alloc] initWithRootViewController:queueTable];
+    self.pullController = pullController;
     
     // Add the nav controller to the window
-    self.window.rootViewController = self.navController;
+    self.window.rootViewController = self.pullController;
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];

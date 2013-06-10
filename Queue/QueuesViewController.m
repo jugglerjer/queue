@@ -10,6 +10,7 @@
 #import "QueueViewController.h"
 #import "QueueBarButtonItem.h"
 #import "Queue.h"
+#import "LLPullNavigationController.h"
 
 @interface QueuesViewController ()
 
@@ -71,7 +72,11 @@
     QueueViewController *queueView = [[QueueViewController alloc] initWithQueue:[self.queuesArray objectAtIndex:indexPath.row]];
     queueView.managedObjectContext = self.managedObjectContext;
     queueView.title = [[self.queuesArray objectAtIndex:indexPath.row] name];
-    [self.navigationController pushViewController:queueView animated:YES];
+//    [self.navigationController pushViewController:queueView animated:YES];
+    
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:queueView];
+    LLPullNavigationController *pullController = (LLPullNavigationController *)self.parentViewController;
+    [pullController switchToViewController:navController animated:YES completion:nil];
     
 //    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -103,6 +108,15 @@
     self.tableView = tableView;
     [self.view addSubview:self.tableView];
     
+    for (UIGestureRecognizer *gesture in self.tableView.gestureRecognizers)
+    {
+        if ([gesture isKindOfClass:[UISwipeGestureRecognizer class]])
+        {
+            gesture.delegate = self;
+        }
+        
+    }
+    
     // Add the add contact button to the right side of the nav bar
     QueueBarButtonItem *addContactButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeAdd target:self action:@selector(addQueue)];
     self.navigationItem.rightBarButtonItem = addContactButton;
@@ -121,6 +135,11 @@
     # pragma mark - TODO sort the queues
 
     [self setQueuesArray:mutableFetchResults];
+}
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    return YES;
 }
 
 - (void)didReceiveMemoryWarning
