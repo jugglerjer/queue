@@ -340,16 +340,16 @@ static CGFloat contactRowHeight = 72.0f;
     return footer;
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    NSLog(@"%f, %f", scrollView.contentOffset.x, scrollView.contentOffset.y);
-    if (scrollView.contentOffset.y < 0)
-    {
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+//{
+//    NSLog(@"%f, %f", scrollView.contentOffset.x, scrollView.contentOffset.y);
+//    if (scrollView.contentOffset.y < 0)
+//    {
 //        LLPullNavigationController *pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
 //        [scrollView setContentOffset:CGPointMake(scrollView.contentOffset.x, 0)];
 //        [pullController assumeScrollControl];
-    }
-}
+//    }
+//}
 
 # pragma mark - Queue Row Selection Methods
 

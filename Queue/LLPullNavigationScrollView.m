@@ -16,6 +16,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        self.delegate = self;
     }
     return self;
 }
@@ -30,17 +31,19 @@
     [super touchesBegan:touches withEvent:event];
 }
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
+{    
     UITouch *touch = [[touches allObjects] objectAtIndex:0];
     CGPoint currentLocation = [touch locationInView:self];
     CGPoint previousLocation = [touch previousLocationInView:self];
     if (previousLocation.y > currentLocation.y)
     {
         self.scrollEnabled = NO;
+        self.delaysContentTouches = NO;
         [super touchesCancelled:touches withEvent:event];
     }
     else {
         self.scrollEnabled = YES;
+        self.delaysContentTouches = YES;
         [self becomeFirstResponder];
         [super touchesMoved:touches withEvent:event];
     }
@@ -53,6 +56,11 @@
 - (BOOL)canBecomeFirstResponder
 {
     return YES;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    NSLog(@"%f", scrollView.contentOffset.y);
 }
 
 /*

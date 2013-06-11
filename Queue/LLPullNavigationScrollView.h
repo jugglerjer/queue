@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LLPullNavigationScrollView : UIScrollView
+@interface LLPullNavigationScrollView : UIScrollView <UIScrollViewDelegate>
 
 @end
