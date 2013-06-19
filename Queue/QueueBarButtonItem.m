@@ -46,11 +46,20 @@
         // Create the button
         CGFloat buttonMargin = 10.0f;
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.frame = CGRectMake(buttonMargin, 0, normalImage.size.width + (2*buttonMargin), normalImage.size.height);
+        button.frame = CGRectMake(buttonMargin, 0, normalImage.size.width + (2*buttonMargin), normalImage.size.height + (2*buttonMargin));
         button.contentMode = UIViewContentModeCenter;
         [button setImage:normalImage forState:UIControlStateNormal];
+//        UIImageView *imageView = [[UIImageView alloc] initWithImage:normalImage];
+//        [button addSubview:imageView];
         [button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
         button.showsTouchWhenHighlighted = YES;
+//        button.autoresizingMask = UIViewAutoresizingNone;
+        button.imageView.autoresizingMask = UIViewAutoresizingNone;
+        button.imageView.contentMode = UIViewContentModeCenter;
+        button.imageView.clipsToBounds = NO;
+        button.autoresizesSubviews = NO;
+//        button.imageView.backgroundColor = [UIColor greenColor];
+//        button.backgroundColor = [UIColor orangeColor];
         
         [self setCustomView:button];
     }

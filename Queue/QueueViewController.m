@@ -27,6 +27,7 @@
 @implementation QueueViewController
 
 static CGFloat contactRowHeight = 72.0f;
+#define degreesToRadians(x) (M_PI * x / 180.0)
 
 # pragma mark - Initialization Methods
 
@@ -367,9 +368,10 @@ static CGFloat contactRowHeight = 72.0f;
     NSIndexPath *timelineIndexPath = [self timelineIndexPath];
 //    [self slideTimelineDown];
 //    [self performSelector:@selector(slideTimeline) withObject:nil afterDelay:0.4];
+    [self rotateRightNavButtonToClose];
     [self.tableView insertRowsAtIndexPaths:@[timelineIndexPath] withRowAnimation:UITableViewRowAnimationTop];
     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
-    [self.addButton setEnabled:NO];
+//    [self.addButton setEnabled:NO];
 }
 
 - (void)hideTimelineWithContactReposition:(BOOL)reposition
@@ -379,6 +381,7 @@ static CGFloat contactRowHeight = 72.0f;
     NSIndexPath *timelineIndexPath = [self timelineIndexPath];
 //    [self slideTimelineUp];
 //    [self performSelector:@selector(slideTimeline) withObject:nil afterDelay:0.4];
+    [self rotateRightNavButtonToAdd];
     [self.tableView deleteRowsAtIndexPaths:@[timelineIndexPath] withRowAnimation:UITableViewRowAnimationTop];
     self.tableView.scrollEnabled = YES;
     
@@ -409,6 +412,41 @@ static CGFloat contactRowHeight = 72.0f;
                      }];
 }
 
+- (void)rightNavButtonTapped
+{
+    if (self.isTimelineExpanded)
+    {
+        [self hideTimelineWithContactReposition:YES];
+    }
+    else
+    {
+        [self importContact];
+    }
+}
+
+- (void)rotateRightNavButtonToClose
+{
+    UIButton *button = (UIButton *)self.navigationItem.rightBarButtonItem.customView;
+    UIImageView *imageView = button.imageView;
+    [UIView animateWithDuration:0.3 animations:^{
+        imageView.center = button.center;
+        imageView.transform = CGAffineTransformMakeRotation(degreesToRadians(45.0));
+    } completion:^(BOOL finished){
+//        self.navigationItem.rightBarButtonItem.customView.frame = frame;
+    }];
+}
+
+- (void)rotateRightNavButtonToAdd
+{
+    UIButton *button = (UIButton *)self.navigationItem.rightBarButtonItem.customView;
+    UIImageView *imageView = button.imageView;
+    [UIView animateWithDuration:0.3 animations:^{
+        imageView.transform = CGAffineTransformMakeRotation(degreesToRadians(0.0));
+    } completion:^(BOOL finished){
+        //        self.navigationItem.rightBarButtonItem.customView.frame = frame;
+    }];
+}
+
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
     
@@ -435,7 +473,7 @@ static CGFloat contactRowHeight = 72.0f;
     [self.view addSubview:self.tableView];
     
     // Add the add contact button to the right side of the nav bar
-    QueueBarButtonItem *addContactButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeAdd target:self action:@selector(importContact)];
+    QueueBarButtonItem *addContactButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeAdd target:self action:@selector(rightNavButtonTapped)];
     self.addButton = addContactButton;
     self.navigationItem.rightBarButtonItem = self.addButton;
     
