@@ -57,12 +57,6 @@
 {
     return YES;
 }
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    NSLog(@"%f", scrollView.contentOffset.y);
-}
-
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

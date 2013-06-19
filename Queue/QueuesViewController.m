@@ -8,18 +8,21 @@
 
 #import "QueuesViewController.h"
 #import "QueueViewController.h"
+#import "QueueCell.h"
 #import "QueueBarButtonItem.h"
 #import "Queue.h"
-#import "LLPullNavigationController.h"
 
 @interface QueuesViewController ()
 
 @property (strong, nonatomic) UITableView *tableView;
 @property (nonatomic) NSMutableArray *queuesArray;
+@property (weak, nonatomic) QueueViewController *queueViewController;
 
 @end
 
 @implementation QueuesViewController
+
+int selectedQueue;
 
 # pragma mark - Queue Management Methods
 
@@ -55,13 +58,16 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *QueueRowIdentifier = @"QueueRowIdentifier";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:QueueRowIdentifier];
+    QueueCell *cell = [tableView dequeueReusableCellWithIdentifier:QueueRowIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault  reuseIdentifier:QueueRowIdentifier];
+        cell = [[QueueCell alloc] initWithReuseIdentifier:QueueRowIdentifier];
     }
     Queue *queue = (Queue *)[self.queuesArray objectAtIndex:indexPath.row];
-    cell.textLabel.text = queue.name;
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    cell.queueNameLabel.text = queue.name;
+    cell.queueTable = self.tableView;
+    CGRect frame = cell.selectableBackgroundView.frame;
+    frame.origin.y = -5;
+    cell.selectableBackgroundView.frame = frame;
     return cell;
 }
 
@@ -69,16 +75,63 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    QueueViewController *queueView = [[QueueViewController alloc] initWithQueue:[self.queuesArray objectAtIndex:indexPath.row]];
+    [self switchToQueueAtIndex:indexPath.row];
+}
+
+- (void)pullNavigationControllerWillEnterSelectionMode:(LLPullNavigationController *)pullNavigationController
+{
+//    [self.queueViewController.navigationController setNavigationBarHidden:YES];
+//    CGRect frame = self.queueViewController.view.frame;
+//    frame.origin.y = frame.origin.y + self.queueViewController.navigationController.navigationBar.frame.size.height;
+//    self.queueViewController.view.frame = frame;
+    
+    self.queueViewController.navigationController.navigationBar.alpha = 0;
+}
+
+- (void)pullNavigationController:(LLPullNavigationController *)pullNavigationViewController shouldSelectPage:(NSUInteger)page
+{
+    if (page != selectedQueue)
+        [self switchToQueueAtIndex:page];
+}
+
+- (void)pullNavigationController:(LLPullNavigationController *)pullNavigationViewController canSelectPage:(NSUInteger)page
+{
+//    [self.queueViewController.navigationController setNavigationBarHidden:YES animated:NO];
+    QueueCell *cell = (QueueCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:page inSection:0]];
+    [cell setSelectable:YES animated:YES];
+    [self.tableView performSelector:@selector(bringSubviewToFront:) withObject:cell afterDelay:0.4];
+//    [self.tableView bringSubviewToFront:cell];
+    NSLog(@"%d", page);
+}
+
+- (void)pullNavigationController:(LLPullNavigationController *)pullNavigationViewController canNoLongerSelectPage:(NSUInteger)page
+{
+    QueueCell *cell = (QueueCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:page inSection:0]];
+    [cell setSelectable:NO animated:YES];
+    [self.tableView performSelector:@selector(sendSubviewToBack:) withObject:cell afterDelay:0.4];
+//    [self.tableView sendSubviewToBack:cell];
+    NSLog(@"%d", page);
+}
+
+- (void)switchToQueueAtIndex:(NSInteger)index
+{
+    // If the selected queue doesn't exist, choose the queue at the highest index allowed instead
+    if (index >= [self.queuesArray count])
+    {
+        index = [self.queuesArray count] - 1;
+    }
+    
+    QueueViewController *queueView = [[QueueViewController alloc] initWithQueue:[self.queuesArray objectAtIndex:index]];
     queueView.managedObjectContext = self.managedObjectContext;
-    queueView.title = [[self.queuesArray objectAtIndex:indexPath.row] name];
-//    [self.navigationController pushViewController:queueView animated:YES];
+    queueView.title = [[self.queuesArray objectAtIndex:index] name];
     
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:queueView];
+//    [queueView.navigationController setNavigationBarHidden:NO animated:NO];
     LLPullNavigationController *pullController = (LLPullNavigationController *)self.parentViewController;
     [pullController switchToViewController:navController animated:YES completion:nil];
     
-//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    self.queueViewController = queueView;
+    selectedQueue = index;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -96,6 +149,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    LLPullNavigationController *pullController = (LLPullNavigationController *)self.parentViewController;
+    pullController.delegate = self;
 	
     // Create a table view to hold the contacts
     UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
@@ -105,6 +161,8 @@
                                                           style:UITableViewStylePlain];
     tableView.delegate = self;
     tableView.dataSource = self;
+    tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    tableView.backgroundColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1];
     self.tableView = tableView;
     [self.view addSubview:self.tableView];
     

@@ -454,8 +454,8 @@ static CGFloat contactRowHeight = 72.0f;
     self.addButton = addContactButton;
     self.navigationItem.rightBarButtonItem = self.addButton;
     
-    QueueBarButtonItem *backButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeBack target:self action:@selector(back)];
-    self.navigationItem.leftBarButtonItem = backButton;
+//    QueueBarButtonItem *backButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeBack target:self action:@selector(back)];
+//    self.navigationItem.leftBarButtonItem = backButton;
     
     [self updateContactsArrayWithTableReload:NO];
 }
