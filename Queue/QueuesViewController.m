@@ -88,6 +88,8 @@ CGFloat rowHeight = 44.0;
     cell.queueNameLabel.text = queue.name;
     cell.queueTable = self.tableView;
     cell.delegate = self;
+    cell.showsReorderControl = YES;
+//    [cell.editingAccessoryView addSubview:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"reorder-control.png"]]];
     CGRect frame = cell.selectableBackgroundView.frame;
     frame.origin.y = -5;
     cell.selectableBackgroundView.frame = frame;
@@ -104,12 +106,15 @@ CGFloat rowHeight = 44.0;
 - (void)pullNavigationControllerWillEnterSelectionMode:(LLPullNavigationController *)pullNavigationController
 {    
     self.queueViewController.navigationController.navigationBar.alpha = 0;
+    [self.tableView setEditing:YES animated:NO];
 }
 
 - (void)pullNavigationController:(LLPullNavigationController *)pullNavigationViewController shouldSelectPage:(NSUInteger)page
 {
-    if (page != selectedQueue)
+    if (page != selectedQueue) {
         [self switchToQueueAtIndex:page];
+        [self.tableView setEditing:NO animated:NO];
+    }
 }
 
 - (void)pullNavigationController:(LLPullNavigationController *)pullNavigationViewController canSelectPage:(NSUInteger)page
@@ -163,7 +168,7 @@ CGFloat rowHeight = 44.0;
 // -----------------------------------------
 - (void)hideNewQueueSectionWithAnimation:(BOOL)animated
 {
-//    [self.tableView setContentOffset:CGPointMake(0, rowHeight) animated:animated];
+    [self.tableView setContentOffset:CGPointMake(0, rowHeight) animated:animated];
 //    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:NSNotFound inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:animated];
 }
 
@@ -187,10 +192,12 @@ CGFloat rowHeight = 44.0;
     if (![textField.text isEqualToString:@""])
     {
         [self addQueueWithName:textField.text];
+        [self hideNewQueueSectionWithAnimation:NO];
     }
-    
-    textField.text = @"";
-    [self hideNewQueueSectionWithAnimation:NO];
+    else {
+        textField.text = @"";
+        [self hideNewQueueSectionWithAnimation:YES];
+    }
 }
 
 #pragma mark Queue Name Editing
@@ -207,6 +214,9 @@ CGFloat rowHeight = 44.0;
         if (cell.queueNameLabel.isFirstResponder)
             [cell.queueNameLabel resignFirstResponder];
     }
+    
+    if ([self.queueNameTextField isFirstResponder])
+        [self.queueNameTextField resignFirstResponder];
 }
 
 // -----------------------------------------
@@ -233,6 +243,32 @@ CGFloat rowHeight = 44.0;
     [self hideNewQueueSectionWithAnimation:NO];
 }
 
+#pragma mark Queue Position Editing
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return UITableViewCellEditingStyleNone;
+}
+
+- (BOOL)tableView:(UITableView *)tableview shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (BOOL)tableView:(UITableView *)tableview canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+{
+    Queue *queue = [self.queuesArray objectAtIndex:fromIndexPath.row];
+    [self.queuesArray removeObjectAtIndex:fromIndexPath.row];
+    [self.queuesArray insertObject:queue atIndex:toIndexPath.row];
+    [tableView reloadData];
+}
+
 # pragma mark - View Management Methods
 
 - (void)viewDidLoad
@@ -251,12 +287,15 @@ CGFloat rowHeight = 44.0;
     tableView.delegate = self;
     tableView.dataSource = self;
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    tableView.allowsSelectionDuringEditing = YES;
     tableView.backgroundColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1];
     
-    CGRect nameFrame = CGRectMake(NAME_LABEL_MARGIN_LEFT,
-                                  NAME_LABEL_MARGIN_TOP,
+    UIView *newQueueView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, rowHeight)];
+    
+    CGRect nameFrame = CGRectMake(newQueueView.bounds.origin.x + NAME_LABEL_MARGIN_LEFT,
+                                  newQueueView.bounds.origin.y + NAME_LABEL_MARGIN_TOP,
                                   tableView.frame.size.width - (NAME_LABEL_MARGIN_LEFT + NAME_LABEL_MARGIN_RIGHT),
-                                  44.0 - (NAME_LABEL_MARGIN_TOP + NAME_LABEL_MARGIN_BOTTOM));
+                                  newQueueView.frame.size.height - (NAME_LABEL_MARGIN_TOP + NAME_LABEL_MARGIN_BOTTOM));
     
     UITextField *queueNameLabel = [[UITextField alloc] initWithFrame:nameFrame];
     queueNameLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21.0];
@@ -271,7 +310,9 @@ CGFloat rowHeight = 44.0;
     queueNameLabel.textColor = [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0];
     [queueNameLabel setValue:[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:0.5] forKeyPath:@"_placeholderLabel.textColor"];
     self.queueNameTextField = queueNameLabel;
-    tableView.tableHeaderView = self.queueNameTextField;
+    
+    [newQueueView addSubview:self.queueNameTextField];
+    tableView.tableHeaderView = newQueueView;
     
     self.tableView = tableView;
     [self.view addSubview:self.tableView];
