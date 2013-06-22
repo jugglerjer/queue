@@ -33,7 +33,6 @@
 		3F934447175ADDF2000FD331 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F934443175ADDF2000FD331 /* SBJsonWriter.m */; };
 		3F934449175AE968000FD331 /* location-enabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F934448175AE968000FD331 /* location-enabled@2x.png */; };
 		3F93444B175AF179000FD331 /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F93444A175AF179000FD331 /* GoogleMaps.framework */; };
-		3F93444D175AF1B2000FD331 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3F93444C175AF1B2000FD331 /* GoogleMaps.bundle */; };
 		3F934458175AF245000FD331 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F93444E175AF244000FD331 /* AVFoundation.framework */; };
 		3F934459175AF245000FD331 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F93444F175AF244000FD331 /* CoreText.framework */; };
 		3F93445A175AF245000FD331 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F934450175AF244000FD331 /* GLKit.framework */; };
@@ -95,10 +94,6 @@
 		3FE80CEC174DCBE90009D61D /* add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CEB174DCBE90009D61D /* add@2x.png */; };
 		3FE80CF0174DCED50009D61D /* done@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CEF174DCED50009D61D /* done@2x.png */; };
 		3FE80CF2174DD05E0009D61D /* cancel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CF1174DD05E0009D61D /* cancel@2x.png */; };
-		3FE80CFA174DE2080009D61D /* nav_button_back_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CF6174DE2080009D61D /* nav_button_back_pressed@2x.png */; };
-		3FE80CFB174DE2080009D61D /* nav_button_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CF7174DE2080009D61D /* nav_button_back@2x.png */; };
-		3FE80CFC174DE2080009D61D /* nav_button_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CF8174DE2080009D61D /* nav_button_pressed@2x.png */; };
-		3FE80CFD174DE2080009D61D /* nav_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CF9174DE2080009D61D /* nav_button@2x.png */; };
 		3FE80D00174DE8A30009D61D /* QueueBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FE80CFF174DE8A30009D61D /* QueueBarButtonItem.m */; };
 		3FE80D02174DF34E0009D61D /* queue_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80D01174DF34E0009D61D /* queue_background@2x.png */; };
 		3FE80D04174DF4F60009D61D /* queue-row-background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80D03174DF4F60009D61D /* queue-row-background@2x.png */; };
@@ -106,6 +101,7 @@
 		3FE80D09174F12390009D61D /* contact-avatar-placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80D08174F12390009D61D /* contact-avatar-placeholder@2x.png */; };
 		3FF2C0211749D74E007203D8 /* AddMeetingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2C0201749D74E007203D8 /* AddMeetingViewController.m */; };
 		3FF2C027174B52DC007203D8 /* TimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2C026174B52DC007203D8 /* TimelineViewController.m */; };
+		695755EE17761E9A00606E9C /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 695755ED17761E9A00606E9C /* GoogleMaps.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -152,7 +148,6 @@
 		3F934443175ADDF2000FD331 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
 		3F934448175AE968000FD331 /* location-enabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "location-enabled@2x.png"; path = "Queue/location-enabled@2x.png"; sourceTree = "<group>"; };
 		3F93444A175AF179000FD331 /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
-		3F93444C175AF1B2000FD331 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = "../../../Downloads/GoogleMaps-iOS-1.3.0/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle"; sourceTree = "<group>"; };
 		3F93444E175AF244000FD331 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		3F93444F175AF244000FD331 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		3F934450175AF244000FD331 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
@@ -229,10 +224,6 @@
 		3FE80CEB174DCBE90009D61D /* add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "add@2x.png"; path = "Queue/add@2x.png"; sourceTree = "<group>"; };
 		3FE80CEF174DCED50009D61D /* done@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "done@2x.png"; path = "Queue/done@2x.png"; sourceTree = "<group>"; };
 		3FE80CF1174DD05E0009D61D /* cancel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cancel@2x.png"; path = "Queue/cancel@2x.png"; sourceTree = "<group>"; };
-		3FE80CF6174DE2080009D61D /* nav_button_back_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "nav_button_back_pressed@2x.png"; path = "../Carma/Carma/nav_button_back_pressed@2x.png"; sourceTree = "<group>"; };
-		3FE80CF7174DE2080009D61D /* nav_button_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "nav_button_back@2x.png"; path = "../Carma/Carma/nav_button_back@2x.png"; sourceTree = "<group>"; };
-		3FE80CF8174DE2080009D61D /* nav_button_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "nav_button_pressed@2x.png"; path = "../Carma/Carma/nav_button_pressed@2x.png"; sourceTree = "<group>"; };
-		3FE80CF9174DE2080009D61D /* nav_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "nav_button@2x.png"; path = "../Carma/Carma/nav_button@2x.png"; sourceTree = "<group>"; };
 		3FE80CFE174DE8A30009D61D /* QueueBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QueueBarButtonItem.h; sourceTree = "<group>"; };
 		3FE80CFF174DE8A30009D61D /* QueueBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QueueBarButtonItem.m; sourceTree = "<group>"; };
 		3FE80D01174DF34E0009D61D /* queue_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "queue_background@2x.png"; path = "Queue/queue_background@2x.png"; sourceTree = "<group>"; };
@@ -244,6 +235,7 @@
 		3FF2C0201749D74E007203D8 /* AddMeetingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddMeetingViewController.m; sourceTree = "<group>"; };
 		3FF2C025174B52DC007203D8 /* TimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineViewController.h; sourceTree = "<group>"; };
 		3FF2C026174B52DC007203D8 /* TimelineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimelineViewController.m; sourceTree = "<group>"; };
+		695755ED17761E9A00606E9C /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = "../../../../Downloads/GoogleMaps-iOS-1.3.1/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -325,7 +317,7 @@
 		3FA1018A17447769007D2520 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3F93444C175AF1B2000FD331 /* GoogleMaps.bundle */,
+				695755ED17761E9A00606E9C /* GoogleMaps.bundle */,
 				3F93444A175AF179000FD331 /* GoogleMaps.framework */,
 				3FA1018B17447769007D2520 /* UIKit.framework */,
 				3FA1018D17447769007D2520 /* Foundation.framework */,
@@ -467,10 +459,6 @@
 				3FE80D08174F12390009D61D /* contact-avatar-placeholder@2x.png */,
 				3FE80D03174DF4F60009D61D /* queue-row-background@2x.png */,
 				3FE80D01174DF34E0009D61D /* queue_background@2x.png */,
-				3FE80CF6174DE2080009D61D /* nav_button_back_pressed@2x.png */,
-				3FE80CF7174DE2080009D61D /* nav_button_back@2x.png */,
-				3FE80CF8174DE2080009D61D /* nav_button_pressed@2x.png */,
-				3FE80CF9174DE2080009D61D /* nav_button@2x.png */,
 				3FE80CF1174DD05E0009D61D /* cancel@2x.png */,
 				3FE80CEF174DCED50009D61D /* done@2x.png */,
 				3FE80CEB174DCBE90009D61D /* add@2x.png */,
@@ -561,10 +549,6 @@
 				3FE80CEC174DCBE90009D61D /* add@2x.png in Resources */,
 				3FE80CF0174DCED50009D61D /* done@2x.png in Resources */,
 				3FE80CF2174DD05E0009D61D /* cancel@2x.png in Resources */,
-				3FE80CFA174DE2080009D61D /* nav_button_back_pressed@2x.png in Resources */,
-				3FE80CFB174DE2080009D61D /* nav_button_back@2x.png in Resources */,
-				3FE80CFC174DE2080009D61D /* nav_button_pressed@2x.png in Resources */,
-				3FE80CFD174DE2080009D61D /* nav_button@2x.png in Resources */,
 				3FE80D02174DF34E0009D61D /* queue_background@2x.png in Resources */,
 				3FE80D04174DF4F60009D61D /* queue-row-background@2x.png in Resources */,
 				3FE80D09174F12390009D61D /* contact-avatar-placeholder@2x.png in Resources */,
@@ -581,7 +565,6 @@
 				3F977645175726B000E6B5B7 /* notepad@2x.png in Resources */,
 				3F97764717572C4900E6B5B7 /* light-background@2x.png in Resources */,
 				3F934449175AE968000FD331 /* location-enabled@2x.png in Resources */,
-				3F93444D175AF1B2000FD331 /* GoogleMaps.bundle in Resources */,
 				3F9EF883175C0AB10089EC2A /* location-disabled@2x.png in Resources */,
 				3F9EF884175C0AB10089EC2A /* location-search@2x.png in Resources */,
 				3F9EF889175C344A0089EC2A /* clear-button@2x.png in Resources */,
@@ -600,6 +583,7 @@
 				3F3264DA176AE918000BCF83 /* queue-cell-background-selectable@2x.png in Resources */,
 				3F9B1A19176E995D00C566B9 /* icon@2x.png in Resources */,
 				3F9B1A1B176E999900C566B9 /* icon.png in Resources */,
+				695755EE17761E9A00606E9C /* GoogleMaps.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

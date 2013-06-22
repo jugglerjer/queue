@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface QueueCell : UITableViewCell
+@interface QueueCell : UITableViewCell <UITextFieldDelegate>
 
-@property (strong, nonatomic) UILabel *queueNameLabel;
+@property (strong, nonatomic) UITextField *queueNameLabel;
 @property (strong, nonatomic) UIImageView *unselectedImageView;
 @property (strong, nonatomic) UIImageView *selectedImageView;
 @property (strong, nonatomic) UIImageView *selectableBackgroundView;

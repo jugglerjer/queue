@@ -68,6 +68,11 @@ int selectedQueue;
     CGRect frame = cell.selectableBackgroundView.frame;
     frame.origin.y = -5;
     cell.selectableBackgroundView.frame = frame;
+    
+    NSArray *actions = [cell.queueNameLabel actionsForTarget:cell.queueNameLabel forControlEvent:UIControlEventTouchUpInside];
+    for (NSString *action in actions) {
+        [cell.queueNameLabel removeTarget:cell.queueNameLabel action:NSSelectorFromString(action) forControlEvents:UIControlEventTouchUpInside];
+    }
     return cell;
 }
 

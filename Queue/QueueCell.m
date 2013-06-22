@@ -7,11 +7,12 @@
 //
 
 #import "QueueCell.h"
+#import <QuartzCore/QuartzCore.h>
 
 #define NAME_LABEL_MARGIN_RIGHT     20
 #define NAME_LABEL_MARGIN_LEFT      20
-#define NAME_LABEL_MARGIN_TOP       12
-#define NAME_LABEL_MARGIN_BOTTOM    12
+#define NAME_LABEL_MARGIN_TOP       6
+#define NAME_LABEL_MARGIN_BOTTOM    6
 
 @implementation QueueCell
 
@@ -34,19 +35,43 @@
                                       self.bounds.origin.y + NAME_LABEL_MARGIN_TOP,
                                       self.frame.size.width - (NAME_LABEL_MARGIN_LEFT + NAME_LABEL_MARGIN_RIGHT),
                                       self.frame.size.height - (NAME_LABEL_MARGIN_TOP + NAME_LABEL_MARGIN_BOTTOM));
-        UILabel *queueNameLabel = [[UILabel alloc] initWithFrame:nameFrame];
+        UITextField *queueNameLabel = [[UITextField alloc] initWithFrame:nameFrame];
         queueNameLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21.0];
         queueNameLabel.textAlignment = NSTextAlignmentCenter;
-        queueNameLabel.textColor = [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0];
-        queueNameLabel.shadowColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.1];
-        queueNameLabel.shadowOffset = CGSizeMake(0, -1);
         queueNameLabel.backgroundColor = [UIColor clearColor];
+        queueNameLabel.placeholder = @"New Queue";
+        [queueNameLabel setValue:[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:0.5] forKeyPath:@"_placeholderLabel.textColor"];
+        [queueNameLabel addTarget:self action:@selector(nameTextFieldDidChange:) forControlEvents:UIControlEventAllEditingEvents];
         self.queueNameLabel = queueNameLabel;
+        [self setQueueNameLabelFont];
         [self addSubview:self.queueNameLabel];
         
         self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return self;
+}
+
+- (void)setQueueNameLabelFont
+{
+    //        queueNameLabel.shadowColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.1];
+    //        queueNameLabel.shadowOffset = CGSizeMake(0, -1);
+    //        queueNameLabel.contentInset = UIEdgeInsetsMake(-4,-8,0,0);
+    self.queueNameLabel.layer.shadowOpacity = 1.0;
+    self.queueNameLabel.layer.shadowRadius = 0.0;
+    self.queueNameLabel.layer.shadowColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.1].CGColor;
+    self.queueNameLabel.layer.shadowOffset = CGSizeMake(0.0, -1.0);
+    self.queueNameLabel.textColor = [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0];
+//    if ([self.queueNameLabel.text isEqualToString:@""]) {
+//        self.queueNameLabel.text = @"Queue Name";
+//        self.queueNameLabel.textColor = [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:0.5];
+//    }
+//    else
+//        self.queueNameLabel.textColor = [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0];
+}
+
+- (void)nameTextFieldDidChange:(UITextField *)nameTextField
+{
+//    [self setQueueNameLabelFont];
 }
 
 - (void)setSelectable:(BOOL)selectable animated:(BOOL)animated
