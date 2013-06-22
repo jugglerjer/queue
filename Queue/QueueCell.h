@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface QueueCell : UITableViewCell <UITextFieldDelegate>
+@protocol QueueCellDelegate;
 
+@interface QueueCell : UITableViewCell <UITextFieldDelegate, UIGestureRecognizerDelegate>
+
+@property (weak, nonatomic) id <QueueCellDelegate> delegate;
 @property (strong, nonatomic) UITextField *queueNameLabel;
 @property (strong, nonatomic) UIImageView *unselectedImageView;
 @property (strong, nonatomic) UIImageView *selectedImageView;
@@ -18,5 +21,11 @@
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
 - (void)setSelectable:(BOOL)selectable animated:(BOOL)animated;
+
+@end
+
+@protocol QueueCellDelegate <NSObject>
+
+- (void)queueCell:(QueueCell *)cell didEndNameEditingWithNewName:(NSString *)name;
 
 @end

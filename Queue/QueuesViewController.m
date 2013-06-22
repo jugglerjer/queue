@@ -8,7 +8,6 @@
 
 #import "QueuesViewController.h"
 #import "QueueViewController.h"
-#import "QueueCell.h"
 #import "QueueBarButtonItem.h"
 #import "Queue.h"
 
@@ -65,14 +64,10 @@ int selectedQueue;
     Queue *queue = (Queue *)[self.queuesArray objectAtIndex:indexPath.row];
     cell.queueNameLabel.text = queue.name;
     cell.queueTable = self.tableView;
+    cell.delegate = self;
     CGRect frame = cell.selectableBackgroundView.frame;
     frame.origin.y = -5;
     cell.selectableBackgroundView.frame = frame;
-    
-    NSArray *actions = [cell.queueNameLabel actionsForTarget:cell.queueNameLabel forControlEvent:UIControlEventTouchUpInside];
-    for (NSString *action in actions) {
-        [cell.queueNameLabel removeTarget:cell.queueNameLabel action:NSSelectorFromString(action) forControlEvents:UIControlEventTouchUpInside];
-    }
     return cell;
 }
 
@@ -126,6 +121,9 @@ int selectedQueue;
         index = [self.queuesArray count] - 1;
     }
     
+    // Resign first responder in case one of the queue names is being edited
+    [self endQueueNameEditing];
+    
     QueueViewController *queueView = [[QueueViewController alloc] initWithQueue:[self.queuesArray objectAtIndex:index]];
     queueView.managedObjectContext = self.managedObjectContext;
     queueView.title = [[self.queuesArray objectAtIndex:index] name];
@@ -137,6 +135,30 @@ int selectedQueue;
     
     self.queueViewController = queueView;
     selectedQueue = index;
+}
+
+// -----------------------------------------
+// End editing for any of the queue names
+// that may be in edit state
+// -----------------------------------------
+- (void)endQueueNameEditing
+{
+    for (Queue *queue in self.queuesArray)
+    {
+        QueueCell *cell = (QueueCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:[self.queuesArray indexOfObject:queue] inSection:0]];
+        if (cell.queueNameLabel.isFirstResponder)
+            [cell.queueNameLabel resignFirstResponder];
+    }
+}
+
+// -----------------------------------------
+// Update the edit queue with its new name
+// -----------------------------------------
+- (void)queueCell:(QueueCell *)cell didEndNameEditingWithNewName:(NSString *)name
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    Queue *queue = [self.queuesArray objectAtIndex:indexPath.row];
+    queue.name = name;
 }
 
 - (void)viewWillAppear:(BOOL)animated
