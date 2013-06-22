@@ -10,7 +10,7 @@
 #import "LLPullNavigationController.h"
 #import "QueueCell.h"
 
-@interface QueuesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, LLPullNavigationViewControllerDelegate, QueueCellDelegate>
+@interface QueuesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, LLPullNavigationViewControllerDelegate, QueueCellDelegate, UITextFieldDelegate>
 
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 

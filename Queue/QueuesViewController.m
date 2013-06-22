@@ -10,10 +10,17 @@
 #import "QueueViewController.h"
 #import "QueueBarButtonItem.h"
 #import "Queue.h"
+#import <QuartzCore/QuartzCore.h>
+
+#define NAME_LABEL_MARGIN_RIGHT     20
+#define NAME_LABEL_MARGIN_LEFT      20
+#define NAME_LABEL_MARGIN_TOP       6
+#define NAME_LABEL_MARGIN_BOTTOM    6
 
 @interface QueuesViewController ()
 
 @property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) UITextField *queueNameTextField;
 @property (nonatomic) NSMutableArray *queuesArray;
 @property (weak, nonatomic) QueueViewController *queueViewController;
 
@@ -22,24 +29,40 @@
 @implementation QueuesViewController
 
 int selectedQueue;
+CGFloat rowHeight = 44.0;
 
 # pragma mark - Queue Management Methods
 
 // -------------------------------------------------------------
-// Create a new Queue
+// Save any new data to the data store
 // -------------------------------------------------------------
-- (void)addQueue
+- (BOOL)saveQueueData
 {
-    // Create a new Queue managed object
-    Queue *newQueue = (Queue *)[NSEntityDescription insertNewObjectForEntityForName:@"Queue"
-                                                                   inManagedObjectContext:_managedObjectContext];
-    newQueue.name = @"Queue";
     NSError *error = nil;
     if (![self.managedObjectContext save:&error]) {
         // Handle the error.
+        return NO;
     } else {
-        [self.queuesArray addObject:newQueue];
+        return YES;
     }
+}
+
+// -------------------------------------------------------------
+// Create a new Queue
+// -------------------------------------------------------------
+- (void)addQueueWithName:(NSString *)name
+{
+    if (name == nil || [name isEqualToString:@""])
+        name = @"Queue";
+    
+    // Create a new Queue managed object
+    Queue *newQueue = (Queue *)[NSEntityDescription insertNewObjectForEntityForName:@"Queue"
+                                                                   inManagedObjectContext:_managedObjectContext];
+    newQueue.name = name;
+    if ([self saveQueueData])
+        [self.queuesArray insertObject:newQueue atIndex:0];
+//        [self.queuesArray addObject:newQueue];
+    
     [_tableView reloadData];
 }
 
@@ -79,12 +102,7 @@ int selectedQueue;
 }
 
 - (void)pullNavigationControllerWillEnterSelectionMode:(LLPullNavigationController *)pullNavigationController
-{
-//    [self.queueViewController.navigationController setNavigationBarHidden:YES];
-//    CGRect frame = self.queueViewController.view.frame;
-//    frame.origin.y = frame.origin.y + self.queueViewController.navigationController.navigationBar.frame.size.height;
-//    self.queueViewController.view.frame = frame;
-    
+{    
     self.queueViewController.navigationController.navigationBar.alpha = 0;
 }
 
@@ -137,6 +155,46 @@ int selectedQueue;
     selectedQueue = index;
 }
 
+#pragma mark Queue Creation
+
+// -----------------------------------------
+// Hide the new queue section by changing
+// the table's offset
+// -----------------------------------------
+- (void)hideNewQueueSectionWithAnimation:(BOOL)animated
+{
+//    [self.tableView setContentOffset:CGPointMake(0, rowHeight) animated:animated];
+//    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:NSNotFound inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:animated];
+}
+
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField
+{
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+
+// -----------------------------------------
+// Create a new queue when the user is
+// done editing the name
+// -----------------------------------------
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if (![textField.text isEqualToString:@""])
+    {
+        [self addQueueWithName:textField.text];
+    }
+    
+    textField.text = @"";
+    [self hideNewQueueSectionWithAnimation:NO];
+}
+
+#pragma mark Queue Name Editing
+
 // -----------------------------------------
 // End editing for any of the queue names
 // that may be in edit state
@@ -159,6 +217,7 @@ int selectedQueue;
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     Queue *queue = [self.queuesArray objectAtIndex:indexPath.row];
     queue.name = name;
+    [self saveQueueData];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -169,6 +228,9 @@ int selectedQueue;
     if (selection) {
         [self.tableView deselectRowAtIndexPath:selection animated:YES];
     }
+    
+    // Hide the create new queue section
+    [self hideNewQueueSectionWithAnimation:NO];
 }
 
 # pragma mark - View Management Methods
@@ -190,17 +252,29 @@ int selectedQueue;
     tableView.dataSource = self;
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     tableView.backgroundColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1];
+    
+    CGRect nameFrame = CGRectMake(NAME_LABEL_MARGIN_LEFT,
+                                  NAME_LABEL_MARGIN_TOP,
+                                  tableView.frame.size.width - (NAME_LABEL_MARGIN_LEFT + NAME_LABEL_MARGIN_RIGHT),
+                                  44.0 - (NAME_LABEL_MARGIN_TOP + NAME_LABEL_MARGIN_BOTTOM));
+    
+    UITextField *queueNameLabel = [[UITextField alloc] initWithFrame:nameFrame];
+    queueNameLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:21.0];
+    queueNameLabel.textAlignment = NSTextAlignmentCenter;
+    queueNameLabel.backgroundColor = [UIColor clearColor];
+    queueNameLabel.delegate = self;
+    queueNameLabel.placeholder = @"New Queue";
+    queueNameLabel.layer.shadowOpacity = 1.0;
+    queueNameLabel.layer.shadowRadius = 0.0;
+    queueNameLabel.layer.shadowColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.1].CGColor;
+    queueNameLabel.layer.shadowOffset = CGSizeMake(0.0, -1.0);
+    queueNameLabel.textColor = [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0];
+    [queueNameLabel setValue:[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:0.5] forKeyPath:@"_placeholderLabel.textColor"];
+    self.queueNameTextField = queueNameLabel;
+    tableView.tableHeaderView = self.queueNameTextField;
+    
     self.tableView = tableView;
     [self.view addSubview:self.tableView];
-    
-    for (UIGestureRecognizer *gesture in self.tableView.gestureRecognizers)
-    {
-        if ([gesture isKindOfClass:[UISwipeGestureRecognizer class]])
-        {
-            gesture.delegate = self;
-        }
-        
-    }
     
     // Add the add contact button to the right side of the nav bar
     QueueBarButtonItem *addContactButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeAdd target:self action:@selector(addQueue)];
@@ -216,15 +290,8 @@ int selectedQueue;
     if (mutableFetchResults == nil) {
         // Handle the error.
     }
-    
-    # pragma mark - TODO sort the queues
 
     [self setQueuesArray:mutableFetchResults];
-}
-
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
-{
-    return YES;
 }
 
 - (void)didReceiveMemoryWarning
