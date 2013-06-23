@@ -39,52 +39,52 @@ BOOL isScrollingUp = NO;
 //    return YES;
 //}
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [super touchesBegan:touches withEvent:event];
-}
-
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    UITouch *touch = [[touches allObjects] objectAtIndex:0];
-    CGPoint currentLocation = [touch locationInView:self];
-    CGPoint previousLocation = [touch previousLocationInView:self];
-    
-    // Loop through all superviews to find the LLPullNavigationSwipeView
-    id view = self;
-    LLPullNavigationScrollView *scrollView;
-    while (view != nil)
-    {
-        view = [view superview];
-        if ([view isKindOfClass:[LLPullNavigationScrollView class]])
-        {
-            scrollView = (LLPullNavigationScrollView *)view;
-            [scrollView touchesMoved:touches withEvent:event];
-            [super touchesCancelled:touches withEvent:event];
-            break;
-        }
-    }
-    
-    if (previousLocation.y < currentLocation.y && self.contentOffset.y <= 0)
-    {
-        NSLog(@"Scrolled up on table");
-        scrollView.scrollEnabled = YES;
-        isScrollingUp = YES;
-    }
-    else
-    {
-        NSLog(@"Scrolled down on table");
-        scrollView.scrollEnabled = NO;
-        [self becomeFirstResponder];
-        isScrollingUp = NO;
-        [super touchesMoved:touches withEvent:event];
-    }
-    
-}
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [super touchesEnded:touches withEvent:event];
-}
+//- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+//{
+//    [super touchesBegan:touches withEvent:event];
+//}
+//
+//- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+//{
+//    UITouch *touch = [[touches allObjects] objectAtIndex:0];
+//    CGPoint currentLocation = [touch locationInView:self];
+//    CGPoint previousLocation = [touch previousLocationInView:self];
+//    
+//    // Loop through all superviews to find the LLPullNavigationSwipeView
+//    id view = self;
+//    LLPullNavigationScrollView *scrollView;
+//    while (view != nil)
+//    {
+//        view = [view superview];
+//        if ([view isKindOfClass:[LLPullNavigationScrollView class]])
+//        {
+//            scrollView = (LLPullNavigationScrollView *)view;
+//            [scrollView touchesMoved:touches withEvent:event];
+//            [super touchesCancelled:touches withEvent:event];
+//            break;
+//        }
+//    }
+//    
+//    if (previousLocation.y < currentLocation.y && self.contentOffset.y <= 0)
+//    {
+//        NSLog(@"Scrolled up on table");
+//        scrollView.scrollEnabled = YES;
+//        isScrollingUp = YES;
+//    }
+//    else
+//    {
+//        NSLog(@"Scrolled down on table");
+//        scrollView.scrollEnabled = NO;
+//        [self becomeFirstResponder];
+//        isScrollingUp = NO;
+//        [super touchesMoved:touches withEvent:event];
+//    }
+//    
+//}
+//- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+//{
+//    [super touchesEnded:touches withEvent:event];
+//}
 
 - (BOOL)canBecomeFirstResponder
 {

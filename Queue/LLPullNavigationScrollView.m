@@ -26,32 +26,32 @@
 //    return YES;
 //}
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [super touchesBegan:touches withEvent:event];
-}
--(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{    
-    UITouch *touch = [[touches allObjects] objectAtIndex:0];
-    CGPoint currentLocation = [touch locationInView:self];
-    CGPoint previousLocation = [touch previousLocationInView:self];
-    if (previousLocation.y > currentLocation.y)
-    {
-        self.scrollEnabled = NO;
-        self.delaysContentTouches = NO;
-        [super touchesCancelled:touches withEvent:event];
-    }
-    else {
-        self.scrollEnabled = YES;
-        self.delaysContentTouches = YES;
-        [self becomeFirstResponder];
-        [super touchesMoved:touches withEvent:event];
-    }
-}
--(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [super touchesEnded: touches withEvent: event];
-}
+//-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+//{
+//    [super touchesBegan:touches withEvent:event];
+//}
+//-(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+//{    
+//    UITouch *touch = [[touches allObjects] objectAtIndex:0];
+//    CGPoint currentLocation = [touch locationInView:self];
+//    CGPoint previousLocation = [touch previousLocationInView:self];
+//    if (previousLocation.y > currentLocation.y)
+//    {
+//        self.scrollEnabled = NO;
+//        self.delaysContentTouches = NO;
+//        [super touchesCancelled:touches withEvent:event];
+//    }
+//    else {
+//        self.scrollEnabled = YES;
+//        self.delaysContentTouches = YES;
+//        [self becomeFirstResponder];
+//        [super touchesMoved:touches withEvent:event];
+//    }
+//}
+//-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+//{
+//    [super touchesEnded: touches withEvent: event];
+//}
 
 - (BOOL)canBecomeFirstResponder
 {

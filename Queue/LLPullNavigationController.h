@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+@class LLPullNavigationScrollView;
 
 @protocol LLPullNavigationViewControllerDelegate;
 
@@ -15,6 +16,7 @@
 @property int cellHeight;
 
 @property (weak, nonatomic) id<LLPullNavigationViewControllerDelegate> delegate;
+@property (strong, nonatomic) LLPullNavigationScrollView *scrollView;
 
 - (id)initWithRootViewController:(UIViewController *)rootViewController;
 - (void)switchToViewController:(UIViewController *)newViewController animated:(BOOL)animated completion:(void (^)(void))completion;

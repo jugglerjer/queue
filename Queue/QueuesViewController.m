@@ -147,6 +147,9 @@ CGFloat rowHeight = 44.0;
     // Resign first responder in case one of the queue names is being edited
     [self endQueueNameEditing];
     
+    // Make sure the new queue field is hidden
+    [self hideNewQueueSectionWithAnimation:NO];
+    
     QueueViewController *queueView = [[QueueViewController alloc] initWithQueue:[self.queuesArray objectAtIndex:index]];
     queueView.managedObjectContext = self.managedObjectContext;
     queueView.title = [[self.queuesArray objectAtIndex:index] name];
@@ -195,9 +198,9 @@ CGFloat rowHeight = 44.0;
         [self hideNewQueueSectionWithAnimation:NO];
     }
     else {
-        textField.text = @"";
         [self hideNewQueueSectionWithAnimation:YES];
     }
+    textField.text = @"";
 }
 
 #pragma mark Queue Name Editing

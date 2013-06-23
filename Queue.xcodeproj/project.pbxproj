@@ -51,7 +51,6 @@
 		3F98A2EC17529196006A3668 /* timeline-inner-shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F98A2EB17529196006A3668 /* timeline-inner-shadow.png */; };
 		3F98A2EF17529A32006A3668 /* MeetingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F98A2EE17529A32006A3668 /* MeetingCell.m */; };
 		3F98A2F11752ED3A006A3668 /* expand-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F98A2F01752ED39006A3668 /* expand-button.png */; };
-		3F99FF7F17762FB6003D9D1E /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3F99FF7E17762FB6003D9D1E /* GoogleMaps.bundle */; };
 		3F9B1A19176E995D00C566B9 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F9B1A18176E995D00C566B9 /* icon@2x.png */; };
 		3F9B1A1B176E999900C566B9 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F9B1A1A176E999900C566B9 /* icon.png */; };
 		3F9EF883175C0AB10089EC2A /* location-disabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F9EF881175C0AB10089EC2A /* location-disabled@2x.png */; };
@@ -103,6 +102,7 @@
 		3FE80D09174F12390009D61D /* contact-avatar-placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80D08174F12390009D61D /* contact-avatar-placeholder@2x.png */; };
 		3FF2C0211749D74E007203D8 /* AddMeetingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2C0201749D74E007203D8 /* AddMeetingViewController.m */; };
 		3FF2C027174B52DC007203D8 /* TimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2C026174B52DC007203D8 /* TimelineViewController.m */; };
+		695755F01776652B00606E9C /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 695755EF1776652B00606E9C /* GoogleMaps.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -169,7 +169,6 @@
 		3F98A2ED17529A32006A3668 /* MeetingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeetingCell.h; sourceTree = "<group>"; };
 		3F98A2EE17529A32006A3668 /* MeetingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeetingCell.m; sourceTree = "<group>"; };
 		3F98A2F01752ED39006A3668 /* expand-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "expand-button.png"; path = "Queue/expand-button.png"; sourceTree = "<group>"; };
-		3F99FF7E17762FB6003D9D1E /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = "../../../Downloads/GoogleMaps-iOS-1.3.0/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle"; sourceTree = "<group>"; };
 		3F9B1A18176E995D00C566B9 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
 		3F9B1A1A176E999900C566B9 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		3F9EF881175C0AB10089EC2A /* location-disabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "location-disabled@2x.png"; path = "Queue/location-disabled@2x.png"; sourceTree = "<group>"; };
@@ -238,6 +237,7 @@
 		3FF2C0201749D74E007203D8 /* AddMeetingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddMeetingViewController.m; sourceTree = "<group>"; };
 		3FF2C025174B52DC007203D8 /* TimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineViewController.h; sourceTree = "<group>"; };
 		3FF2C026174B52DC007203D8 /* TimelineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimelineViewController.m; sourceTree = "<group>"; };
+		695755EF1776652B00606E9C /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = "../../../../Downloads/GoogleMaps-iOS-1.3.1/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -319,7 +319,7 @@
 		3FA1018A17447769007D2520 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3F99FF7E17762FB6003D9D1E /* GoogleMaps.bundle */,
+				695755EF1776652B00606E9C /* GoogleMaps.bundle */,
 				3F93444A175AF179000FD331 /* GoogleMaps.framework */,
 				3FA1018B17447769007D2520 /* UIKit.framework */,
 				3FA1018D17447769007D2520 /* Foundation.framework */,
@@ -586,8 +586,8 @@
 				3F3264DA176AE918000BCF83 /* queue-cell-background-selectable@2x.png in Resources */,
 				3F9B1A19176E995D00C566B9 /* icon@2x.png in Resources */,
 				3F9B1A1B176E999900C566B9 /* icon.png in Resources */,
-				3F99FF7F17762FB6003D9D1E /* GoogleMaps.bundle in Resources */,
 				3F2CA0F517766022009EAED7 /* reorder-control@2x.png in Resources */,
+				695755F01776652B00606E9C /* GoogleMaps.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

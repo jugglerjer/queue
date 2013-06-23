@@ -10,8 +10,6 @@
 #import "LLPullNavigationScrollView.h"
 
 @interface LLPullNavigationController ()
-
-@property (strong, nonatomic) LLPullNavigationScrollView *scrollView;
 @property (strong, nonatomic) UIViewController *rootViewController;
 @property (strong, nonatomic) UIViewController *currentViewController;
 
@@ -54,6 +52,7 @@ int currentPage = -1;
     scrollView.showsVerticalScrollIndicator = NO;
     scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height * 2);
     scrollView.delegate = self;
+    scrollView.scrollEnabled = NO;
     self.scrollView = scrollView;
     [self.view addSubview:self.scrollView];
     
@@ -193,7 +192,7 @@ int currentPage = -1;
 - (void)assumeScrollControl
 {
     [self.scrollView becomeFirstResponder];
-    self.scrollView.scrollEnabled = YES;
+//    self.scrollView.scrollEnabled = YES;
 }
 
 // -----------------------------------------
