@@ -9,10 +9,10 @@
 #import "QueueCell.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define NAME_LABEL_MARGIN_RIGHT     20
-#define NAME_LABEL_MARGIN_LEFT      20
-#define NAME_LABEL_MARGIN_TOP       6
-#define NAME_LABEL_MARGIN_BOTTOM    6
+#define NAME_LABEL_MARGIN_RIGHT     21
+#define NAME_LABEL_MARGIN_LEFT      19
+#define NAME_LABEL_MARGIN_TOP       10
+#define NAME_LABEL_MARGIN_BOTTOM    9
 
 @interface QueueCell ()
 
@@ -51,7 +51,7 @@
         //        queueNameLabel.shadowOffset = CGSizeMake(0, -1);
         //        queueNameLabel.contentInset = UIEdgeInsetsMake(-4,-8,0,0);
         queueNameLabel.layer.shadowOpacity = 1.0;
-        queueNameLabel.layer.shadowRadius = 0.0;
+        queueNameLabel.layer.shadowRadius = 1.0;
         queueNameLabel.layer.shadowColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.1].CGColor;
         queueNameLabel.layer.shadowOffset = CGSizeMake(0.0, -1.0);
         queueNameLabel.textColor = [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0];

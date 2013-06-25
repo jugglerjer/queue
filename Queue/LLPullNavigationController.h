@@ -17,11 +17,21 @@
 
 @property (weak, nonatomic) id<LLPullNavigationViewControllerDelegate> delegate;
 @property (strong, nonatomic) LLPullNavigationScrollView *scrollView;
+@property int numberOfPages;
+@property BOOL isEngaged;
 
 - (id)initWithRootViewController:(UIViewController *)rootViewController;
-- (void)switchToViewController:(UIViewController *)newViewController animated:(BOOL)animated completion:(void (^)(void))completion;
+- (NSUInteger)currentPage;
+- (void)shouldSwitchViewControllers;
+- (void)switchToViewController:(UIViewController *)newViewController atPage:(NSUInteger)page animated:(BOOL)animated completion:(void (^)(void))completion;
+- (void)resumeCurrentViewController:(UIViewController *)currentViewController atPage:(NSUInteger)page;
 - (void)assumeScrollControl;
 - (void)resignScrollControl;
+- (void)enterSelectionMode;
+- (void)exitSelectionMode;
+- (BOOL)shouldDismissScrollView;
+- (void)dismissScrollView;
+- (void)presentScrollView;
 
 @end
 
@@ -37,5 +47,15 @@
 
 - (void)pullNavigationController:(LLPullNavigationController *)pullNavigationViewController
         canNoLongerSelectPage:(NSUInteger)page;
+
+- (void)pullNavigationController:(LLPullNavigationController *)pullNavigationViewController
+      hasIntersectedSelectedPage:(NSUInteger)page;
+
+- (NSString *)pullNavigationController:(LLPullNavigationController *)pullNavigationViewController
+               nameForViewAtPage:(NSUInteger)page;
+
+- (NSString *)pullNavigationControllerNameForShouldDismissInstruction:(LLPullNavigationController *)pullNavigationViewController;
+
+- (NSUInteger)pullNavigationControllerNumberOfPages:(LLPullNavigationController *)pullNavigationViewController;
 
 @end

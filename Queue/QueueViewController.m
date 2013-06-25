@@ -15,6 +15,7 @@
 #import "LLPullNavigationController.h"
 #import "LLPullNavigationTableView.h"
 #import "LLPullNavigationScrollView.h"
+#import "QueuesViewController.h"
 
 @interface QueueViewController ()
 
@@ -33,6 +34,7 @@
 static CGFloat contactRowHeight = 72.0f;
 #define degreesToRadians(x) (M_PI * x / 180.0)
 CGPoint previousContentOffset;
+BOOL isScrollingDown;
 
 # pragma mark - Initialization Methods
 
@@ -343,18 +345,84 @@ CGPoint previousContentOffset;
     return footer;
 }
 
+// -----------------------------------------
+// Determine which direction the scroll view
+// is scrolling in so that we can tell whether
+// or not to switch pages on a didEndDragging call
+// -----------------------------------------
+- (BOOL)isScrollingDown
+{
+    BOOL isScrollingDown;
+    CGPoint currentContentOffset = CGPointMake(self.tableView.contentOffset.x, self.tableView.contentOffset.y);
+    if (currentContentOffset.y < previousContentOffset.y)
+        isScrollingDown = YES;
+    else
+        isScrollingDown = NO;
+    
+    return isScrollingDown;
+}
+
+// -----------------------------------------
+// Prepare for queue selection mode when
+// The user begins dragging the table
+// -----------------------------------------
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+//    NSLog(@"%f, %f", scrollView.contentOffset.x, scrollView.contentOffset.y);
+    LLPullNavigationController *pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
+    [pullController assumeScrollControl];
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    NSLog(@"%f, %f", scrollView.contentOffset.x, scrollView.contentOffset.y);
+    LLPullNavigationController *pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
     if (scrollView.contentOffset.y < 0)
     {
+        [pullController enterSelectionMode];
+        isScrollingDown = YES;
+        if (pullController.isEngaged)
+        {
+//            [pullController assumeScrollControl];
+//            self.navigationController.navigationBar.alpha = 0.0;
+            [UIView animateWithDuration:0.0 animations:^{self.navigationController.navigationBar.alpha = 0.0;}];
+            //        [self.navigationController setNavigationBarHidden:YES animated:NO];
+            //        [pullController.scrollView setTransform:CGAffineTransformMakeTranslation(0, -scrollView.contentOffset.y)];
+            [pullController.scrollView setContentOffset:CGPointMake(0, scrollView.contentOffset.y + pullController.scrollView.frame.size.height)];
+            //        [self.navigationController.view setTransform:CGAffineTransformMakeTranslation(0, -scrollView.contentOffset.y)];
+            [self.view setTransform:CGAffineTransformMakeTranslation(0, scrollView.contentOffset.y)];
+            //        [self.tableView setTransform:CGAffineTransformMakeTranslation(0, scrollView.contentOffset.y)];
+        }
+    }
+    else {
+//        self.navigationController.navigationBar.alpha = 1.0;
+        isScrollingDown = NO;
+        [pullController exitSelectionMode];
+//        [pullController resignScrollControl];
+        [UIView animateWithDuration:0.25 animations:^{self.navigationController.navigationBar.alpha = 1.0;}];
+    }
+}
+
+// -----------------------------------------
+// Prepare for queue selection mode when
+// The user begins dragging the table
+// -----------------------------------------
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if (isScrollingDown)
+    {
         LLPullNavigationController *pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
-        //[pullController.scrollView setContentOffset:CGPointMake(scrollView.contentOffset.x, scrollView.contentOffset.y) animated:NO];
-        
-        
-        [self.navigationController.view setTransform:CGAffineTransformMakeTranslation(0, -scrollView.contentOffset.y)];
-        [self.view setTransform:CGAffineTransformMakeTranslation(0, scrollView.contentOffset.y)];
-        [pullController assumeScrollControl];
+        [pullController exitSelectionMode];
+        if ([pullController shouldDismissScrollView])
+        {
+            NSLog(@"Should dismiss scroll view");
+            [pullController resignScrollControl];
+            [pullController dismissScrollView];
+        }
+        else
+        {
+            NSLog(@"Should switch queues");
+            [pullController shouldSwitchViewControllers];
+        }
     }
 }
 
@@ -480,9 +548,9 @@ CGPoint previousContentOffset;
 	
     // Create a table view to hold the contacts
     LLPullNavigationTableView *tableView = [[LLPullNavigationTableView alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
-                                                                           self.view.bounds.origin.y,
-                                                                           self.view.bounds.size.width,
-                                                                           self.view.bounds.size.height - self.navigationController.navigationBar.frame.size.height)
+                                                                           self.view.bounds.origin.y/* + self.navigationController.navigationBar.frame.size.height*/,
+                                                                           self.view.frame.size.width,
+                                                                           self.view.frame.size.height - self.navigationController.navigationBar.frame.size.height)
                                                           style:UITableViewStylePlain];
     tableView.backgroundColor = [UIColor colorWithPatternImage: [UIImage imageNamed:@"queue_background.png"]];
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;

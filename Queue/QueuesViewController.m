@@ -12,10 +12,10 @@
 #import "Queue.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define NAME_LABEL_MARGIN_RIGHT     20
-#define NAME_LABEL_MARGIN_LEFT      20
-#define NAME_LABEL_MARGIN_TOP       6
-#define NAME_LABEL_MARGIN_BOTTOM    6
+#define NAME_LABEL_MARGIN_RIGHT     21
+#define NAME_LABEL_MARGIN_LEFT      19
+#define NAME_LABEL_MARGIN_TOP       10
+#define NAME_LABEL_MARGIN_BOTTOM    9
 
 @interface QueuesViewController ()
 
@@ -98,42 +98,94 @@ CGFloat rowHeight = 44.0;
 
 # pragma mark - Queue Row Selection Methods
 
+- (void)setNavigationBar:(UINavigationBar *)navBar alpha:(CGFloat)alpha withDuration:(NSTimeInterval)duration
+{
+    [UIView animateWithDuration:duration
+                     animations:^{
+                         navBar.alpha = alpha;
+                     }];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self switchToQueueAtIndex:indexPath.row];
 }
 
+- (NSUInteger)pullNavigationControllerNumberOfPages:(LLPullNavigationController *)pullNavigationViewController
+{
+    return [self.queuesArray count];
+}
+
 - (void)pullNavigationControllerWillEnterSelectionMode:(LLPullNavigationController *)pullNavigationController
 {    
-    self.queueViewController.navigationController.navigationBar.alpha = 0;
+//    self.queueViewController.navigationController.navigationBar.alpha = 0;
+    [self setNavigationBar:self.queueViewController.navigationController.navigationBar alpha:0.0 withDuration:0.0];
     [self.tableView setEditing:YES animated:NO];
 }
 
 - (void)pullNavigationController:(LLPullNavigationController *)pullNavigationViewController shouldSelectPage:(NSUInteger)page
 {
-    if (page != selectedQueue) {
+    if (page != selectedQueue)
+    {
         [self switchToQueueAtIndex:page];
         [self.tableView setEditing:NO animated:NO];
+    }
+    else
+    {
+        [pullNavigationViewController resumeCurrentViewController:self.queueViewController atPage:page];
     }
 }
 
 - (void)pullNavigationController:(LLPullNavigationController *)pullNavigationViewController canSelectPage:(NSUInteger)page
 {
 //    [self.queueViewController.navigationController setNavigationBarHidden:YES animated:NO];
-    QueueCell *cell = (QueueCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:page inSection:0]];
-    [cell setSelectable:YES animated:YES];
-    [self.tableView performSelector:@selector(bringSubviewToFront:) withObject:cell afterDelay:0.4];
-//    [self.tableView bringSubviewToFront:cell];
-    NSLog(@"%d", page);
+    if (page < [self.queuesArray count])
+    {
+        QueueCell *cell = (QueueCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:page inSection:0]];
+        [cell setSelectable:YES animated:YES];
+        [self.tableView performSelector:@selector(bringSubviewToFront:) withObject:cell afterDelay:0.4];
+        //    [self.tableView bringSubviewToFront:cell];
+//        NSLog(@"Can select page %d", page);
+    }
 }
 
 - (void)pullNavigationController:(LLPullNavigationController *)pullNavigationViewController canNoLongerSelectPage:(NSUInteger)page
 {
-    QueueCell *cell = (QueueCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:page inSection:0]];
-    [cell setSelectable:NO animated:YES];
-    [self.tableView performSelector:@selector(sendSubviewToBack:) withObject:cell afterDelay:0.4];
-//    [self.tableView sendSubviewToBack:cell];
-    NSLog(@"%d", page);
+    if (page < [self.queuesArray count])
+    {
+        QueueCell *cell = (QueueCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:page inSection:0]];
+        [cell setSelectable:NO animated:YES];
+        [self.tableView performSelector:@selector(sendSubviewToBack:) withObject:cell afterDelay:0.4];
+        //    [self.tableView sendSubviewToBack:cell];
+//        NSLog(@"Can no longer select %d", page);
+    }
+}
+
+- (void)pullNavigationController:(LLPullNavigationController *)pullNavigationViewController hasIntersectedSelectedPage:(NSUInteger)page
+{
+//    self.queueViewController.navigationController.navigationBar.alpha = 1.0;
+    [self setNavigationBar:self.queueViewController.navigationController.navigationBar alpha:1.0 withDuration:0.25];
+}
+
+- (NSString *)pullNavigationController:(LLPullNavigationController *)pullNavigationViewController nameForViewAtPage:(NSUInteger)page
+{
+    if (page == 0)
+    {
+        return @"Pull to switch queues";
+    }
+    
+    if (page < [self.queuesArray count])
+    {
+        Queue *queue = [self.queuesArray objectAtIndex:page];
+        return [NSString stringWithFormat:@"Release to switch\nto your %@ queue", queue.name];
+    }
+    
+    return @"Release to see all queues";
+}
+
+- (NSString *)pullNavigationControllerNameForShouldDismissInstruction:(LLPullNavigationController *)pullNavigationViewController
+{
+    return @"Release to see all queues";
 }
 
 - (void)switchToQueueAtIndex:(NSInteger)index
@@ -148,7 +200,7 @@ CGFloat rowHeight = 44.0;
     [self endQueueNameEditing];
     
     // Make sure the new queue field is hidden
-    [self hideNewQueueSectionWithAnimation:NO];
+    [self hideNewQueueSectionWithAnimation:YES];
     
     QueueViewController *queueView = [[QueueViewController alloc] initWithQueue:[self.queuesArray objectAtIndex:index]];
     queueView.managedObjectContext = self.managedObjectContext;
@@ -157,10 +209,23 @@ CGFloat rowHeight = 44.0;
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:queueView];
 //    [queueView.navigationController setNavigationBarHidden:NO animated:NO];
     LLPullNavigationController *pullController = (LLPullNavigationController *)self.parentViewController;
-    [pullController switchToViewController:navController animated:YES completion:nil];
+//    queueView.navigationController.navigationBar.alpha = 0.0;
+    [pullController switchToViewController:navController atPage:index animated:YES completion:nil];
+//    [self setNavigationBar:queueView.navigationController.navigationBar alpha:0.0 withDuration:0.0];
     
     self.queueViewController = queueView;
-    selectedQueue = index;
+    [self sendQueueAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0] toTopOfListWithDelay:0.5];
+    selectedQueue = 0;
+}
+
+- (void)sendQueueAtIndexPath:(NSIndexPath *)indexPath toTopOfListWithDelay:(NSTimeInterval)delay
+{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*delay),
+                   dispatch_get_current_queue(), ^{
+                       [self tableView:self.tableView
+                    moveRowAtIndexPath:indexPath
+                           toIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+                   });
 }
 
 #pragma mark Queue Creation
@@ -307,7 +372,7 @@ CGFloat rowHeight = 44.0;
     queueNameLabel.delegate = self;
     queueNameLabel.placeholder = @"New Queue";
     queueNameLabel.layer.shadowOpacity = 1.0;
-    queueNameLabel.layer.shadowRadius = 0.0;
+    queueNameLabel.layer.shadowRadius = 1.0;
     queueNameLabel.layer.shadowColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.1].CGColor;
     queueNameLabel.layer.shadowOffset = CGSizeMake(0.0, -1.0);
     queueNameLabel.textColor = [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0];
