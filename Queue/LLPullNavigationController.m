@@ -313,8 +313,12 @@ int pageToSwitchTo;
 // -----------------------------------------
 - (void)setPageSwitchingMode:(BOOL)mode withDelay:(NSTimeInterval)delay
 {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*delay),
-                   dispatch_get_current_queue(), ^{isSwitchingToPage = mode;});
+    [self performSelector:@selector(setPageSwitchingMode:) withObject:[NSNumber numberWithBool:mode] afterDelay:delay];
+}
+
+- (void)setPageSwitchingMode:(NSNumber *)mode
+{
+    isSwitchingToPage = [mode boolValue];
 }
 
 // -----------------------------------------

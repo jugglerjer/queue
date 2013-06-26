@@ -220,12 +220,12 @@ CGFloat rowHeight = 44.0;
 
 - (void)sendQueueAtIndexPath:(NSIndexPath *)indexPath toTopOfListWithDelay:(NSTimeInterval)delay
 {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*delay),
-                   dispatch_get_current_queue(), ^{
-                       [self tableView:self.tableView
-                    moveRowAtIndexPath:indexPath
-                           toIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-                   });
+    [self performSelector:@selector(sendQueueAtIndexPathToTopOfList:) withObject:indexPath afterDelay:delay];
+}
+
+- (void)sendQueueAtIndexPathToTopOfList:(NSIndexPath *)indexPath
+{
+    [self tableView:self.tableView moveRowAtIndexPath:indexPath toIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
 }
 
 #pragma mark Queue Creation

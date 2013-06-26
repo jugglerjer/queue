@@ -23,7 +23,7 @@
         // TODO Contact Photo
         UIImageView *contactImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"contact-avatar-placeholder.png"]];
         contactImage.frame = CGRectMake(11.0f, 11.0f, 52.0f, 52.0f);
-        [self addSubview:contactImage];
+        [self.contentView addSubview:contactImage];
         
         // Contact Name
         UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(73.0f, 26.0f, 160.0f, 22.0f)];
@@ -31,7 +31,7 @@
         nameLabel.textColor = [UIColor colorWithRed:99.0/255.0 green:99.0/255.0 blue:99.0/255.0 alpha:1.0];
         nameLabel.backgroundColor = [UIColor clearColor];
         self.nameLabel = nameLabel;
-        [self addSubview:self.nameLabel];
+        [self.contentView addSubview:self.nameLabel];
         
         // Contact Due Date & Unit Label
         UILabel *dueDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(211.0f, 9.0f, 57.0f, 53.0f)];
@@ -56,15 +56,19 @@
         statusLabel.textColor = statusColor;
         dueLabel.textColor = statusColor;
         
+        // Set up queue gesture recognizer
+        UIPanGestureRecognizer *queueGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
+        [self.contentView addGestureRecognizer:queueGesture];
+        
         self.dueDateLabel = dueDateLabel;
         self.unitsLabel = unitsLabel;
         self.statusLabel = statusLabel;
         self.dueLabel = dueLabel;
         
-        [self addSubview:self.dueDateLabel];
-        [self addSubview:self.unitsLabel];
-        [self addSubview:self.statusLabel];
-        [self addSubview:self.dueLabel];
+        [self.contentView addSubview:self.dueDateLabel];
+        [self.contentView addSubview:self.unitsLabel];
+        [self.contentView addSubview:self.statusLabel];
+        [self.contentView addSubview:self.dueLabel];
         
         self.selectionStyle = UITableViewCellEditingStyleNone;
     }
@@ -108,6 +112,96 @@
         self.dueDateLabel.text = [NSString stringWithFormat:@"%.0f", [contact weeksUntilDue] * -1];
         self.statusLabel.text = @"OVER";
     }
+}
+
+// -----------------------------
+// Handle dragging the cell left
+// in order to queue the contact
+// -----------------------------
+
+- (void)handleGesture:(UIPanGestureRecognizer *)gestureRecognizer
+{
+    CGPoint distance;
+    CGRect bounds;
+    
+    switch (gestureRecognizer.state) {
+        case UIGestureRecognizerStateBegan:
+            NSLog(@"gesture detected");
+            break;
+            
+        case UIGestureRecognizerStateChanged:
+            distance = [gestureRecognizer translationInView:self.contentView.superview];
+            bounds = self.contentView.bounds;
+            if (distance.x < 0)
+            {
+                bounds.origin.x = -distance.x;
+//                NSLog(@"%f", bounds.origin.x);
+                [self.contentView setBounds:bounds];
+            }
+            break;
+            
+        case UIGestureRecognizerStateEnded:
+            [self resetCellPositionWithAnimation:YES];
+            break;
+            
+        default:
+            [self resetCellPositionWithAnimation:YES];
+            break;
+    }
+    
+    
+}
+
+// -----------------------------
+// Bounce the cell back into its
+// initial position
+// -----------------------------
+- (void)resetCellPositionWithAnimation:(BOOL)animated
+{
+    [self setCellPosition:CGPointMake(0, 0) withAnimation:YES];
+}
+
+// -----------------------------
+// Reposition the cell with or
+// without animation
+// -----------------------------
+- (void)setCellPosition:(CGPoint)position withAnimation:(BOOL)animated
+{    
+    CGFloat totalDuration = 0.25;                        /* Total time that the animation would take if it were moving the full width of the screen */
+    CGFloat totalDistance = self.contentView.frame.size.width;       /* Max distance the cell could need to travel */
+    CGFloat bounceBack = 0.05;                           /* Percentage of distance to bounce for momentum */
+    
+    // Determine how far the cell needs to travel
+    CGFloat distance = -self.contentView.bounds.origin.x - position.x;
+    CGFloat bounceDistance = distance * bounceBack;
+    
+    // Determine the direction of travel
+//    CGFloat direction = self.bounds.origin.x <= position.x ? 1.0 : -1.0;        /* 1.0: right, -1.0: left */
+    
+    // Determine the new positions
+    CGPoint bouncePosition = CGPointMake(position.x + bounceDistance, 0);
+    CGRect initialBounds = self.contentView.bounds;
+    initialBounds.origin.x = bouncePosition.x;
+    
+    CGRect finalBounds = self.contentView.bounds;
+    finalBounds.origin.x = position.x;
+    
+    // Determine the duration of the animation
+    CGFloat initialDuration = (distance / totalDistance) * totalDuration;
+    CGFloat bounceDuration = initialDuration * bounceBack;
+    NSLog(@"%f, %f", initialDuration, bounceDuration);
+    
+    // Animate the change of position
+    [UIView animateWithDuration:initialDuration
+                     animations:^{
+                         self.contentView.bounds = initialBounds;
+                     }
+                     completion:^(BOOL finished){
+                         [UIView animateWithDuration:bounceDuration
+                                          animations:^{
+                                              self.contentView.bounds = finalBounds;
+                                          }];
+                     }];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
