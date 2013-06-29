@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		3F2CA0F517766022009EAED7 /* reorder-control@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F2CA0F417766022009EAED7 /* reorder-control@2x.png */; };
-		3F2CA0F717778BB1009EAED7 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3F2CA0F617778BB1009EAED7 /* GoogleMaps.bundle */; };
 		3F2CA0F917796A11009EAED7 /* pull-to-switch-arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F2CA0F817796A11009EAED7 /* pull-to-switch-arrow@2x.png */; };
 		3F3264971763A328000BCF83 /* reminder-day-of-disabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F3264961763A328000BCF83 /* reminder-day-of-disabled@2x.png */; };
 		3F3264991763A37F000BCF83 /* reminder-day-of-enabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F3264981763A37F000BCF83 /* reminder-day-of-enabled@2x.png */; };
@@ -104,6 +103,8 @@
 		3FE80D09174F12390009D61D /* contact-avatar-placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80D08174F12390009D61D /* contact-avatar-placeholder@2x.png */; };
 		3FF2C0211749D74E007203D8 /* AddMeetingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2C0201749D74E007203D8 /* AddMeetingViewController.m */; };
 		3FF2C027174B52DC007203D8 /* TimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2C026174B52DC007203D8 /* TimelineViewController.m */; };
+		695BF153177BE16F00A3F865 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 695BF152177BE16F00A3F865 /* GoogleMaps.bundle */; };
+		695BF155177C543E00A3F865 /* check-finished@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 695BF154177C543E00A3F865 /* check-finished@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -118,7 +119,6 @@
 
 /* Begin PBXFileReference section */
 		3F2CA0F417766022009EAED7 /* reorder-control@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reorder-control@2x.png"; path = "Queue/reorder-control@2x.png"; sourceTree = "<group>"; };
-		3F2CA0F617778BB1009EAED7 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = "../../../Downloads/GoogleMaps-iOS-1.3.0/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle"; sourceTree = "<group>"; };
 		3F2CA0F817796A11009EAED7 /* pull-to-switch-arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "pull-to-switch-arrow@2x.png"; path = "Queue/pull-to-switch-arrow@2x.png"; sourceTree = "<group>"; };
 		3F3264961763A328000BCF83 /* reminder-day-of-disabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reminder-day-of-disabled@2x.png"; path = "Queue/reminder-day-of-disabled@2x.png"; sourceTree = "<group>"; };
 		3F3264981763A37F000BCF83 /* reminder-day-of-enabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reminder-day-of-enabled@2x.png"; path = "Queue/reminder-day-of-enabled@2x.png"; sourceTree = "<group>"; };
@@ -240,6 +240,8 @@
 		3FF2C0201749D74E007203D8 /* AddMeetingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddMeetingViewController.m; sourceTree = "<group>"; };
 		3FF2C025174B52DC007203D8 /* TimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineViewController.h; sourceTree = "<group>"; };
 		3FF2C026174B52DC007203D8 /* TimelineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimelineViewController.m; sourceTree = "<group>"; };
+		695BF152177BE16F00A3F865 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = "../../../../Downloads/GoogleMaps-iOS-1.3.1/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle"; sourceTree = "<group>"; };
+		695BF154177C543E00A3F865 /* check-finished@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "check-finished@2x.png"; path = "Queue/check-finished@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -321,7 +323,7 @@
 		3FA1018A17447769007D2520 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3F2CA0F617778BB1009EAED7 /* GoogleMaps.bundle */,
+				695BF152177BE16F00A3F865 /* GoogleMaps.bundle */,
 				3F93444A175AF179000FD331 /* GoogleMaps.framework */,
 				3FA1018B17447769007D2520 /* UIKit.framework */,
 				3FA1018D17447769007D2520 /* Foundation.framework */,
@@ -432,6 +434,7 @@
 		3FE80CE4174DBFA50009D61D /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				695BF154177C543E00A3F865 /* check-finished@2x.png */,
 				3F2CA0F817796A11009EAED7 /* pull-to-switch-arrow@2x.png */,
 				3F2CA0F417766022009EAED7 /* reorder-control@2x.png */,
 				3F3264D9176AE918000BCF83 /* queue-cell-background-selectable@2x.png */,
@@ -590,8 +593,9 @@
 				3F9B1A19176E995D00C566B9 /* icon@2x.png in Resources */,
 				3F9B1A1B176E999900C566B9 /* icon.png in Resources */,
 				3F2CA0F517766022009EAED7 /* reorder-control@2x.png in Resources */,
-				3F2CA0F717778BB1009EAED7 /* GoogleMaps.bundle in Resources */,
 				3F2CA0F917796A11009EAED7 /* pull-to-switch-arrow@2x.png in Resources */,
+				695BF153177BE16F00A3F865 /* GoogleMaps.bundle in Resources */,
+				695BF155177C543E00A3F865 /* check-finished@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

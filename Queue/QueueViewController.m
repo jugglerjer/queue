@@ -8,10 +8,10 @@
 
 #import "QueueViewController.h"
 #import "TimelineViewController.h"
-#import "QueueContactCell.h"
 #import "QueueBarButtonItem.h"
 #import "Contact.h"
 #import "Queue.h"
+#import "Meeting.h"
 #import "LLPullNavigationController.h"
 #import "LLPullNavigationTableView.h"
 #import "LLPullNavigationScrollView.h"
@@ -130,6 +130,42 @@ BOOL isScrollingDown;
 - (void)timelineViewController:(TimelineViewController *)timelineViewController didUpdateContact:(Contact *)contact withMeeting:(Meeting *)meeting
 {
     [self.tableView reloadRowsAtIndexPaths:@[self.selectedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void)queueContactCellDidDismiss:(QueueContactCell *)cell
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    Contact *contact = [self.contactsArray objectAtIndex:indexPath.row];
+    Meeting *newMeeting = (Meeting *)[NSEntityDescription insertNewObjectForEntityForName:@"Meeting"
+                                                                   inManagedObjectContext:_managedObjectContext];
+    newMeeting.date = [NSDate date];
+    newMeeting.note = @"Queued";
+    
+    [contact addMeetingsObject:newMeeting];
+    self.selectedIndexPath = indexPath;
+    
+    CGFloat delay = 0.5;
+    [self performSelector:@selector(repositionSelectedContact) withObject:nil afterDelay:delay];
+    [cell performSelector:@selector(resetCellPositionWithAnimation:) withObject:nil afterDelay:delay + 0.25];
+//    [self repositionSelectedContact];
+//    int newRow = [self.contactsArray indexOfObject:contact];
+    
+//    if (indexPath.row == newRow)
+//        duration = 0.0;
+//    else
+//        duration = 0.0;
+    
+    
+}
+
+- (void)queueContactCellDidBeginDragging:(QueueContactCell *)cell
+{
+    self.tableView.scrollEnabled = NO;
+}
+
+- (void)queueContactCellDidEndDragging:(QueueContactCell *)cell
+{
+    self.tableView.scrollEnabled = YES;
 }
 
 // -------------------------------------------------------------
@@ -305,9 +341,12 @@ BOOL isScrollingDown;
     if (cell == nil) {
         cell = [[QueueContactCell alloc] initWithReuseIdentifier:ContactRowIdentifier];
     }
-
-    
     [cell configureWithContact:[self.contactsArray objectAtIndex:indexPath.row]];
+    CGRect frame = cell.bounds;
+    frame.size.height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
+    cell.backgroundWell.frame = frame;
+    [cell bringSubviewToFront:cell.contentView];
+    cell.delegate = self;
     
     return cell;
 }

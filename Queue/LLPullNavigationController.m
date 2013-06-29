@@ -168,7 +168,7 @@ int pageToSwitchTo;
 - (void)enterSelectionMode
 {
     isInSelectionMode = YES;
-    NSLog(@"Enter selection mode");
+//    NSLog(@"Enter selection mode");
 }
 
 // -----------------------------------------
@@ -177,7 +177,7 @@ int pageToSwitchTo;
 - (void)exitSelectionMode
 {
     isInSelectionMode = NO;
-    NSLog(@"Exit selection mode");
+//    NSLog(@"Exit selection mode");
 }
 
 // -----------------------------------------

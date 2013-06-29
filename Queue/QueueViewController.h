@@ -10,10 +10,11 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import "AddMeetingViewController.h"
 #import "TimelineViewController.h"
+#import "QueueContactCell.h"
 @class Queue;
 @class LLPullNavigationTableView;
 
-@interface QueueViewController : UIViewController <ABPeoplePickerNavigationControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, TimelineViewControllerDelegate, UIGestureRecognizerDelegate>
+@interface QueueViewController : UIViewController <ABPeoplePickerNavigationControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, TimelineViewControllerDelegate, UIGestureRecognizerDelegate, QueueContactCellDelegate>
 
 @property (strong, nonatomic) Queue *queue;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;

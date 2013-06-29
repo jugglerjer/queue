@@ -9,8 +9,12 @@
 #import <UIKit/UIKit.h>
 @class Contact;
 
-@interface QueueContactCell : UITableViewCell
+@protocol QueueContactCellDelegate;
 
+@interface QueueContactCell : UITableViewCell <UIGestureRecognizerDelegate>
+
+@property (weak, nonatomic)   id <QueueContactCellDelegate> delegate;
+@property (strong, nonatomic) UIImageView *backgroundWell;
 @property (strong, nonatomic) UIImageView *contactImage;
 @property (strong, nonatomic) UILabel *nameLabel;
 @property (strong, nonatomic) UILabel *dueDateLabel;
@@ -20,5 +24,14 @@
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
 - (void)configureWithContact:(Contact *)contact;
+- (void)resetCellPositionWithAnimation:(BOOL)animated;
+
+@end
+
+@protocol QueueContactCellDelegate <NSObject>
+
+- (void)queueContactCellDidDismiss:(QueueContactCell *)cell;
+- (void)queueContactCellDidBeginDragging:(QueueContactCell *)cell;
+- (void)queueContactCellDidEndDragging:(QueueContactCell *)cell;
 
 @end
