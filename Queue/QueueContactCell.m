@@ -31,12 +31,13 @@ double queueDistance = 0.75;
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     if (self)
     {        
-        self.backgroundColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0];
+//        self.backgroundColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0];
         
         // Swipe Instruction View
         UIView *queueInstructionView = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width + (0),
                                                                                                          self.bounds.origin.y, self.frame.size.width,
                                                                                                          self.frame.size.height)];
+//        queueInstructionView.backgroundColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0];
         self.queueInstructionView = queueInstructionView;
         
         UIImageView *queueInstructionImageView = [[UIImageView alloc] initWithFrame:CGRectMake(INSTRUCTION_IMAGE_MARGIN_LEFT, INSTRUCTION_IMAGE_MARGIN_TOP,
@@ -189,6 +190,7 @@ double queueDistance = 0.75;
                 bounds.origin.x = -distance.x;
                 [self.contentView setBounds:bounds];
                 [self updateInstructionView];
+                [self updateBackgroundWell];
             }
             break;
             
@@ -289,7 +291,17 @@ double queueDistance = 0.75;
 // -----------------------------
 - (CGFloat)percentageDragged
 {
-    return ABS(self.contentView.bounds.origin.x) / (self.frame.size.width * queueDistance);
+    return [self percentageDraggedWithDragPoint:CGPointMake(self.contentView.bounds.origin.x, 0)];
+}
+
+// -----------------------------
+// Determine how far the cell has
+// been dragged relative to the threshold
+// with a given drag point
+// -----------------------------
+- (CGFloat)percentageDraggedWithDragPoint:(CGPoint)dragPoint
+{
+    return ABS(dragPoint.x) / (self.frame.size.width * queueDistance);
 }
 
 // -----------------------------
@@ -324,9 +336,13 @@ double queueDistance = 0.75;
     CGRect instructionCheckFrame = self.queueInstructionImageView.frame;
     CGFloat magnification = 0.2;
     
+    // Update the background well
+    CGRect queueWellFrame = [self backgroundWellFrameForDragPoint:CGPointMake(bounds.origin.x, 0)];
+    
     [UIView animateWithDuration:duration
                      animations:^{
                          self.contentView.bounds = bounds;
+                         self.backgroundWell.frame = queueWellFrame;
                      }
                      completion:^(BOOL finished){
                          if ([_delegate respondsToSelector:@selector(queueContactCellDidDismiss:)])
@@ -368,7 +384,9 @@ double queueDistance = 0.75;
     CGRect initialBounds = self.contentView.bounds;
     initialBounds.origin.x = bouncePosition.x;
     
-//    CGFloat instructionBouncePosition;
+    CGRect instructionFrame = self.queueInstructionView.frame;
+    instructionFrame.origin.x = [self instructionPositionWithDragPoint:position];
+    CGRect queueWellFrame =  [self backgroundWellFrameForDragPoint:position];
     
     CGRect finalBounds = self.contentView.bounds;
     finalBounds.origin.x = position.x;
@@ -384,6 +402,8 @@ double queueDistance = 0.75;
                         options:UIViewAnimationOptionAllowUserInteraction
                      animations:^{
                          self.contentView.bounds = initialBounds;
+                         self.backgroundWell.frame =  queueWellFrame;
+                         self.queueInstructionView.frame = instructionFrame;
                      }
                      completion:^(BOOL finished){
                          [UIView animateWithDuration:bounceDuration
@@ -397,16 +417,42 @@ double queueDistance = 0.75;
 }
 
 // -----------------------------
+// Change the size of the background
+// well to reflect the cell's position
+// -----------------------------
+- (void)updateBackgroundWell
+{
+    self.backgroundWell.frame = [self backgroundWellFrameForDragPoint:CGPointMake(self.contentView.bounds.origin.x, 0)];
+}
+
+- (CGRect)backgroundWellFrameForDragPoint:(CGPoint)dragPoint
+{
+    return CGRectMake(self.contentView.frame.size.width - dragPoint.x,
+                      dragPoint.y,
+                      dragPoint.x,
+                      self.contentView.frame.size.height);
+}
+
+// -----------------------------
 // Determine instruction position
 // based on cell dragging
 // -----------------------------
 - (CGFloat)instructionPosition
 {
+    return [self instructionPositionWithDragPoint:CGPointMake(self.contentView.bounds.origin.x, 0)];
+}
+
+// -----------------------------
+// Determine instruction position
+// based any given cell dragging point
+// -----------------------------
+- (CGFloat)instructionPositionWithDragPoint:(CGPoint)dragPoint
+{
     CGFloat instructionStartingPoint = self.frame.size.width + (0);
     CGFloat instructionEndingPoint = self.frame.size.width * (1 - queueDistance);
     CGFloat totalInstructionDistance = instructionStartingPoint - instructionEndingPoint;
     
-    CGFloat instructionDragPercentage = [self percentageDragged] <= 1.0 ? [self percentageDragged] : 1.0;
+    CGFloat instructionDragPercentage = [self percentageDraggedWithDragPoint:dragPoint] <= 1.0 ? [self percentageDraggedWithDragPoint:dragPoint] : 1.0;
     return instructionStartingPoint - (totalInstructionDistance * instructionDragPercentage);
 }
 

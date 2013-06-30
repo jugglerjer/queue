@@ -344,6 +344,8 @@ BOOL isScrollingDown;
     [cell configureWithContact:[self.contactsArray objectAtIndex:indexPath.row]];
     CGRect frame = cell.bounds;
     frame.size.height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
+    frame.size.width = cell.frame.size.width;
+    frame.origin.x = 0;
     cell.backgroundWell.frame = frame;
     [cell bringSubviewToFront:cell.contentView];
     cell.delegate = self;
