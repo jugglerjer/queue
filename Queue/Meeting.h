@@ -11,6 +11,13 @@
 
 @class Contact, Location;
 
+typedef enum
+{
+    MeetingMethodQueue,
+    MeetingMethodSnooze,
+    MeetingMethodInPerson
+} MeetingMethod;
+
 @interface Meeting : NSManagedObject
 
 @property (nonatomic, retain) NSDate * date;

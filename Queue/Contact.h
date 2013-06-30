@@ -33,7 +33,7 @@
 @property (nonatomic, retain) NSNumber * hasReminderWeekAfter;
 
 - (void)populateWithAddressBookRecord:(ABRecordRef)person;
-- (NSDate *)dueDate;
+- (NSDate *)dueDateIncludingSnoozes:(BOOL)snoozes;
 - (double)weeksUntilDue;
 - (NSArray *)sortedMeetings;
 

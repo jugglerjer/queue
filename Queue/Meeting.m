@@ -19,4 +19,23 @@
 @dynamic contact;
 @dynamic location;
 
+// ------------------------
+// Convert the meeting method
+// into a string and save it
+// to the object
+// ------------------------
+//- (void)setMeetingMethod:(MeetingMethod)method
+//{
+//    switch (method) {
+//        case MeetingMethodQueue:
+//            self.method = @"queue";
+//            break;
+//        case MeetingMethodSnooze:
+//            self.method = @"snooze"
+//            
+//        default:
+//            break;
+//    }
+//}
+
 @end

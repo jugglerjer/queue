@@ -67,7 +67,15 @@ static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/a
 
 - (void)snoozeContact
 {
+    // Create a new meeting of type snooze
+    Meeting *newMeeting = (Meeting *)[NSEntityDescription insertNewObjectForEntityForName:@"Meeting"
+                                                                   inManagedObjectContext:_managedObjectContext];
+    newMeeting.date = [NSDate date];
+    newMeeting.note = @"Snoozed";
+    newMeeting.method = @"snooze";
     
+    [self.contact addMeetingsObject:newMeeting];
+    [self addMeeting:newMeeting forContact:self.contact];
 }
 
 - (void)showSettings
@@ -175,6 +183,11 @@ static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/a
                    didAddMeeting:(Meeting *)meeting
                       forContact:(Contact *)contact;
 {
+    [self addMeeting:meeting forContact:contact];
+}
+
+- (void)addMeeting:(Meeting *)meeting forContact:(Contact *)contact
+{
     // Find the section index of the new meeting
     [self updateMeetingsArrayWithTableReload:NO];
     NSInteger row = [self.meetingsArray indexOfObject:meeting];
@@ -191,6 +204,11 @@ static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/a
 - (void)addMeetingViewController:(AddMeetingViewController *)addMeetingViewController
                 didUpdateMeeting:(Meeting *)meeting
                       forContact:(Contact *)contact
+{
+    [self updateMeeting:meeting forContact:contact];
+}
+
+- (void)updateMeeting:(Meeting *)meeting forContact:(Contact *)contact
 {
     // Get the meeting's current queue position
     NSInteger oldRow = [self.meetingsArray indexOfObject:meeting];
@@ -292,7 +310,7 @@ static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/a
         [toolbeltButton addTarget:self action:NSSelectorFromString([buttonSelectorsArray objectAtIndex:i]) forControlEvents:UIControlEventTouchUpInside];
         toolbeltButton.showsTouchWhenHighlighted = YES;
         
-        if (i == 1 || i == 3)
+        if (i == 1)
             [toolbeltButton setEnabled:NO];
         
         [self.toolBelt addSubview:toolbeltButton];

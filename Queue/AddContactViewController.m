@@ -226,7 +226,7 @@ static CGFloat keyboardHeight = 216;
                                                                               keyboardHeight)];
     dueDatePicker.datePickerMode = UIDatePickerModeDate;
     dueDatePicker.maximumDate = [NSDate date];
-    dueDatePicker.date = [self.contact dueDate];
+    dueDatePicker.date = [self.contact dueDateIncludingSnoozes:NO];
     [dueDatePicker addTarget:self action:@selector(datePickerDateDidChange:) forControlEvents:UIControlEventValueChanged];
     self.dueDatePicker = dueDatePicker;
     [self.view addSubview:self.dueDatePicker];
@@ -439,7 +439,7 @@ static CGFloat keyboardHeight = 216;
     return self.view.frame.size.height - self.navigationController.navigationBar.frame.size.height - ([self dueDateViewContainerHeight] + [self intervalViewContainerHeight] + [self noteViewContainerHeight]);
 }
 
-- (NSString *)dueDateLabelText { return [NSString stringWithFormat:@"Due on %@", [self stringForDueDate:[self.contact dueDate]]]; }
+- (NSString *)dueDateLabelText { return [NSString stringWithFormat:@"Due on %@", [self stringForDueDate:[self.contact dueDateIncludingSnoozes:NO]]]; }
 - (NSString *)intervalLabelText { return [NSString stringWithFormat:@"Catch up %@", [self stringForInterval:self.contact.meetInterval]]; }
 - (NSString *)stringForDueDate:(NSDate *)dueDate
 {

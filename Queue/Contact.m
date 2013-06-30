@@ -70,26 +70,37 @@ static double defaultMeetInterval = 3 * 30.5 * 24 * 60 * 60; /* 1 month ~ 31.5 d
 // -------------------------------------------------------------
 // Determine the contact's due date
 // -------------------------------------------------------------
-- (NSDate *)dueDate
+- (NSDate *)dueDateIncludingSnoozes:(BOOL)snoozes
 {
     if (self.oneTimeDueDate)
         return self.oneTimeDueDate;
-    return [NSDate dateWithTimeInterval:[self.meetInterval doubleValue] sinceDate:[self lastMeetingDate]];
+    return [NSDate dateWithTimeInterval:[self.meetInterval doubleValue] sinceDate:[self lastMeetingDateIncludingSnoozes:snoozes]];
 }
 
 
-- (NSDate *)lastMeetingDate
+- (NSDate *)lastMeetingDateIncludingSnoozes:(BOOL)snoozes
 {
-    NSDate *lastMeetingDate;
-    if ([self.meetings count] <= 0) lastMeetingDate = self.dateAdded;
-    else lastMeetingDate = [[[self sortedMeetings] objectAtIndex:0] date]; // Sort the meetings by date and grab the most recent date
-    return lastMeetingDate;
+//    NSDate *lastMeetingDate;
+//    if ([self.meetings count] <= 0) lastMeetingDate = self.dateAdded;
+    
+    // Find the last meeting that isn't a snooze
+//    else
+//    {
+        for (Meeting *meeting in [self sortedMeetings])
+        {
+            if (![meeting.method isEqualToString:@"snooze"] || snoozes)
+                return [meeting date];
+        }
+//    }
+//    else lastMeetingDate = [[[self sortedMeetings] objectAtIndex:0] date]; // Sort the meetings by date and grab the most recent date
+//    return lastMeetingDate;
+    return self.dateAdded;
 }
 
 - (double)weeksUntilDue
 {
     NSTimeInterval secondsInWeek = 7 * 24 * 60 * 60;
-    NSTimeInterval secondsUntilDue = [[self dueDate] timeIntervalSinceDate:[NSDate date]];
+    NSTimeInterval secondsUntilDue = [[self dueDateIncludingSnoozes:NO] timeIntervalSinceDate:[NSDate date]];
     return secondsUntilDue / secondsInWeek;
 }
 

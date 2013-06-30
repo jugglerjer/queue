@@ -36,8 +36,8 @@
 - (NSArray *)sortedContacts
 {    
     return [[self.contacts allObjects] sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
-        NSDate *first = [(Contact*)a dueDate];
-        NSDate *second = [(Contact*)b dueDate];
+        NSDate *first = [(Contact*)a dueDateIncludingSnoozes:YES];
+        NSDate *second = [(Contact*)b dueDateIncludingSnoozes:YES];
         return [first compare:second];
     }];
 }
