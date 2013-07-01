@@ -45,6 +45,7 @@
 		3F93445F175AF245000FD331 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F934455175AF245000FD331 /* OpenGLES.framework */; };
 		3F934460175AF245000FD331 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F934456175AF245000FD331 /* QuartzCore.framework */; };
 		3F934461175AF245000FD331 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F934457175AF245000FD331 /* SystemConfiguration.framework */; };
+		3F94A94517813C350054A733 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3F94A94417813C350054A733 /* GoogleMaps.bundle */; };
 		3F977641175723C200E6B5B7 /* LocationChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F977640175723C200E6B5B7 /* LocationChooserViewController.m */; };
 		3F977644175726B000E6B5B7 /* calendar_full@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F977642175726B000E6B5B7 /* calendar_full@2x.png */; };
 		3F977645175726B000E6B5B7 /* notepad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F977643175726B000E6B5B7 /* notepad@2x.png */; };
@@ -103,7 +104,6 @@
 		3FE80D09174F12390009D61D /* contact-avatar-placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80D08174F12390009D61D /* contact-avatar-placeholder@2x.png */; };
 		3FF2C0211749D74E007203D8 /* AddMeetingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2C0201749D74E007203D8 /* AddMeetingViewController.m */; };
 		3FF2C027174B52DC007203D8 /* TimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FF2C026174B52DC007203D8 /* TimelineViewController.m */; };
-		695BF153177BE16F00A3F865 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 695BF152177BE16F00A3F865 /* GoogleMaps.bundle */; };
 		695BF155177C543E00A3F865 /* check-finished@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 695BF154177C543E00A3F865 /* check-finished@2x.png */; };
 		695BF1581780E7CC00A3F865 /* QueueContactImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 695BF1571780E7CC00A3F865 /* QueueContactImageView.m */; };
 		695BF15A1780FEC300A3F865 /* snooze-well@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 695BF1591780FEC300A3F865 /* snooze-well@2x.png */; };
@@ -166,6 +166,7 @@
 		3F934455175AF245000FD331 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		3F934456175AF245000FD331 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		3F934457175AF245000FD331 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		3F94A94417813C350054A733 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = "../../../Downloads/GoogleMaps-iOS-1.3.0/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle"; sourceTree = "<group>"; };
 		3F97763F175723C200E6B5B7 /* LocationChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationChooserViewController.h; sourceTree = "<group>"; };
 		3F977640175723C200E6B5B7 /* LocationChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationChooserViewController.m; sourceTree = "<group>"; };
 		3F977642175726B000E6B5B7 /* calendar_full@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "calendar_full@2x.png"; path = "Queue/calendar_full@2x.png"; sourceTree = "<group>"; };
@@ -243,7 +244,6 @@
 		3FF2C0201749D74E007203D8 /* AddMeetingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddMeetingViewController.m; sourceTree = "<group>"; };
 		3FF2C025174B52DC007203D8 /* TimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineViewController.h; sourceTree = "<group>"; };
 		3FF2C026174B52DC007203D8 /* TimelineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimelineViewController.m; sourceTree = "<group>"; };
-		695BF152177BE16F00A3F865 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = "../../../../Downloads/GoogleMaps-iOS-1.3.1/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle"; sourceTree = "<group>"; };
 		695BF154177C543E00A3F865 /* check-finished@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "check-finished@2x.png"; path = "Queue/check-finished@2x.png"; sourceTree = "<group>"; };
 		695BF1561780E7CB00A3F865 /* QueueContactImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QueueContactImageView.h; sourceTree = "<group>"; };
 		695BF1571780E7CC00A3F865 /* QueueContactImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QueueContactImageView.m; sourceTree = "<group>"; };
@@ -330,7 +330,7 @@
 		3FA1018A17447769007D2520 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				695BF152177BE16F00A3F865 /* GoogleMaps.bundle */,
+				3F94A94417813C350054A733 /* GoogleMaps.bundle */,
 				3F93444A175AF179000FD331 /* GoogleMaps.framework */,
 				3FA1018B17447769007D2520 /* UIKit.framework */,
 				3FA1018D17447769007D2520 /* Foundation.framework */,
@@ -605,10 +605,10 @@
 				3F9B1A1B176E999900C566B9 /* icon.png in Resources */,
 				3F2CA0F517766022009EAED7 /* reorder-control@2x.png in Resources */,
 				3F2CA0F917796A11009EAED7 /* pull-to-switch-arrow@2x.png in Resources */,
-				695BF153177BE16F00A3F865 /* GoogleMaps.bundle in Resources */,
 				695BF155177C543E00A3F865 /* check-finished@2x.png in Resources */,
 				695BF15A1780FEC300A3F865 /* snooze-well@2x.png in Resources */,
 				695BF15C1781222C00A3F865 /* snooze-drop@2x.png in Resources */,
+				3F94A94517813C350054A733 /* GoogleMaps.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -200,7 +200,7 @@ float wellMarginRight = 10.0;
 // -----------------------------
 - (BOOL)isInSnoozeZone
 {
-    if (self.frame.origin.x > [self maxDragPosition] - self.frame.size.width)
+    if (self.frame.origin.x > [self maxDragPosition])
     {
         NSLog(@"In snooze zone");
         return YES;

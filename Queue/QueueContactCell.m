@@ -43,6 +43,7 @@ double queueDistance = 0.75;
     if (self)
     {        
 //        self.backgroundColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0];
+        self.clipsToBounds = NO;
         
         // Swipe Instruction View
         UIView *queueInstructionView = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width + (0),
@@ -588,7 +589,7 @@ double queueDistance = 0.75;
 - (void)setSnoozeTrackAlpha:(CGFloat)alpha animated:(BOOL)animated
 {
     CGFloat reverseAlpha = 1.0 - alpha;
-    CGFloat duration = animated ? 0.2 : 0.0;
+    CGFloat duration = animated ? 0.25 : 0.0;
     
     [UIView animateWithDuration:duration
                      animations:^{
