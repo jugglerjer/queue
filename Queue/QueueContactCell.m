@@ -14,11 +14,22 @@
 #define INSTRUCTION_IMAGE_MARGIN_LEFT   21.0
 #define INSTRUCTION_IMAGE_MARGIN_TOP    23.0
 
+#define SNOOZE_LABEL_WIDTH              160.0
+
+#define SNOOZE_IMAGE_WIDTH              28.0
+#define SNOOZE_IMAGE_HEIGHT             25.0
+#define SNOOZE_IMAGE_MARGIN_RIGHT       26.0
+#define SNOOZE_IMAGE_MARGIN_TOP         23.5
+
 @interface QueueContactCell ()
 
 @property (strong, nonatomic) UIView *queueInstructionView;
 @property (strong, nonatomic) UIImageView *queueInstructionImageView;
 @property (strong, nonatomic) UILabel *queueInstructionLabel;
+@property (strong, nonatomic) UIView *snoozeView;
+@property (strong, nonatomic) UILabel *snoozeLabel;
+@property (strong, nonatomic) UIImageView *snoozeImageView;
+@property (strong, nonatomic) UIImageView *snoozeWell;
 
 @end
 
@@ -48,7 +59,10 @@ double queueDistance = 0.75;
         UILabel *queueInstructionLabel = [[UILabel alloc] initWithFrame:CGRectMake(INSTRUCTION_IMAGE_MARGIN_LEFT * 2 + INSTRUCTION_IMAGE_WIDTH,
                                                                                    26.0f, 160.0f, 22.0f)];
         queueInstructionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
-        queueInstructionLabel.textColor = [UIColor colorWithRed:139.0/255.0 green:139.0/255.0 blue:139.0/255.0 alpha:1.0];
+//        queueInstructionLabel.textColor = [UIColor colorWithRed:139.0/255.0 green:139.0/255.0 blue:139.0/255.0 alpha:1.0];
+        queueInstructionLabel.textColor = [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:0.4];
+        queueInstructionLabel.shadowColor = [UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:0.4];
+        queueInstructionLabel.shadowOffset = CGSizeMake(0, -0.5);
         queueInstructionLabel.backgroundColor = [UIColor clearColor];
 //        queueInstructionLabel.text = @"Slide to queue";
         self.queueInstructionLabel = queueInstructionLabel;
@@ -99,21 +113,58 @@ double queueDistance = 0.75;
         statusLabel.textColor = statusColor;
         dueLabel.textColor = statusColor;
         
-        // TODO Contact Photo
-        UIImageView *contactImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"contact-avatar-placeholder.png"]];
-        contactImage.frame = CGRectMake(11.0f, 11.0f, 52.0f, 52.0f);
-        [self.contentView addSubview:contactImage];
-        
         // Set up queue gesture recognizer
         UIPanGestureRecognizer *queueGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
         queueGesture.delegate = self;
         [self.contentView addGestureRecognizer:queueGesture];
         
+        // TODO Contact Photo
+        QueueContactImageView *contactImage = [[QueueContactImageView alloc] initWithImage:[UIImage imageNamed:@"contact-avatar-placeholder.png"]];
+        contactImage.backgroundColor = [UIColor colorWithPatternImage: [UIImage imageNamed:@"queue_background.png"]];
+        contactImage.frame = CGRectMake(11.0f, 11.0f, 52.0f, 52.0f);
+        contactImage.delegate = self;
+        contactImage.marginLeft = 11.0f;
+        
+        // Snooze view
+        // to be shown when the user is dragging the contact image in order to snooze the contact
+        UIView *snoozeView = [[UIView alloc] initWithFrame:self.frame];
+        snoozeView.alpha = 0.0;
+        
+        UIImageView *snoozeWell = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"snooze-well.png"]];
+        self.snoozeWell = snoozeWell;
+        [snoozeView addSubview:snoozeWell];
+        
+        UILabel *snoozeLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - SNOOZE_LABEL_WIDTH)/2,
+                                                                         26.0f, SNOOZE_LABEL_WIDTH, 22.0f)];
+        snoozeLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
+        snoozeLabel.textColor = [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:0.4];
+        snoozeLabel.shadowColor = [UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:0.4];
+        snoozeLabel.shadowOffset = CGSizeMake(0, -0.5);
+        snoozeLabel.backgroundColor = [UIColor clearColor];
+        snoozeLabel.textAlignment = NSTextAlignmentCenter;
+//        snoozeLabel.text = [self setSnoozeText];
+        self.snoozeLabel = snoozeLabel;
+        [snoozeView addSubview:self.snoozeLabel];
+        
+        UIImageView *snoozeImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"snooze-drop.png"]];
+        snoozeImageView.frame = CGRectMake(self.frame.size.width - SNOOZE_IMAGE_MARGIN_RIGHT - SNOOZE_IMAGE_WIDTH,
+                                           SNOOZE_IMAGE_MARGIN_TOP, SNOOZE_IMAGE_WIDTH, SNOOZE_IMAGE_HEIGHT);
+        self.snoozeImageView = snoozeImageView;
+        [snoozeView addSubview:self.snoozeImageView];
+        
+//        UIPanGestureRecognizer *snoozeGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self.contactImage action:@selector(handleGesture:)];
+//        snoozeGesture.delegate = self;
+//        [self.contactImage addGestureRecognizer:snoozeGesture];
+        
+        self.snoozeView = snoozeView;
+        self.contactImage = contactImage;
         self.dueDateLabel = dueDateLabel;
         self.unitsLabel = unitsLabel;
         self.statusLabel = statusLabel;
         self.dueLabel = dueLabel;
         
+        [self.contentView addSubview:self.snoozeView];
+        [self.contentView addSubview:self.contactImage];
         [self.contentView addSubview:self.nameLabel];
         [self.contentView addSubview:self.dueDateLabel];
         [self.contentView addSubview:self.unitsLabel];
@@ -191,7 +242,7 @@ double queueDistance = 0.75;
                 [self.contentView setBounds:bounds];
                 [self updateInstructionView];
                 [self updateBackgroundWell];
-            }
+            }                
             break;
             
         case UIGestureRecognizerStateEnded:
@@ -244,9 +295,10 @@ double queueDistance = 0.75;
     if ([gestureRecognizer respondsToSelector:@selector(velocityInView:)])
     {
         CGPoint velocity = [gestureRecognizer velocityInView:self.contentView.superview];
-        return ABS(velocity.x) > ABS(velocity.y);
+        if ( ABS(velocity.x) > ABS(velocity.y) && velocity.x < 0)
+            return YES;
     }
-    return YES;
+    return NO;
 }
 
 // -----------------------------
@@ -254,6 +306,7 @@ double queueDistance = 0.75;
 // table while dragging the cell
 // -----------------------------
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+//    NSLog(@"%@", otherGestureRecognizer);
     return YES;
 }
 
@@ -345,8 +398,8 @@ double queueDistance = 0.75;
                          self.backgroundWell.frame = queueWellFrame;
                      }
                      completion:^(BOOL finished){
-                         if ([_delegate respondsToSelector:@selector(queueContactCellDidDismiss:)])
-                             [_delegate queueContactCellDidDismiss:self];
+                         if ([_delegate respondsToSelector:@selector(queueContactCell:didDismissWithType:)])
+                             [_delegate queueContactCell:self didDismissWithType:QueueContactCellDismissalTypeQueue];
                      }];
     [UIView animateWithDuration:0.2
                      animations:^{
@@ -392,23 +445,23 @@ double queueDistance = 0.75;
     finalBounds.origin.x = position.x;
     
     // Determine the duration of the animation
-    CGFloat initialDuration = (distance / totalDistance) * totalDuration;
+    CGFloat initialDuration = ABS((distance / totalDistance) * totalDuration);
     CGFloat bounceDuration = initialDuration * bounceBack;
 //    NSLog(@"%f, %f", initialDuration, bounceDuration);
     
     // Animate the change of position
-    [UIView animateWithDuration:initialDuration
+    [UIView animateWithDuration:totalDuration
                           delay:0.0
-                        options:UIViewAnimationOptionAllowUserInteraction
+                        options:UIViewAnimationOptionAllowUserInteraction|UIViewAnimationCurveEaseInOut
                      animations:^{
                          self.contentView.bounds = initialBounds;
                          self.backgroundWell.frame =  queueWellFrame;
                          self.queueInstructionView.frame = instructionFrame;
                      }
                      completion:^(BOOL finished){
-                         [UIView animateWithDuration:bounceDuration
+                         [UIView animateWithDuration:totalDuration
                                                delay:0.0
-                                             options:UIViewAnimationOptionAllowUserInteraction
+                                             options:UIViewAnimationOptionAllowUserInteraction|UIViewAnimationCurveEaseInOut
                                           animations:^{
                                               self.contentView.bounds = finalBounds;
                                           }
@@ -486,5 +539,74 @@ double queueDistance = 0.75;
 
     // Configure the view for the selected state
 }
+
+# pragma mark - Snoozing Methods
+- (void)queueContactImageViewDidBeginDragging:(QueueContactImageView *)imageView
+{
+    [self showSnoozeTrackWithAnimation:YES];
+    if ([_delegate respondsToSelector:@selector(queueContactCellDidBeginDragging:)])
+        [_delegate queueContactCellDidBeginDragging:self];
+}
+
+- (void)queueContactImageView:(QueueContactImageView *)imageView didEndDraggingWithSnooze:(BOOL)snooze
+{
+    if (snooze)
+    {
+        if ([_delegate respondsToSelector:@selector(queueContactCell:didDismissWithType:)])
+            [_delegate queueContactCell:self didDismissWithType:QueueContactCellDismissalTypeSnooze];
+    }
+    
+    [self hideSnoozeTrackWithAnimation:YES];
+    if ([_delegate respondsToSelector:@selector(queueContactCellDidEndDragging:)])
+        [_delegate queueContactCellDidEndDragging:self];
+}
+
+- (void)queueContactImageView:(QueueContactImageView *)imageView canSnooze:(BOOL)snooze
+{
+    if (snooze)
+        self.snoozeLabel.text = @"Release to snooze";
+    else
+        self.snoozeLabel.text = @"Slide to snooze";
+    
+}
+
+- (void)queueContactImageViewWillSnooze:(QueueContactImageView *)imageView
+{
+    self.snoozeLabel.text = @"Snoozed";
+}
+
+- (void)showSnoozeTrackWithAnimation:(BOOL)animate
+{
+    [self setSnoozeTrackAlpha:1.0 animated:animate];
+}
+
+- (void)hideSnoozeTrackWithAnimation:(BOOL)animate
+{
+    [self setSnoozeTrackAlpha:0.0 animated:animate];
+}
+
+- (void)setSnoozeTrackAlpha:(CGFloat)alpha animated:(BOOL)animated
+{
+    CGFloat reverseAlpha = 1.0 - alpha;
+    CGFloat duration = animated ? 0.2 : 0.0;
+    
+    [UIView animateWithDuration:duration
+                     animations:^{
+                         // Adjust the snooze track
+                         self.snoozeView.alpha = alpha;
+                         
+                         // Adjust the cell labels
+                         self.nameLabel.alpha = reverseAlpha;
+                         self.dueDateLabel.alpha = reverseAlpha;
+                         self.statusLabel.alpha = reverseAlpha;
+                         self.unitsLabel.alpha = reverseAlpha;
+                         self.dueLabel.alpha = reverseAlpha;
+                     }];
+}
+
+//- (NSString *)setSnoozeText
+//{
+//    return @"Slide to snooze";
+//}
 
 @end

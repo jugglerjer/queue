@@ -132,14 +132,32 @@ BOOL isScrollingDown;
     [self.tableView reloadRowsAtIndexPaths:@[self.selectedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
-- (void)queueContactCellDidDismiss:(QueueContactCell *)cell
+- (void)queueContactCell:(QueueContactCell *)cell didDismissWithType:(QueueContactCellDismissalType)type
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     Contact *contact = [self.contactsArray objectAtIndex:indexPath.row];
     Meeting *newMeeting = (Meeting *)[NSEntityDescription insertNewObjectForEntityForName:@"Meeting"
                                                                    inManagedObjectContext:_managedObjectContext];
-    newMeeting.date = [NSDate date];
-    newMeeting.note = @"Queued";
+    switch (type) {
+        case QueueContactCellDismissalTypeQueue:
+            newMeeting.date = [NSDate date];
+            newMeeting.note = @"Queued";
+            newMeeting.method = @"queue";
+            break;
+            
+        case QueueContactCellDismissalTypeSnooze:
+            newMeeting.date = [NSDate date];
+            newMeeting.note = @"Snoozed";
+            newMeeting.method = @"snooze";
+            break;
+            
+        default:
+            newMeeting.date = [NSDate date];
+            newMeeting.note = @"Queued";
+            newMeeting.method = @"queue";
+            break;
+    }
+    
     
     [contact addMeetingsObject:newMeeting];
     self.selectedIndexPath = indexPath;

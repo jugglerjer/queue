@@ -7,15 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "QueueContactImageView.h"
 @class Contact;
 
 @protocol QueueContactCellDelegate;
 
-@interface QueueContactCell : UITableViewCell <UIGestureRecognizerDelegate>
+typedef enum
+{
+    QueueContactCellDismissalTypeQueue,
+    QueueContactCellDismissalTypeSnooze
+} QueueContactCellDismissalType;
+
+@interface QueueContactCell : UITableViewCell <UIGestureRecognizerDelegate, QueueContactImageViewDelegate>
 
 @property (weak, nonatomic)   id <QueueContactCellDelegate> delegate;
 @property (strong, nonatomic) UIImageView *backgroundWell;
-@property (strong, nonatomic) UIImageView *contactImage;
+@property (strong, nonatomic) QueueContactImageView *contactImage;
 @property (strong, nonatomic) UILabel *nameLabel;
 @property (strong, nonatomic) UILabel *dueDateLabel;
 @property (strong, nonatomic) UILabel *unitsLabel;
@@ -30,7 +37,7 @@
 
 @protocol QueueContactCellDelegate <NSObject>
 
-- (void)queueContactCellDidDismiss:(QueueContactCell *)cell;
+- (void)queueContactCell:(QueueContactCell *)cell didDismissWithType:(QueueContactCellDismissalType)type;
 - (void)queueContactCellDidBeginDragging:(QueueContactCell *)cell;
 - (void)queueContactCellDidEndDragging:(QueueContactCell *)cell;
 
