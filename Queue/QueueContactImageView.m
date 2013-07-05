@@ -7,19 +7,36 @@
 //
 
 #import "QueueContactImageView.h"
-#import <QuartzCore/QuartzCore.h>    
+#import <QuartzCore/QuartzCore.h>  
+
+@interface QueueContactImageView ()
+{
+    UIImageView *imageView;
+    UIImage *gloss;
+}
+@end
 
 @implementation QueueContactImageView
 
-float shadowFlatOpacity = 0.0;
+float shadowFlatOpacity = 0.1;
 float shadowElevatedOpacity = 0.4;
 float wellMarginRight = 10.0;
 
-- (id)initWithImage:(UIImage *)image
+- (id)initWithFrame:(CGRect)frame
 {
-    self = [super initWithImage:image];
+    self = [super initWithFrame:frame];
     if (self)
     {
+        // Create the image view
+        imageView = [[UIImageView alloc] initWithFrame:self.bounds];
+        imageView.contentMode = UIViewContentModeScaleAspectFill;
+        [imageView.layer setMinificationFilter:kCAFilterTrilinear];
+        imageView.clipsToBounds = YES;
+        imageView.layer.cornerRadius = 8;
+        [self addSubview:imageView];
+        
+        // Cache common images
+        gloss = [UIImage imageNamed:@"avatar-gloss.png"];
         
         self.userInteractionEnabled = YES;
         
@@ -33,7 +50,9 @@ float wellMarginRight = 10.0;
         self.layer.cornerRadius = 8;
         self.layer.shadowOffset = CGSizeMake(0, 0);
         self.layer.shadowRadius = 10;
-        self.layer.shadowOpacity = 0.0;
+        self.layer.shadowOpacity = 0.2;
+        
+        
     }
     return self;
 }
@@ -115,6 +134,28 @@ float wellMarginRight = 10.0;
 }
 
 #pragma mark - Image Positioning Methods
+
+// -----------------------------
+// Set the imageView's image
+// -----------------------------
+- (void)setImage:(UIImage *)image
+{
+    imageView.image = image;
+}
+
+// -----------------------------
+// Draw a new image with gloss
+// -----------------------------
+- (UIImage *)imageWithGloss:(UIImage *)image
+{
+    CGSize size = self.frame.size;
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    [gloss drawAtPoint:CGPointZero];
+    UIImage *imageWithGloss = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return imageWithGloss;
+}
 
 // -----------------------------
 // Reset the image to its

@@ -27,6 +27,8 @@
 @property BOOL isTimelineExpanded;
 @property BOOL isOutOfBounds;
 
+@property (nonatomic) NSMutableDictionary *imagesDictionary;
+
 @end
 
 @implementation QueueViewController
@@ -359,16 +361,31 @@ BOOL isScrollingDown;
     if (cell == nil) {
         cell = [[QueueContactCell alloc] initWithReuseIdentifier:ContactRowIdentifier];
     }
-    [cell configureWithContact:[self.contactsArray objectAtIndex:indexPath.row]];
+    
+    cell.delegate = self;
+    Contact *contact = [self.contactsArray objectAtIndex:indexPath.row];
+    UIImage *image = [_imagesDictionary objectForKey:[NSNumber numberWithInteger:[contact hash]]];
+    if (!image)
+    {
+//        image = [cell avatarImageForContact:contact];
+        [cell performSelectorInBackground:@selector(setAvatarImageForContact:) withObject:contact];
+//        [_imagesDictionary setObject:image forKey:indexPath];
+    }
+    
+    [cell configureWithContact:[self.contactsArray objectAtIndex:indexPath.row] andImage:image];
     CGRect frame = cell.bounds;
     frame.size.height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
     frame.size.width = cell.frame.size.width;
     frame.origin.x = 0;
     cell.backgroundWell.frame = frame;
     [cell bringSubviewToFront:cell.contentView];
-    cell.delegate = self;
     
     return cell;
+}
+
+- (void)queueContactCell:(QueueContactCell *)cell didSetImage:(UIImage *)image forContact:(Contact *)contact
+{
+    [_imagesDictionary setObject:image forKey:[NSNumber numberWithInteger:[contact hash]]];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -629,6 +646,7 @@ BOOL isScrollingDown;
 //    self.navigationItem.leftBarButtonItem = backButton;
     
     [self updateContactsArrayWithTableReload:NO];
+    _imagesDictionary = [NSMutableDictionary dictionaryWithCapacity:[self.contactsArray count]];
 }
 
 - (void)back

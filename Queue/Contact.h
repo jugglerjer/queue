@@ -14,6 +14,12 @@
 @class Queue;
 @class Meeting;
 
+typedef enum {
+    ContactImageTypeAddressBook,
+    ContactImageTypeFacebook,
+    ContactImageTypeLinkedIn,
+    ContactImageTypeGoogle
+} ContactImageType;
 
 @interface Contact : NSManagedObject
 
@@ -31,11 +37,15 @@
 @property (nonatomic, retain) NSNumber * hasReminderDayBefore;
 @property (nonatomic, retain) NSNumber * hasReminderWeekBefore;
 @property (nonatomic, retain) NSNumber * hasReminderWeekAfter;
+//@property (nonatomic, retain) UIImage  * image;
+//@property (nonatomic)         int32_t    imageType;
 
 - (void)populateWithAddressBookRecord:(ABRecordRef)person;
 - (NSDate *)dueDateIncludingSnoozes:(BOOL)snoozes;
 - (double)weeksUntilDue;
 - (NSArray *)sortedMeetings;
+- (UIImage *)image;
+- (UIImage *)thumbnailWithSize:(CGFloat)size cornerRadius:(CGFloat)radius;
 
 @end
 

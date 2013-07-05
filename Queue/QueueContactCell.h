@@ -30,13 +30,15 @@ typedef enum
 @property (strong, nonatomic) UILabel *dueLabel;
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
-- (void)configureWithContact:(Contact *)contact;
+- (void)configureWithContact:(Contact *)contact andImage:(UIImage *)image;
+- (UIImage *)avatarImageForContact:(Contact *)contact;
 - (void)resetCellPositionWithAnimation:(BOOL)animated;
 
 @end
 
 @protocol QueueContactCellDelegate <NSObject>
 
+- (void)queueContactCell:(QueueContactCell *)cell didSetImage:(UIImage *)image forContact:(Contact *)contact;
 - (void)queueContactCell:(QueueContactCell *)cell didDismissWithType:(QueueContactCellDismissalType)type;
 - (void)queueContactCellDidBeginDragging:(QueueContactCell *)cell;
 - (void)queueContactCellDidEndDragging:(QueueContactCell *)cell;

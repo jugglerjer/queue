@@ -9,7 +9,7 @@
 #import "Contact.h"
 #import "Queue.h"
 #import "Meeting.h"
-
+#import "UIImage+Resize.h"
 
 @implementation Contact
 
@@ -27,6 +27,8 @@
 @dynamic hasReminderDayBefore;
 @dynamic hasReminderWeekBefore;
 @dynamic hasReminderWeekAfter;
+//@dynamic image;
+//@dynamic imageType;
 
 #pragma mark - Data Population Methods
 
@@ -63,6 +65,29 @@ static double defaultMeetInterval = 3 * 30.5 * 24 * 60 * 60; /* 1 month ~ 31.5 d
     self.hasReminderDayOf = [NSNumber numberWithBool:YES];
     self.hasReminderWeekBefore = [NSNumber numberWithBool:NO];
     self.hasReminderWeekAfter = [NSNumber numberWithBool:NO];
+}
+
+// -------------------------------------------------------------
+// Fetch and return a contact's image lazily
+// -------------------------------------------------------------
+- (UIImage *)image
+{
+    CFErrorRef error = nil;
+    ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, &error);
+    ABRecordRef person = ABAddressBookGetPersonWithRecordID(addressBook, [self.addressBookID intValue]);
+    NSData *imageData = (__bridge NSData *)ABPersonCopyImageData(person);
+    return [UIImage imageWithData:imageData];
+}
+
+// -------------------------------------------------------------
+// Return a thumbnail of the contact image at the given size
+// -------------------------------------------------------------
+- (UIImage *)thumbnailWithSize:(CGFloat)size cornerRadius:(CGFloat)radius
+{
+    return [[self image] thumbnailImage:104
+               transparentBorder:0
+                    cornerRadius:8
+            interpolationQuality:kCGInterpolationHigh];
 }
 
 #pragma mark - Due Date Methods

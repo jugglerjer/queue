@@ -15,6 +15,8 @@
 @property (weak, nonatomic) id<QueueContactImageViewDelegate> delegate;
 @property CGFloat marginLeft;
 
+- (UIImage *)imageWithGloss:(UIImage *)image;
+
 @end
 
 @protocol QueueContactImageViewDelegate <NSObject>

@@ -8,6 +8,7 @@
 
 #import "QueueContactCell.h"
 #import "Contact.h"
+#import "UIImage+Resize.h"
 
 #define INSTRUCTION_IMAGE_HEIGHT        22.5
 #define INSTRUCTION_IMAGE_WIDTH         28.0
@@ -30,6 +31,7 @@
 @property (strong, nonatomic) UILabel *snoozeLabel;
 @property (strong, nonatomic) UIImageView *snoozeImageView;
 @property (strong, nonatomic) UIImageView *snoozeWell;
+@property (strong, nonatomic) UIImage *placeholder;
 
 @end
 
@@ -120,11 +122,12 @@ double queueDistance = 0.75;
         [self.contentView addGestureRecognizer:queueGesture];
         
         // TODO Contact Photo
-        QueueContactImageView *contactImage = [[QueueContactImageView alloc] initWithImage:[UIImage imageNamed:@"contact-avatar-placeholder.png"]];
+        QueueContactImageView *contactImage = [[QueueContactImageView alloc] initWithFrame:CGRectMake(11.0f, 11.0f, 52.0f, 52.0f)];
         contactImage.backgroundColor = [UIColor colorWithPatternImage: [UIImage imageNamed:@"queue_background.png"]];
-        contactImage.frame = CGRectMake(11.0f, 11.0f, 52.0f, 52.0f);
         contactImage.delegate = self;
         contactImage.marginLeft = 11.0f;
+        
+        self.placeholder = [UIImage imageNamed:@"contact-avatar-placeholder-clean.png"];
         
         // Snooze view
         // to be shown when the user is dragging the contact image in order to snooze the contact
@@ -177,10 +180,34 @@ double queueDistance = 0.75;
     return self;
 }
 
-- (void)configureWithContact:(Contact *)contact
+- (UIImage *)avatarImageForContact:(Contact *)contact
+{
+    UIImage *image = [contact image];
+    if (!image)
+        image = _placeholder;
+    else
+        image = [image thumbnailImage:102
+                    transparentBorder:0
+                         cornerRadius:8
+                 interpolationQuality:kCGInterpolationHigh];
+    return [self.contactImage imageWithGloss:image];
+}
+
+- (void)setAvatarImageForContact:(Contact *)contact
+{
+    UIImage *image = [self avatarImageForContact:contact];
+    self.contactImage.image = image;
+    if ([_delegate respondsToSelector:@selector(queueContactCell:didSetImage:forContact:)])
+        [_delegate queueContactCell:self didSetImage:image forContact:contact];
+}
+
+- (void)configureWithContact:(Contact *)contact andImage:(UIImage *)image
 {       
     
     // TODO Contact Photo
+    if (!image)
+        image = _placeholder;
+    self.contactImage.image = image;
     
     // Contact Name
     self.nameLabel.text = [NSString stringWithFormat:@"%@ %@", contact.firstName, contact.lastName];

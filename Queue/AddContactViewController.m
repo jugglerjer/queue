@@ -10,6 +10,7 @@
 #import "QueueBarButtonItem.h"
 #import "Contact.h"
 #import "NSArray-SortUsingArray.h"
+#import "ContactImageView.h"
 
 //#define DUE_DATE_MARGIN_LEFT       48
 //#define DUE_DATE_MARGIN_RIGHT      13
@@ -194,7 +195,7 @@ static CGFloat keyboardHeight = 216;
     UIView *dueDateDividerLine = [[UIView alloc] initWithFrame:CGRectMake(dueDateViewContainer.bounds.origin.x, dueDateViewContainer.bounds.size.height - 0.5,
                                                                           dueDateViewContainer.bounds.size.width, 0.5)];
     
-    UIImageView *thumbnailImageView = [[UIImageView alloc] initWithFrame:CGRectMake((DUE_DATE_MARGIN_LEFT - THUMBNAIL_WIDTH)/2,
+    ContactImageView *thumbnailImageView = [[ContactImageView alloc] initWithFrame:CGRectMake((DUE_DATE_MARGIN_LEFT - THUMBNAIL_WIDTH)/2,
                                                                                     ((DUE_DATE_MARGIN_TOP + DUE_DATE_TEXT_HEIGHT + DUE_DATE_SUBTEXT_HEIGHT + DUE_DATE_MARGIN_BOTTOM) - THUMBNAIL_HEIGHT)/2, THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT)];
 
     intervalLabel.font = font;
@@ -207,7 +208,7 @@ static CGFloat keyboardHeight = 216;
     dueDateLabel.text = [self dueDateLabelText];
     self.dueDateLabel = dueDateLabel;
     
-    thumbnailImageView.image = [UIImage imageNamed:@"contact-avatar-placeholder.png"];
+    thumbnailImageView.image = [thumbnailImageView imageWithGloss:[self.contact image]];
     
     dueDateDividerLine.backgroundColor = [UIColor blackColor];
     dueDateDividerLine.alpha = 0.2;
