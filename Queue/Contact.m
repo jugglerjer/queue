@@ -80,6 +80,18 @@ static double defaultMeetInterval = 3 * 30.5 * 24 * 60 * 60; /* 1 month ~ 31.5 d
 }
 
 // -------------------------------------------------------------
+// Fetch and return a contact's thumbnail image lazily
+// -------------------------------------------------------------
+- (UIImage *)thumbnail
+{
+    CFErrorRef error = nil;
+    ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, &error);
+    ABRecordRef person = ABAddressBookGetPersonWithRecordID(addressBook, [self.addressBookID intValue]);
+    NSData *imageData = (__bridge NSData *)ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatThumbnail);
+    return [UIImage imageWithData:imageData];
+}
+
+// -------------------------------------------------------------
 // Return a thumbnail of the contact image at the given size
 // -------------------------------------------------------------
 - (UIImage *)thumbnailWithSize:(CGFloat)size cornerRadius:(CGFloat)radius

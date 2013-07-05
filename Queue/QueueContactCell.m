@@ -182,7 +182,7 @@ double queueDistance = 0.75;
 
 - (UIImage *)avatarImageForContact:(Contact *)contact
 {
-    UIImage *image = [contact image];
+    UIImage *image = [contact thumbnail];
     if (!image)
         image = _placeholder;
     else

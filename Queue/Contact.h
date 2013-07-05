@@ -45,6 +45,7 @@ typedef enum {
 - (double)weeksUntilDue;
 - (NSArray *)sortedMeetings;
 - (UIImage *)image;
+- (UIImage *)thumbnail;
 - (UIImage *)thumbnailWithSize:(CGFloat)size cornerRadius:(CGFloat)radius;
 
 @end

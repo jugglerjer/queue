@@ -31,7 +31,7 @@
         self.layer.cornerRadius = 6;
         
         // Cache common images
-        gloss = [UIImage imageNamed:@"avatar-gloss.png"];
+        gloss = [UIImage imageNamed:@"avatar-gloss-small.png"];
         placeholder = [UIImage imageNamed:@"contact-avatar-placeholder-clean.png"];
     }
     return self;
@@ -46,12 +46,12 @@
         image = placeholder;
     
     UIImage *newImage = [image thumbnailImage:self.frame.size.height*2 transparentBorder:0 cornerRadius:self.layer.cornerRadius interpolationQuality:kCGInterpolationHigh];
-    UIImage *newGloss = [gloss thumbnailImage:self.frame.size.height*2 transparentBorder:0 cornerRadius:self.layer.cornerRadius interpolationQuality:kCGInterpolationHigh];
+//    UIImage *newGloss = [gloss thumbnailImage:self.frame.size.height transparentBorder:0 cornerRadius:self.layer.cornerRadius interpolationQuality:kCGInterpolationHigh];
     
     CGSize size = self.frame.size;
     UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
     [newImage drawInRect:CGRectMake(0, 0, size.width, size.height)];
-    [newGloss drawAtPoint:CGPointZero];
+    [gloss drawAtPoint:CGPointZero];
     UIImage *imageWithGloss = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return imageWithGloss;

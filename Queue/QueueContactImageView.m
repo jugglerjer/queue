@@ -18,7 +18,7 @@
 
 @implementation QueueContactImageView
 
-float shadowFlatOpacity = 0.1;
+float shadowFlatOpacity = 0.05;
 float shadowElevatedOpacity = 0.4;
 float wellMarginRight = 10.0;
 
@@ -50,7 +50,7 @@ float wellMarginRight = 10.0;
         self.layer.cornerRadius = 8;
         self.layer.shadowOffset = CGSizeMake(0, 0);
         self.layer.shadowRadius = 10;
-        self.layer.shadowOpacity = 0.2;
+        self.layer.shadowOpacity = shadowFlatOpacity;
         
         
     }
