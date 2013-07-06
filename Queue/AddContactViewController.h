@@ -9,6 +9,12 @@
 #import <UIKit/UIKit.h>
 @class  Contact;
 
+typedef enum
+{
+    QueueEditContactTypeAdd,
+    QueueEditContactTypeUpdate
+} QueueEditContactType;
+
 @protocol AddContactViewControllerDelegate;
 
 @interface AddContactViewController : UIViewController <UITextViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
@@ -16,6 +22,7 @@
 @property (weak, nonatomic) id<AddContactViewControllerDelegate> delegate;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (strong, nonatomic) Contact *contact;
+@property QueueEditContactType editContactType;
 
 @end
 
@@ -23,5 +30,7 @@
 
 - (void)addContactViewController:(AddContactViewController *)addContactViewController
                    didUpdateContact:(Contact *)contact;
+- (void)addContactViewController:(AddContactViewController *)addContactViewController
+didDismissWithoutUpdatingContact:(Contact *)contact;
 
 @end

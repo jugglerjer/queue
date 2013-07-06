@@ -129,7 +129,7 @@ static CGFloat keyboardHeight = 216;
 
 // ------------------------------
 // Dismiss the view without saving
-// when the user taps the check
+// when the user taps the x
 // ------------------------------
 - (void)close
 {
@@ -139,6 +139,19 @@ static CGFloat keyboardHeight = 216;
     self.contact.hasReminderWeekBefore = self.originalHasReminderWeekBefore;
     self.contact.hasReminderWeekAfter = self.originalHasReminderWeekAfter;
     [self dismissViewControllerAnimated:YES completion:nil];
+    if([_delegate respondsToSelector:@selector(addContactViewController:didDismissWithoutUpdatingContact:)])
+        [_delegate addContactViewController:self didDismissWithoutUpdatingContact:self.contact];
+}
+
+// ------------------------------
+// Slide away the view without saving
+// when the user taps the back button
+// ------------------------------
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
+    if([_delegate respondsToSelector:@selector(addContactViewController:didDismissWithoutUpdatingContact:)])
+        [_delegate addContactViewController:self didDismissWithoutUpdatingContact:self.contact];
 }
 
 - (void)viewDidLoad
@@ -156,14 +169,32 @@ static CGFloat keyboardHeight = 216;
     self.reminderArray = [NSMutableArray arrayWithArray:@[self.contact.hasReminderDayOf, self.contact.hasReminderDayBefore, self.contact.hasReminderWeekBefore, self.contact.hasReminderWeekAfter]];
 
 	
-    // Give the view a light background patter & a title
+    // Give the view a light background patter
     // -----------------------------------------------
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"light-background.png"]];
-    self.title = @"Edit Contact";
     
     // Add the save and cancel buttons to the nav bar
+    // as well as a title
     // -----------------------------------------------
-    QueueBarButtonItem *cancelButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeCancel target:self action:@selector(close)];
+    QueueBarButtonItem *cancelButton;
+    switch (self.editContactType)
+    {
+        case QueueEditContactTypeAdd:
+            cancelButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeBack target:self action:@selector(back)];
+            self.title = @"Add Contact";
+            break;
+            
+        case QueueEditContactTypeUpdate:
+            cancelButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeCancel target:self action:@selector(close)];
+            self.title = @"Edit Contact";
+            break;
+            
+        default:
+            cancelButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeCancel target:self action:@selector(close)];
+            self.title = @"Edit Contact";
+            break;
+    }
+    
     QueueBarButtonItem *addMeetingButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeDone target:self action:@selector(save)];
     self.navigationItem.leftBarButtonItem = cancelButton;
     self.navigationItem.rightBarButtonItem = addMeetingButton;
@@ -421,7 +452,9 @@ static CGFloat keyboardHeight = 216;
     
     [self registerForKeyboardNotifications];
     
-    [self.noteTextView becomeFirstResponder];
+//    [self.noteTextView becomeFirstResponder];
+//    [self shouldEditIntervalField];
+    [self performSelector:@selector(shouldEditIntervalField) withObject:nil afterDelay:0.25];
 }
 
 // ------------------------------

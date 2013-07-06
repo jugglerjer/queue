@@ -84,6 +84,7 @@ static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/a
     addContactController.managedObjectContext = self.managedObjectContext;
     addContactController.contact = self.contact;
     addContactController.delegate = self;
+    addContactController.editContactType = QueueEditContactTypeUpdate;
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:addContactController];
     [self.queueViewController.navigationController presentViewController:navController animated:YES completion:nil];
 }

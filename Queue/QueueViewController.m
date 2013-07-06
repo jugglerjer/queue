@@ -16,6 +16,7 @@
 #import "LLPullNavigationTableView.h"
 #import "LLPullNavigationScrollView.h"
 #import "QueuesViewController.h"
+#import "ContactChooserViewController.h"
 
 @interface QueueViewController ()
 
@@ -58,6 +59,9 @@ BOOL isScrollingDown;
     picker.peoplePickerDelegate = self;
     picker.delegate = self;
     
+//    ContactChooserViewController *picker = [[ContactChooserViewController alloc] initWithStyle:UITableViewStylePlain];
+//    UINavigationController *controller = [[UINavigationController alloc] initWithRootViewController:picker];
+    
     [self presentViewController:picker animated:YES completion:NULL];
 }
 
@@ -65,8 +69,12 @@ BOOL isScrollingDown;
 {
     if([navigationController isKindOfClass:[ABPeoplePickerNavigationController class]])
     {
-        QueueBarButtonItem *cancelButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeCancel target:self action:@selector(peoplePickerNavigationControllerDidCancel:)];
-        navigationController.topViewController.navigationItem.rightBarButtonItem = cancelButton;
+        if (![viewController isKindOfClass:[AddContactViewController class]])
+        {
+            QueueBarButtonItem *cancelButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeCancel target:self action:@selector(peoplePickerNavigationControllerDidCancel:)];
+            navigationController.topViewController.navigationItem.leftBarButtonItem = cancelButton;
+            navigationController.topViewController.navigationItem.rightBarButtonItem = nil;
+        }
     }
 }
 
@@ -98,29 +106,56 @@ BOOL isScrollingDown;
     // Otherwise, add the contact to the queue
     else
     {
-        [_queue addContactsObject:newContact];
-        NSError *error = nil;
-        if (![self.managedObjectContext save:&error]) {
-            // Handle the error.
-            [self dismissViewControllerAnimated:YES completion:NULL];
-        } else {
-            [self updateContactsArrayWithTableReload:NO];
-            NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:[self.contactsArray indexOfObject:newContact] inSection:0];
-            
-            [self dismissViewControllerAnimated:YES completion:^{[self insertRowAtIndexPath:newIndexPath];}];
-        }
+//        [_queue addContactsObject:newContact];
+//        NSError *error = nil;
+//        if (![self.managedObjectContext save:&error]) {
+//            // Handle the error.
+//            [self dismissViewControllerAnimated:YES completion:NULL];
+//        } else {
+//            [self updateContactsArrayWithTableReload:NO];
+//            NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:[self.contactsArray indexOfObject:newContact] inSection:0];
+//            
+//            [self dismissViewControllerAnimated:YES completion:^{[self insertRowAtIndexPath:newIndexPath];}];
+//        }
+        // Show the add contact view controller
+        // so the user can configure settings
+        AddContactViewController *addContactController = [[AddContactViewController alloc] init];
+        addContactController.managedObjectContext = self.managedObjectContext;
+        addContactController.contact = newContact;
+        addContactController.delegate = self;
+        addContactController.editContactType = QueueEditContactTypeAdd;
+        
+        [peoplePicker pushViewController:addContactController animated:YES];
         
     }
     return NO;
 }
 
-- (BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker
-      shouldContinueAfterSelectingPerson:(ABRecordRef)person
-                                property:(ABPropertyID)property
-                              identifier:(ABMultiValueIdentifier)identifier
+- (void)addContactViewController:(AddContactViewController *)addContactViewController didUpdateContact:(Contact *)contact
 {
-    return NO;
+    [_queue addContactsObject:contact];
+    NSError *error = nil;
+    if (![self.managedObjectContext save:&error]) {
+        // Handle the error.
+    } else {
+        [self updateContactsArrayWithTableReload:NO];
+        NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:[self.contactsArray indexOfObject:contact] inSection:0];
+        [self insertRowAtIndexPath:newIndexPath];
+    }
 }
+
+- (void)addContactViewController:(AddContactViewController *)addContactViewController didDismissWithoutUpdatingContact:(Contact *)contact
+{
+    [self.managedObjectContext deleteObject:contact];
+}
+
+//- (BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker
+//      shouldContinueAfterSelectingPerson:(ABRecordRef)person
+//                                property:(ABPropertyID)property
+//                              identifier:(ABMultiValueIdentifier)identifier
+//{
+//    return NO;
+//}
 
 #pragma mark - Contact Management Methods
 
