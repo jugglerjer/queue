@@ -341,6 +341,10 @@ static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/a
 //    
 //    QueueBarButtonItem *backButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeBack target:self action:@selector(back)];
 //    self.navigationItem.leftBarButtonItem = backButton;
+    
+    // Show the toolbelt if the user has no meetings
+    if ([self.meetingsArray count] == 0)
+        [self performSelector:@selector(showToolbelt) withObject:nil afterDelay:0.25];
 
 }
 

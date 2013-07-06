@@ -24,6 +24,9 @@
 @property (strong, nonatomic) TimelineViewController *timeline;
 @property (strong, nonatomic) QueueBarButtonItem *addButton;
 
+@property (strong, nonatomic) UIPanGestureRecognizer *navBarGesture;
+//@property (strong, nonatomic) UIPanGestureRecognizer *tableGesture;
+
 @property BOOL isScrollingToNewContact;
 @property BOOL isTimelineExpanded;
 @property BOOL isOutOfBounds;
@@ -481,7 +484,11 @@ BOOL isScrollingDown;
 {
 //    NSLog(@"%f, %f", scrollView.contentOffset.x, scrollView.contentOffset.y);
     LLPullNavigationController *pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
-    [pullController assumeScrollControl];
+    if (scrollView.contentOffset.y <= 0)
+    {
+        [pullController assumeScrollControl];
+        [pullController enterSelectionMode];
+    }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -489,7 +496,7 @@ BOOL isScrollingDown;
     LLPullNavigationController *pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
     if (scrollView.contentOffset.y < 0)
     {
-        [pullController enterSelectionMode];
+        
         isScrollingDown = YES;
         if (pullController.isEngaged)
         {
@@ -498,7 +505,10 @@ BOOL isScrollingDown;
             [UIView animateWithDuration:0.0 animations:^{self.navigationController.navigationBar.alpha = 0.0;}];
             //        [self.navigationController setNavigationBarHidden:YES animated:NO];
             //        [pullController.scrollView setTransform:CGAffineTransformMakeTranslation(0, -scrollView.contentOffset.y)];
+            CGRect bounds = scrollView.bounds;
             [pullController.scrollView setContentOffset:CGPointMake(0, scrollView.contentOffset.y + pullController.scrollView.frame.size.height)];
+            bounds.origin.y = scrollView.contentOffset.y;
+            [scrollView setBounds:bounds];
             //        [self.navigationController.view setTransform:CGAffineTransformMakeTranslation(0, -scrollView.contentOffset.y)];
             [self.view setTransform:CGAffineTransformMakeTranslation(0, scrollView.contentOffset.y)];
             //        [self.tableView setTransform:CGAffineTransformMakeTranslation(0, scrollView.contentOffset.y)];
@@ -508,7 +518,7 @@ BOOL isScrollingDown;
 //        self.navigationController.navigationBar.alpha = 1.0;
         isScrollingDown = NO;
         [pullController exitSelectionMode];
-//        [pullController resignScrollControl];
+        [pullController resignScrollControl];
         [UIView animateWithDuration:0.25 animations:^{self.navigationController.navigationBar.alpha = 1.0;}];
     }
 }
@@ -519,9 +529,10 @@ BOOL isScrollingDown;
 // -----------------------------------------
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    if (isScrollingDown)
+    LLPullNavigationController *pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
+    if (isScrollingDown && pullController.isEngaged)
     {
-        LLPullNavigationController *pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
+        
         [pullController exitSelectionMode];
         if ([pullController shouldDismissScrollView])
         {
@@ -587,6 +598,7 @@ BOOL isScrollingDown;
     if (reposition)
         [self performSelector:@selector(repositionSelectedContact) withObject:nil afterDelay:0.4];
     
+    [self.timeline hideToolbelt];
     [self.timeline.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.4];
     [self.addButton setEnabled:YES];
 }
@@ -656,6 +668,11 @@ BOOL isScrollingDown;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    // A a gesture recognizer to the navigation bar to let the user pull to switch queues using its area
+//    UIPanGestureRecognizer *navBarGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(<#selector#>)];
+    
+    self.view.backgroundColor = [UIColor clearColor];
 	
     // Create a table view to hold the contacts
     LLPullNavigationTableView *tableView = [[LLPullNavigationTableView alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
@@ -664,6 +681,7 @@ BOOL isScrollingDown;
                                                                            self.view.frame.size.height - self.navigationController.navigationBar.frame.size.height)
                                                           style:UITableViewStylePlain];
     tableView.backgroundColor = [UIColor colorWithPatternImage: [UIImage imageNamed:@"queue_background.png"]];
+//    tableView.backgroundColor = [UIColor clearColor];
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     tableView.delegate = self;
     tableView.dataSource = self;

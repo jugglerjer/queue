@@ -474,7 +474,7 @@ double queueDistance = 0.75;
     
     // Determine the duration of the animation
     CGFloat initialDuration = ABS((distance / totalDistance) * totalDuration);
-    CGFloat bounceDuration = initialDuration * bounceBack;
+//    CGFloat bounceDuration = initialDuration * bounceBack;
 //    NSLog(@"%f, %f", initialDuration, bounceDuration);
     
     // Animate the change of position

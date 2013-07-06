@@ -24,6 +24,8 @@
 @property (strong, nonatomic) QueueViewController *queueViewController;
 
 - (id)initWithContact:(Contact *)contact;
+- (void)showToolbelt;
+- (void)hideToolbelt;
 
 @end
 
