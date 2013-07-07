@@ -505,12 +505,12 @@ BOOL isScrollingDown;
             [UIView animateWithDuration:0.0 animations:^{self.navigationController.navigationBar.alpha = 0.0;}];
             //        [self.navigationController setNavigationBarHidden:YES animated:NO];
             //        [pullController.scrollView setTransform:CGAffineTransformMakeTranslation(0, -scrollView.contentOffset.y)];
-            CGRect bounds = scrollView.bounds;
+//            CGRect bounds = scrollView.bounds;
             [pullController.scrollView setContentOffset:CGPointMake(0, scrollView.contentOffset.y + pullController.scrollView.frame.size.height)];
-            bounds.origin.y = scrollView.contentOffset.y;
-            [scrollView setBounds:bounds];
             //        [self.navigationController.view setTransform:CGAffineTransformMakeTranslation(0, -scrollView.contentOffset.y)];
             [self.view setTransform:CGAffineTransformMakeTranslation(0, scrollView.contentOffset.y)];
+//            bounds.origin.y = 0.0;
+//            [scrollView setBounds:bounds];
             //        [self.tableView setTransform:CGAffineTransformMakeTranslation(0, scrollView.contentOffset.y)];
         }
     }
@@ -519,7 +519,7 @@ BOOL isScrollingDown;
         isScrollingDown = NO;
         [pullController exitSelectionMode];
         [pullController resignScrollControl];
-        [UIView animateWithDuration:0.25 animations:^{self.navigationController.navigationBar.alpha = 1.0;}];
+        [UIView animateWithDuration:0.0 animations:^{self.navigationController.navigationBar.alpha = 1.0;}];
     }
 }
 

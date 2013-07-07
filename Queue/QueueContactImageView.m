@@ -20,6 +20,8 @@
 
 float shadowFlatOpacity = 0.05;
 float shadowElevatedOpacity = 0.4;
+float shadowFlatRadius = 0.0;
+float shadowElevatedRadius = 5.0;
 float wellMarginRight = 10.0;
 
 - (id)initWithFrame:(CGRect)frame
@@ -49,8 +51,8 @@ float wellMarginRight = 10.0;
         self.layer.masksToBounds = NO;
         self.layer.cornerRadius = 8;
         self.layer.shadowOffset = CGSizeMake(0, 0);
-        self.layer.shadowRadius = 10;
-        self.layer.shadowOpacity = shadowFlatOpacity;
+        self.layer.shadowRadius = shadowFlatRadius;
+        self.layer.shadowOpacity = 1.0;
         
         
     }
@@ -257,7 +259,7 @@ float wellMarginRight = 10.0;
 // -----------------------------
 - (void)showShadowWithAnimation:(BOOL)animated
 {
-    [self setShadowOpacity:shadowElevatedOpacity animated:animated];
+    [self setShadowOpacity:shadowElevatedRadius animated:animated];
 }
 
 // -----------------------------
@@ -266,7 +268,7 @@ float wellMarginRight = 10.0;
 // -----------------------------
 - (void)hideShadowWithAnimation:(BOOL)animated
 {
-    [self setShadowOpacity:shadowFlatOpacity animated:animated];
+    [self setShadowOpacity:shadowFlatRadius animated:animated];
 }
 
 // -----------------------------
@@ -275,12 +277,12 @@ float wellMarginRight = 10.0;
 // -----------------------------
 - (void)setShadowOpacity:(float)opacity animated:(BOOL)animated
 {
-    CABasicAnimation *anim = [CABasicAnimation animationWithKeyPath:@"shadowOpacity"];
-    anim.fromValue = [NSNumber numberWithFloat:self.layer.shadowOpacity];
+    CABasicAnimation *anim = [CABasicAnimation animationWithKeyPath:@"shadowRadius"];
+    anim.fromValue = [NSNumber numberWithFloat:self.layer.shadowRadius];
     anim.toValue = [NSNumber numberWithFloat:opacity];
     anim.duration = animated ? 0.25 : 0.0;
-    [self.layer addAnimation:anim forKey:@"shadowOpacity"];
-    self.layer.shadowOpacity = opacity;
+    [self.layer addAnimation:anim forKey:@"shadowRadius"];
+    self.layer.shadowRadius = opacity;
 }
 
 @end
