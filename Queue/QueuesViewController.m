@@ -22,6 +22,7 @@
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UITextField *queueNameTextField;
 @property (nonatomic) NSMutableArray *queuesArray;
+@property (strong, nonatomic) NSMutableArray *queueViewControllersArray;
 @property (weak, nonatomic) QueueViewController *queueViewController;
 
 @end
@@ -60,7 +61,10 @@ CGFloat rowHeight = 44.0;
                                                                    inManagedObjectContext:_managedObjectContext];
     newQueue.name = name;
     if ([self saveQueueData])
+    {
         [self.queuesArray insertObject:newQueue atIndex:0];
+        [self.queueViewControllersArray insertObject:[NSNull null] atIndex:0];
+    }
 //        [self.queuesArray addObject:newQueue];
     
     [_tableView reloadData];
@@ -202,18 +206,35 @@ CGFloat rowHeight = 44.0;
     // Make sure the new queue field is hidden
     [self hideNewQueueSectionWithAnimation:YES];
     
-    QueueViewController *queueView = [[QueueViewController alloc] initWithQueue:[self.queuesArray objectAtIndex:index]];
-    queueView.managedObjectContext = self.managedObjectContext;
-    queueView.title = [[self.queuesArray objectAtIndex:index] name];
+    UINavigationController *navController;
+    if ([[self.queueViewControllersArray objectAtIndex:index] isEqual:[NSNull null]])
+    {
+        QueueViewController *queueView = [[QueueViewController alloc] initWithQueue:[self.queuesArray objectAtIndex:index]];
+        queueView.managedObjectContext = self.managedObjectContext;
+        queueView.title = [[self.queuesArray objectAtIndex:index] name];
+        
+        self.queueViewController = queueView;
+        
+        navController = [[UINavigationController alloc] initWithRootViewController:queueView];
+        [self.queueViewControllersArray replaceObjectAtIndex:index withObject:navController];
+    }
+    else
+    {
+        navController = [self.queueViewControllersArray objectAtIndex:index];
+        self.queueViewController = [[navController viewControllers] objectAtIndex:0];
+    }
     
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:queueView];
+//    QueueViewController *queueView = [[QueueViewController alloc] initWithQueue:[self.queuesArray objectAtIndex:index]];
+//    queueView.managedObjectContext = self.managedObjectContext;
+//    queueView.title = [[self.queuesArray objectAtIndex:index] name];
+//    
+//    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:queueView];
 //    [queueView.navigationController setNavigationBarHidden:NO animated:NO];
     LLPullNavigationController *pullController = (LLPullNavigationController *)self.parentViewController;
 //    queueView.navigationController.navigationBar.alpha = 0.0;
     [pullController switchToViewController:navController atPage:index animated:YES completion:nil];
 //    [self setNavigationBar:queueView.navigationController.navigationBar alpha:0.0 withDuration:0.0];
     
-    self.queueViewController = queueView;
     [self sendQueueAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0] toTopOfListWithDelay:0.5];
     selectedQueue = 0;
 }
@@ -332,8 +353,14 @@ CGFloat rowHeight = 44.0;
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
     Queue *queue = [self.queuesArray objectAtIndex:fromIndexPath.row];
+    UINavigationController *navController = [self.queueViewControllersArray objectAtIndex:fromIndexPath.row];
+    
     [self.queuesArray removeObjectAtIndex:fromIndexPath.row];
+    [self.queueViewControllersArray removeObjectAtIndex:fromIndexPath.row];
+    
     [self.queuesArray insertObject:queue atIndex:toIndexPath.row];
+    [self.queueViewControllersArray insertObject:navController atIndex:toIndexPath.row];
+    
     [tableView reloadData];
 }
 
@@ -401,6 +428,10 @@ CGFloat rowHeight = 44.0;
     }
 
     [self setQueuesArray:mutableFetchResults];
+    
+    self.queueViewControllersArray = [NSMutableArray arrayWithCapacity:[self.queuesArray count]];
+    for (int i = 0; i < [self.queuesArray count]; i++)
+        [self.queueViewControllersArray addObject:[NSNull null]];
 }
 
 - (void)didReceiveMemoryWarning
