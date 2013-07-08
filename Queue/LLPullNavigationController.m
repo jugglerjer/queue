@@ -437,6 +437,26 @@ int pageToSwitchTo;
     self.isEngaged = NO;
 }
 
+// -----------------------------------------
+// Disengage the pull controller and switch
+// queues if appropriate
+// -----------------------------------------
+- (void)disengage
+{
+    [self exitSelectionMode];
+    if ([self shouldDismissScrollView])
+    {
+//        NSLog(@"Should dismiss scroll view");
+        [self resignScrollControl];
+        [self dismissScrollView];
+    }
+    else
+    {
+//        NSLog(@"Should switch queues");
+        [self shouldSwitchViewControllers];
+    }
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

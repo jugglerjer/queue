@@ -32,6 +32,7 @@
 - (BOOL)shouldDismissScrollView;
 - (void)dismissScrollView;
 - (void)presentScrollView;
+- (void)disengage;
 
 @end
 

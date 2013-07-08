@@ -59,7 +59,6 @@
 		3F94A968178659350054A733 /* ContactImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F94A966178659350054A733 /* ContactImageView.m */; };
 		3F94A96A1786625F0054A733 /* avatar-gloss-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F94A9691786625E0054A733 /* avatar-gloss-small@2x.png */; };
 		3F94A96B1786625F0054A733 /* avatar-gloss-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F94A9691786625E0054A733 /* avatar-gloss-small@2x.png */; };
-		3F94A96D1787CF560054A733 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3F94A96C1787CF560054A733 /* GoogleMaps.bundle */; };
 		3F977641175723C200E6B5B7 /* LocationChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F977640175723C200E6B5B7 /* LocationChooserViewController.m */; };
 		3F977644175726B000E6B5B7 /* calendar_full@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F977642175726B000E6B5B7 /* calendar_full@2x.png */; };
 		3F977645175726B000E6B5B7 /* notepad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F977643175726B000E6B5B7 /* notepad@2x.png */; };
@@ -123,6 +122,7 @@
 		695BF15A1780FEC300A3F865 /* snooze-well@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 695BF1591780FEC300A3F865 /* snooze-well@2x.png */; };
 		695BF15C1781222C00A3F865 /* snooze-drop@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 695BF15B1781222C00A3F865 /* snooze-drop@2x.png */; };
 		695BF16117878BA000A3F865 /* ContactChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 695BF16017878BA000A3F865 /* ContactChooserViewController.m */; };
+		695BF163178A432000A3F865 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 695BF162178A432000A3F865 /* GoogleMaps.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -193,7 +193,6 @@
 		3F94A965178659340054A733 /* ContactImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactImageView.h; sourceTree = "<group>"; };
 		3F94A966178659350054A733 /* ContactImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactImageView.m; sourceTree = "<group>"; };
 		3F94A9691786625E0054A733 /* avatar-gloss-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "avatar-gloss-small@2x.png"; path = "Queue/avatar-gloss-small@2x.png"; sourceTree = "<group>"; };
-		3F94A96C1787CF560054A733 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = "../../../Downloads/GoogleMaps-iOS-1.3.0/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle"; sourceTree = "<group>"; };
 		3F97763F175723C200E6B5B7 /* LocationChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationChooserViewController.h; sourceTree = "<group>"; };
 		3F977640175723C200E6B5B7 /* LocationChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationChooserViewController.m; sourceTree = "<group>"; };
 		3F977642175726B000E6B5B7 /* calendar_full@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "calendar_full@2x.png"; path = "Queue/calendar_full@2x.png"; sourceTree = "<group>"; };
@@ -278,6 +277,7 @@
 		695BF15B1781222C00A3F865 /* snooze-drop@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "snooze-drop@2x.png"; path = "Queue/snooze-drop@2x.png"; sourceTree = "<group>"; };
 		695BF15F17878BA000A3F865 /* ContactChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactChooserViewController.h; sourceTree = "<group>"; };
 		695BF16017878BA000A3F865 /* ContactChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactChooserViewController.m; sourceTree = "<group>"; };
+		695BF162178A432000A3F865 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = "../../../../Downloads/GoogleMaps-iOS-1.3.1/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -359,7 +359,7 @@
 		3FA1018A17447769007D2520 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3F94A96C1787CF560054A733 /* GoogleMaps.bundle */,
+				695BF162178A432000A3F865 /* GoogleMaps.bundle */,
 				3F93444A175AF179000FD331 /* GoogleMaps.framework */,
 				3FA1018B17447769007D2520 /* UIKit.framework */,
 				3FA1018D17447769007D2520 /* Foundation.framework */,
@@ -653,7 +653,7 @@
 				3F94A95417860DCB0054A733 /* avatar-gloss@2x.png in Resources */,
 				3F94A9571786123D0054A733 /* contact-avatar-placeholder-clean@2x.png in Resources */,
 				3F94A96A1786625F0054A733 /* avatar-gloss-small@2x.png in Resources */,
-				3F94A96D1787CF560054A733 /* GoogleMaps.bundle in Resources */,
+				695BF163178A432000A3F865 /* GoogleMaps.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

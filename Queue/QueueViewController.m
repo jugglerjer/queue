@@ -459,6 +459,73 @@ BOOL isScrollingDown;
     return footer;
 }
 
+# pragma mark - Pull to Change Queue Methods
+
+// -----------------------------------------
+// Recognize a pull down gesture on the nav
+// bar if it's in fact a pan downward
+// -----------------------------------------
+- (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)gestureRecognizer
+{
+    if ([gestureRecognizer respondsToSelector:@selector(velocityInView:)])
+    {
+        CGPoint velocity = [gestureRecognizer velocityInView:self.navigationController.navigationBar.superview];
+        if ( ABS(velocity.y) > ABS(velocity.x) && velocity.y > 0)
+            return YES;
+    }
+    return NO;
+}
+
+// -----------------------------------------
+// Activate pull to change queue with a tug
+// on the navigation bar
+// -----------------------------------------
+- (void)handleGesture:(UIPanGestureRecognizer *)gestureRecognizer
+{
+    CGPoint distance = [gestureRecognizer translationInView:self.navigationController.navigationBar.superview];
+    LLPullNavigationController *pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
+    
+    switch (gestureRecognizer.state) {
+        case UIGestureRecognizerStateBegan:
+//            NSLog(@"Gesture began");
+            [pullController assumeScrollControl];
+            [pullController enterSelectionMode];
+            break;
+            
+        case UIGestureRecognizerStateChanged:
+            //            NSLog(@"Gesture changed");
+            if (pullController.isEngaged)
+                [self adjustPullController:pullController toPoint:CGPointMake(0, -distance.y)];
+            break;
+            
+        case UIGestureRecognizerStateEnded:
+//            NSLog(@"Gesture ended");
+            if (pullController.isEngaged)
+            {
+                [pullController disengage];
+                [pullController.scrollView setContentOffset:CGPointMake(0, pullController.scrollView.frame.size.height) animated:YES];
+//                [UIView animateWithDuration:0.0 animations:^{self.navigationController.navigationBar.alpha = 1.0;}];
+            }
+            break;
+            
+        case UIGestureRecognizerStateFailed:
+//            NSLog(@"Gesture failed");
+            break;
+            
+        case UIGestureRecognizerStateCancelled:
+//            NSLog(@"Gesture cencelled");
+            break;
+            
+        case UIGestureRecognizerStatePossible:
+//            NSLog(@"Gesture possible");
+            break;
+            
+        default:
+            break;
+    }
+
+}
+
 // -----------------------------------------
 // Determine which direction the scroll view
 // is scrolling in so that we can tell whether
@@ -500,22 +567,12 @@ BOOL isScrollingDown;
         isScrollingDown = YES;
         if (pullController.isEngaged)
         {
-//            [pullController assumeScrollControl];
-//            self.navigationController.navigationBar.alpha = 0.0;
+            [self adjustPullController:pullController toPoint:CGPointMake(0, scrollView.contentOffset.y)];
             [UIView animateWithDuration:0.0 animations:^{self.navigationController.navigationBar.alpha = 0.0;}];
-            //        [self.navigationController setNavigationBarHidden:YES animated:NO];
-            //        [pullController.scrollView setTransform:CGAffineTransformMakeTranslation(0, -scrollView.contentOffset.y)];
-//            CGRect bounds = scrollView.bounds;
-            [pullController.scrollView setContentOffset:CGPointMake(0, scrollView.contentOffset.y + pullController.scrollView.frame.size.height)];
-            //        [self.navigationController.view setTransform:CGAffineTransformMakeTranslation(0, -scrollView.contentOffset.y)];
             [self.view setTransform:CGAffineTransformMakeTranslation(0, scrollView.contentOffset.y)];
-//            bounds.origin.y = 0.0;
-//            [scrollView setBounds:bounds];
-            //        [self.tableView setTransform:CGAffineTransformMakeTranslation(0, scrollView.contentOffset.y)];
         }
     }
     else {
-//        self.navigationController.navigationBar.alpha = 1.0;
         isScrollingDown = NO;
         [pullController exitSelectionMode];
         [pullController resignScrollControl];
@@ -532,20 +589,16 @@ BOOL isScrollingDown;
     LLPullNavigationController *pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
     if (isScrollingDown && pullController.isEngaged)
     {
-        
-        [pullController exitSelectionMode];
-        if ([pullController shouldDismissScrollView])
-        {
-            NSLog(@"Should dismiss scroll view");
-            [pullController resignScrollControl];
-            [pullController dismissScrollView];
-        }
-        else
-        {
-            NSLog(@"Should switch queues");
-            [pullController shouldSwitchViewControllers];
-        }
+        [pullController disengage];
     }
+}
+
+// -----------------------------------------
+// Move the pull nav controller a given amount
+// -----------------------------------------
+- (void)adjustPullController:(LLPullNavigationController *)pullController toPoint:(CGPoint)point
+{
+    [pullController.scrollView setContentOffset:CGPointMake(point.x, point.y + pullController.scrollView.frame.size.height)];
 }
 
 # pragma mark - Queue Row Selection Methods
@@ -670,7 +723,9 @@ BOOL isScrollingDown;
     [super viewDidLoad];
     
     // A a gesture recognizer to the navigation bar to let the user pull to switch queues using its area
-//    UIPanGestureRecognizer *navBarGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(<#selector#>)];
+    UIPanGestureRecognizer *navBarGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
+    navBarGesture.delegate = self;
+    [self.navigationController.navigationBar addGestureRecognizer:navBarGesture];
     
     self.view.backgroundColor = [UIColor clearColor];
 	
