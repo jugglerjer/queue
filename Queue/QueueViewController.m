@@ -487,37 +487,22 @@ BOOL isScrollingDown;
     
     switch (gestureRecognizer.state) {
         case UIGestureRecognizerStateBegan:
-//            NSLog(@"Gesture began");
-            [pullController assumeScrollControl];
-            [pullController enterSelectionMode];
+            [pullController engageWithGestureRecognizer:gestureRecognizer];
             break;
             
         case UIGestureRecognizerStateChanged:
-            //            NSLog(@"Gesture changed");
             if (pullController.isEngaged)
-                [self adjustPullController:pullController toPoint:CGPointMake(0, -distance.y)];
+                [pullController adjustToPoint:CGPointMake(0, -distance.y)];
             break;
             
         case UIGestureRecognizerStateEnded:
-//            NSLog(@"Gesture ended");
             if (pullController.isEngaged)
             {
-                [pullController disengage];
-                [pullController.scrollView setContentOffset:CGPointMake(0, pullController.scrollView.frame.size.height) animated:YES];
+                [pullController disengageWithPotentialPageSwitch:YES];
+                if (![pullController shouldDismissScrollView])
+                    [pullController.scrollView setContentOffset:CGPointMake(0, pullController.scrollView.frame.size.height) animated:YES];
 //                [UIView animateWithDuration:0.0 animations:^{self.navigationController.navigationBar.alpha = 1.0;}];
             }
-            break;
-            
-        case UIGestureRecognizerStateFailed:
-//            NSLog(@"Gesture failed");
-            break;
-            
-        case UIGestureRecognizerStateCancelled:
-//            NSLog(@"Gesture cencelled");
-            break;
-            
-        case UIGestureRecognizerStatePossible:
-//            NSLog(@"Gesture possible");
             break;
             
         default:
@@ -531,17 +516,17 @@ BOOL isScrollingDown;
 // is scrolling in so that we can tell whether
 // or not to switch pages on a didEndDragging call
 // -----------------------------------------
-- (BOOL)isScrollingDown
-{
-    BOOL isScrollingDown;
-    CGPoint currentContentOffset = CGPointMake(self.tableView.contentOffset.x, self.tableView.contentOffset.y);
-    if (currentContentOffset.y < previousContentOffset.y)
-        isScrollingDown = YES;
-    else
-        isScrollingDown = NO;
-    
-    return isScrollingDown;
-}
+//- (BOOL)isScrollingDown
+//{
+//    BOOL isScrollingDown;
+//    CGPoint currentContentOffset = CGPointMake(self.tableView.contentOffset.x, self.tableView.contentOffset.y);
+//    if (currentContentOffset.y < previousContentOffset.y)
+//        isScrollingDown = YES;
+//    else
+//        isScrollingDown = NO;
+//    
+//    return isScrollingDown;
+//}
 
 // -----------------------------------------
 // Prepare for queue selection mode when
@@ -549,13 +534,9 @@ BOOL isScrollingDown;
 // -----------------------------------------
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-//    NSLog(@"%f, %f", scrollView.contentOffset.x, scrollView.contentOffset.y);
     LLPullNavigationController *pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
     if (scrollView.contentOffset.y <= 0)
-    {
-        [pullController assumeScrollControl];
-        [pullController enterSelectionMode];
-    }
+        [pullController engageWithGestureRecognizer:self.tableView.panGestureRecognizer];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -563,19 +544,19 @@ BOOL isScrollingDown;
     LLPullNavigationController *pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
     if (scrollView.contentOffset.y < 0)
     {
-        
         isScrollingDown = YES;
         if (pullController.isEngaged)
         {
-            [self adjustPullController:pullController toPoint:CGPointMake(0, scrollView.contentOffset.y)];
+            [pullController adjustToPoint:CGPointMake(0, scrollView.contentOffset.y)];
             [UIView animateWithDuration:0.0 animations:^{self.navigationController.navigationBar.alpha = 0.0;}];
-            [self.view setTransform:CGAffineTransformMakeTranslation(0, scrollView.contentOffset.y)];
+            NSLog(@"%f", scrollView.contentOffset.y);
+//            [self.view setTransform:CGAffineTransformMakeTranslation(0, scrollView.contentOffset.y)];
         }
     }
-    else {
+    else
+    {
         isScrollingDown = NO;
-        [pullController exitSelectionMode];
-        [pullController resignScrollControl];
+        [pullController disengageWithPotentialPageSwitch:NO];
         [UIView animateWithDuration:0.0 animations:^{self.navigationController.navigationBar.alpha = 1.0;}];
     }
 }
@@ -588,17 +569,7 @@ BOOL isScrollingDown;
 {
     LLPullNavigationController *pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
     if (isScrollingDown && pullController.isEngaged)
-    {
-        [pullController disengage];
-    }
-}
-
-// -----------------------------------------
-// Move the pull nav controller a given amount
-// -----------------------------------------
-- (void)adjustPullController:(LLPullNavigationController *)pullController toPoint:(CGPoint)point
-{
-    [pullController.scrollView setContentOffset:CGPointMake(point.x, point.y + pullController.scrollView.frame.size.height)];
+        [pullController disengageWithPotentialPageSwitch:YES];
 }
 
 # pragma mark - Queue Row Selection Methods

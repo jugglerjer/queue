@@ -19,6 +19,7 @@
 #define ARROW_MARGIN_TOP                20
 
 @interface LLPullNavigationController ()
+@property (strong, nonatomic) UIPanGestureRecognizer *activeGestureRecognizer;
 @property (strong, nonatomic) UIViewController *rootViewController;
 @property (strong, nonatomic) UIViewController *currentViewController;
 @property (strong, nonatomic) UIView *instructionView;
@@ -163,24 +164,6 @@ int pageToSwitchTo;
 }
 
 // -----------------------------------------
-// Enter Selection Mode
-// -----------------------------------------
-- (void)enterSelectionMode
-{
-    isInSelectionMode = YES;
-//    NSLog(@"Enter selection mode");
-}
-
-// -----------------------------------------
-// Exit Selection Mode
-// -----------------------------------------
-- (void)exitSelectionMode
-{
-    isInSelectionMode = NO;
-//    NSLog(@"Exit selection mode");
-}
-
-// -----------------------------------------
 // Alerts the delegate when the scroll view
 // is about to begin selection mode
 // -----------------------------------------
@@ -255,6 +238,14 @@ int pageToSwitchTo;
 }
 
 // -----------------------------------------
+// Move the pull nav controller a given amount
+// -----------------------------------------
+- (void)adjustToPoint:(CGPoint)point
+{
+    [self.scrollView setContentOffset:CGPointMake(point.x, point.y + self.scrollView.frame.size.height)];
+}
+
+// -----------------------------------------
 // Reports whether or not the controller
 // should dismiss its scroll view.
 // Useful so that the child view knows
@@ -263,9 +254,15 @@ int pageToSwitchTo;
 // -----------------------------------------
 - (BOOL)shouldDismissScrollView
 {
+    // Dismiss the scroll view if it's passed by all of the pages
+    _numberOfPages = [_delegate pullNavigationControllerNumberOfPages:self];
+    if (currentPage >= _numberOfPages)
+        return YES;
+    
     // Dismiss the scroll view if it's been dragged far enough
-    float minOffset = self.scrollView.frame.size.height - (self.cellHeight * 3.0);
-    if (ABS(self.scrollView.contentOffset.y) <= minOffset)
+    CGPoint touchPosition = [self.activeGestureRecognizer locationInView:self.view];
+    float maxOffset = self.view.frame.size.height - 44;
+    if (touchPosition.y >= maxOffset)
         return YES;
     
     return NO;
@@ -286,6 +283,8 @@ int pageToSwitchTo;
 //    isScrollViewDismissed = YES;
     self.scrollView.userInteractionEnabled = NO;
     [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+    if ([_delegate respondsToSelector:@selector(pullNavigationControllerHasBeenDismissed:)])
+        [_delegate pullNavigationControllerHasBeenDismissed:self];
 }
 
 // -----------------------------------------
@@ -415,6 +414,24 @@ int pageToSwitchTo;
 }
 
 // -----------------------------------------
+// Enter Selection Mode
+// -----------------------------------------
+- (void)enterSelectionMode
+{
+    isInSelectionMode = YES;
+    //    NSLog(@"Enter selection mode");
+}
+
+// -----------------------------------------
+// Exit Selection Mode
+// -----------------------------------------
+- (void)exitSelectionMode
+{
+    isInSelectionMode = NO;
+    //    NSLog(@"Exit selection mode");
+}
+
+// -----------------------------------------
 // Switch touch handling from the child view
 // controller to the pull nav controller
 // so that we can iniate the pulldown mechanism
@@ -438,23 +455,44 @@ int pageToSwitchTo;
 }
 
 // -----------------------------------------
+// Engage the scroll view and enter selection
+// mode
+// -----------------------------------------
+- (void)engageWithGestureRecognizer:(UIPanGestureRecognizer *)gestureRecognizer
+{
+    if ([_delegate respondsToSelector:@selector(pullNavigationControllerWillEnterSelectionMode:)])
+        [_delegate pullNavigationControllerWillEnterSelectionMode:self];
+    
+    self.isEngaged = YES;
+    isInSelectionMode = YES;
+    self.activeGestureRecognizer = gestureRecognizer;
+}
+
+// -----------------------------------------
 // Disengage the pull controller and switch
 // queues if appropriate
 // -----------------------------------------
-- (void)disengage
+- (void)disengageWithPotentialPageSwitch:(BOOL)pageSwitch
 {
-    [self exitSelectionMode];
-    if ([self shouldDismissScrollView])
+    isInSelectionMode = NO;
+    
+    if (pageSwitch)
     {
-//        NSLog(@"Should dismiss scroll view");
-        [self resignScrollControl];
-        [self dismissScrollView];
+        if ([self shouldDismissScrollView])
+        {
+            self.isEngaged = NO;
+            [self dismissScrollView];
+        }
+        else
+        {
+            [self shouldSwitchViewControllers];
+        }
     }
     else
     {
-//        NSLog(@"Should switch queues");
-        [self shouldSwitchViewControllers];
+        self.isEngaged = NO;
     }
+    
 }
 
 - (void)didReceiveMemoryWarning

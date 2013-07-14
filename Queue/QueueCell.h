@@ -21,6 +21,7 @@
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
 - (void)setSelectable:(BOOL)selectable animated:(BOOL)animated;
+- (void)setActive:(BOOL)active animated:(BOOL)animated;
 
 @end
 

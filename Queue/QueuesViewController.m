@@ -97,7 +97,22 @@ CGFloat rowHeight = 44.0;
     CGRect frame = cell.selectableBackgroundView.frame;
     frame.origin.y = -5;
     cell.selectableBackgroundView.frame = frame;
+    [cell setActive:YES animated:NO];
     return cell;
+}
+
+// -----------------------------------------
+// Change all the cells to either a normal
+// text color or a de-emphasized text color
+// -----------------------------------------
+- (void)updateAllCellsWithEmphasis:(BOOL)emphasis animated:(BOOL)animated
+{
+    for (int i = 0; i < [self.queuesArray count]; i++)
+    {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+        QueueCell *cell = (QueueCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+        [cell setActive:emphasis animated:animated];
+    }
 }
 
 # pragma mark - Queue Row Selection Methods
@@ -123,8 +138,9 @@ CGFloat rowHeight = 44.0;
 - (void)pullNavigationControllerWillEnterSelectionMode:(LLPullNavigationController *)pullNavigationController
 {    
 //    self.queueViewController.navigationController.navigationBar.alpha = 0;
-    [self setNavigationBar:self.queueViewController.navigationController.navigationBar alpha:0.0 withDuration:0.0];
-    [self.tableView setEditing:YES animated:NO];
+//    [self setNavigationBar:self.queueViewController.navigationController.navigationBar alpha:0.0 withDuration:0.0];
+//    [self.tableView setEditing:YES animated:NO];
+    [self updateAllCellsWithEmphasis:NO animated:NO];
 }
 
 - (void)pullNavigationController:(LLPullNavigationController *)pullNavigationViewController shouldSelectPage:(NSUInteger)page
@@ -169,6 +185,11 @@ CGFloat rowHeight = 44.0;
 {
 //    self.queueViewController.navigationController.navigationBar.alpha = 1.0;
     [self setNavigationBar:self.queueViewController.navigationController.navigationBar alpha:1.0 withDuration:0.25];
+}
+
+- (void)pullNavigationControllerHasBeenDismissed:(LLPullNavigationController *)pullNavigationViewController
+{
+    [self updateAllCellsWithEmphasis:YES animated:YES];
 }
 
 - (NSString *)pullNavigationController:(LLPullNavigationController *)pullNavigationViewController nameForViewAtPage:(NSUInteger)page

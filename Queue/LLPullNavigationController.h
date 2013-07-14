@@ -24,6 +24,7 @@
 - (NSUInteger)currentPage;
 - (void)shouldSwitchViewControllers;
 - (void)switchToViewController:(UIViewController *)newViewController atPage:(NSUInteger)page animated:(BOOL)animated completion:(void (^)(void))completion;
+- (void)adjustToPoint:(CGPoint)point;
 - (void)resumeCurrentViewController:(UIViewController *)currentViewController atPage:(NSUInteger)page;
 - (void)assumeScrollControl;
 - (void)resignScrollControl;
@@ -32,7 +33,8 @@
 - (BOOL)shouldDismissScrollView;
 - (void)dismissScrollView;
 - (void)presentScrollView;
-- (void)disengage;
+- (void)engageWithGestureRecognizer:(UIPanGestureRecognizer *)gestureRecognizer;
+- (void)disengageWithPotentialPageSwitch:(BOOL)pageSwitch;
 
 @end
 
@@ -51,6 +53,8 @@
 
 - (void)pullNavigationController:(LLPullNavigationController *)pullNavigationViewController
       hasIntersectedSelectedPage:(NSUInteger)page;
+
+- (void)pullNavigationControllerHasBeenDismissed:(LLPullNavigationController *)pullNavigationViewController;
 
 - (NSString *)pullNavigationController:(LLPullNavigationController *)pullNavigationViewController
                nameForViewAtPage:(NSUInteger)page;

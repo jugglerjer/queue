@@ -17,6 +17,8 @@
 @interface QueueCell ()
 
 @property (strong, nonatomic) NSString *originalQueueName;
+@property (strong, nonatomic) UIColor *activeColor;
+@property (strong, nonatomic) UIColor *inactiveColor;
 
 @end
 
@@ -29,6 +31,9 @@
     {
         self.backgroundView.backgroundColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1];
 //        self.contentView.backgroundColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1];
+        
+        self.activeColor = [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0];
+        self.inactiveColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0];
         
         // Create the selectable background view
         UIImageView *selectableBackgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"queue-cell-background-selectable.png"]];
@@ -54,7 +59,7 @@
         queueNameLabel.layer.shadowRadius = 1.0;
         queueNameLabel.layer.shadowColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.1].CGColor;
         queueNameLabel.layer.shadowOffset = CGSizeMake(0.0, -1.0);
-        queueNameLabel.textColor = [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0];
+//        queueNameLabel.textColor = [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:0.2];
         [queueNameLabel setValue:[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:0.5] forKeyPath:@"_placeholderLabel.textColor"];
         [queueNameLabel addTarget:self action:@selector(nameTextFieldDidChange:) forControlEvents:UIControlEventAllEditingEvents];
         queueNameLabel.userInteractionEnabled = NO;
@@ -147,12 +152,15 @@
                         options:UIViewAnimationOptionCurveLinear
                      animations:^{
                          self.selectableBackgroundView.alpha = alpha;
+                         self.queueNameLabel.textColor = [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:alpha];
                      }
                      completion:^(BOOL finished){
                          if (!selectable)
                              [self.queueTable sendSubviewToBack:self];
                      }
      ];
+    
+    [self setActive:selectable animated:YES];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -160,6 +168,20 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (void)setActive:(BOOL)active animated:(BOOL)animated
+{
+    UIColor *color = active ? self.activeColor : self.inactiveColor;
+    CGFloat duration = animated ? 0.1 : 0.0;
+    
+    [UIView transitionWithView:self.queueNameLabel
+                      duration:duration
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^{
+                        [self.queueNameLabel setTextColor:color];
+                    }
+                    completion:nil];
 }
 
 @end
