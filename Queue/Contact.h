@@ -21,6 +21,13 @@ typedef enum {
     ContactImageTypeGoogle
 } ContactImageType;
 
+typedef enum {
+    ContactLocalNotificationTypeDayOf,
+    ContactLocalNotificationTypeDayBefore,
+    ContactLocalNotificationTypeWeekBefore,
+    ContactLocalNotificationTypeWeekAfter
+} ContactLocalNotificationType;
+
 @interface Contact : NSManagedObject
 
 @property (nonatomic, retain) NSString * firstName;
@@ -41,12 +48,14 @@ typedef enum {
 //@property (nonatomic)         int32_t    imageType;
 
 - (void)populateWithAddressBookRecord:(ABRecordRef)person;
+- (BOOL)isOverdueIncludingSnoozes:(BOOL)snoozes;
 - (NSDate *)dueDateIncludingSnoozes:(BOOL)snoozes;
 - (double)weeksUntilDue;
 - (NSArray *)sortedMeetings;
 - (UIImage *)image;
 - (UIImage *)thumbnail;
 - (UIImage *)thumbnailWithSize:(CGFloat)size cornerRadius:(CGFloat)radius;
+- (NSString *)queueName;
 
 @end
 

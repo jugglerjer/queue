@@ -92,6 +92,15 @@ static double defaultMeetInterval = 3 * 30.5 * 24 * 60 * 60; /* 1 month ~ 31.5 d
 }
 
 // -------------------------------------------------------------
+// Return the contact's queue name
+// NOTE: This method assumes that the contact only has one queue
+// -------------------------------------------------------------
+- (NSString *)queueName
+{
+    return [[[self.queues allObjects] objectAtIndex:0] name];
+}
+
+// -------------------------------------------------------------
 // Return a thumbnail of the contact image at the given size
 // -------------------------------------------------------------
 - (UIImage *)thumbnailWithSize:(CGFloat)size cornerRadius:(CGFloat)radius
@@ -103,6 +112,25 @@ static double defaultMeetInterval = 3 * 30.5 * 24 * 60 * 60; /* 1 month ~ 31.5 d
 }
 
 #pragma mark - Due Date Methods
+
+// -------------------------------------------------------------
+// Determine whether the contact is currently overdue
+// -------------------------------------------------------------
+- (BOOL)isOverdueIncludingSnoozes:(BOOL)snoozes
+{    
+    NSDate *deadline = [self dueDateIncludingSnoozes:snoozes];
+    NSDate *today = [NSDate date];
+    
+    switch ([today compare:deadline])
+    {
+        case NSOrderedAscending:
+            return NO;
+        case NSOrderedDescending:
+            return YES;
+        case NSOrderedSame:
+            return YES;
+    }
+}
 
 // -------------------------------------------------------------
 // Determine the contact's due date

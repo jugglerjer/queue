@@ -92,6 +92,7 @@
 		3FA101B417447769007D2520 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3FA101B217447769007D2520 /* InfoPlist.strings */; };
 		3FA101B717447769007D2520 /* QueueTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA101B617447769007D2520 /* QueueTests.m */; };
 		3FA101C8174484AB007D2520 /* LLPullNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA101C7174484AB007D2520 /* LLPullNavigationController.m */; };
+		3FAA91DD179658090002670F /* Contact+LocalNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FAA91DC179658090002670F /* Contact+LocalNotifications.m */; };
 		3FABEE231745F9A200BBB760 /* QueueViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FABEE221745F9A200BBB760 /* QueueViewController.m */; };
 		3FABEE291746012600BBB760 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FABEE271746012600BBB760 /* AddressBook.framework */; };
 		3FABEE2A1746012600BBB760 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FABEE281746012600BBB760 /* AddressBookUI.framework */; };
@@ -237,6 +238,8 @@
 		3FA101B617447769007D2520 /* QueueTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QueueTests.m; sourceTree = "<group>"; };
 		3FA101C6174484AB007D2520 /* LLPullNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLPullNavigationController.h; sourceTree = "<group>"; };
 		3FA101C7174484AB007D2520 /* LLPullNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLPullNavigationController.m; sourceTree = "<group>"; };
+		3FAA91DB179658080002670F /* Contact+LocalNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Contact+LocalNotifications.h"; sourceTree = "<group>"; };
+		3FAA91DC179658090002670F /* Contact+LocalNotifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Contact+LocalNotifications.m"; sourceTree = "<group>"; };
 		3FABEE211745F9A200BBB760 /* QueueViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QueueViewController.h; sourceTree = "<group>"; };
 		3FABEE221745F9A200BBB760 /* QueueViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QueueViewController.m; sourceTree = "<group>"; };
 		3FABEE271746012600BBB760 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
@@ -422,6 +425,8 @@
 				3FABEE7B174823BA00BBB760 /* Queue.m */,
 				3FABEE77174822C800BBB760 /* Contact.h */,
 				3FABEE78174822C800BBB760 /* Contact.m */,
+				3FAA91DB179658080002670F /* Contact+LocalNotifications.h */,
+				3FAA91DC179658090002670F /* Contact+LocalNotifications.m */,
 				3F9EF88A175C387B0089EC2A /* Meeting.h */,
 				3F9EF88B175C387C0089EC2A /* Meeting.m */,
 				3F9EF885175C10BD0089EC2A /* Location.h */,
@@ -723,6 +728,7 @@
 				3F94A963178621A20054A733 /* UIImage+RoundedCorner.m in Sources */,
 				3F94A967178659350054A733 /* ContactImageView.m in Sources */,
 				695BF16117878BA000A3F865 /* ContactChooserViewController.m in Sources */,
+				3FAA91DD179658090002670F /* Contact+LocalNotifications.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

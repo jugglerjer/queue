@@ -11,6 +11,9 @@
 #import <GoogleMaps/GoogleMaps.h>
 #import "LLPullNavigationController.h"
 #import "QueuesViewController.h"
+#import "Queue.h"
+#import "Contact.h"
+#import "Contact+LocalNotifications.h"
 
 @implementation LLAppDelegate
 
@@ -76,6 +79,10 @@
         // Handle the error.
     }
     
+    // Cancel any scheduled local notifications
+    UIApplication *myApp = [UIApplication sharedApplication];
+    [myApp cancelAllLocalNotifications];
+    
     // Create a table to hold the queue
     QueuesViewController *queueTable = [[QueuesViewController alloc] init];
     queueTable.title = @"My Queues";
@@ -90,6 +97,7 @@
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+    
     return YES;
 }
 
@@ -97,6 +105,8 @@
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    
+    [self prepareForApplicationClose];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
@@ -108,6 +118,9 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    // Cancel any scheduled local notifications
+    UIApplication *myApp = [UIApplication sharedApplication];
+    [myApp cancelAllLocalNotifications];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -118,6 +131,7 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    [self prepareForApplicationClose];
 }
 
 - (void)saveContext
@@ -131,6 +145,86 @@
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
         }
+    }
+}
+
+#pragma mark - Local Notifications Methods
+
+- (void)prepareForApplicationClose
+{
+    NSArray *queues = [self queues];
+    [UIApplication sharedApplication].applicationIconBadgeNumber = [self overdueCountForQueues:queues];
+    [self scheduleLocalNotificationsForQueues:queues];
+}
+
+- (NSArray *)queues
+{
+    // Load all of the Queues from memory
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Queue" inManagedObjectContext:_managedObjectContext];
+    [request setEntity:entity];
+    
+    NSError *error = nil;
+    NSMutableArray *queues = [[_managedObjectContext executeFetchRequest:request error:&error] mutableCopy];
+    if (queues == nil) {
+        // Handle the error.
+    }
+    return queues;
+}
+
+- (int)overdueCountForQueues:(NSArray *)queues;
+{
+    int badge = 0;
+    
+    for (Queue *queue in queues)
+    {
+        for (Contact *contact in queue.contacts)
+        {
+            if ([contact isOverdueIncludingSnoozes:YES])
+                badge++;
+        }
+    }
+    
+    return badge;
+}
+
+- (void)scheduleLocalNotificationsForQueues:(NSArray *)queues
+{    
+    // Iterate through each contact
+    // and generate his/her local notifications
+    NSMutableArray *notifications = [NSMutableArray arrayWithCapacity:64];
+    for (Queue *queue in queues)
+    {
+        for (Contact *contact in queue.contacts)
+            [notifications addObjectsFromArray:[contact generateLocalNotifications]];
+    }
+    
+    // Pick out just the day of overdue notifications
+    // and schedule the rest
+    NSMutableDictionary *dayOfNotifications = [NSMutableDictionary dictionaryWithCapacity:64];
+    for (UILocalNotification *notification in notifications)
+    {
+        if ([[notification.userInfo objectForKey:@"type"] intValue] == ContactLocalNotificationTypeDayOf)
+            [dayOfNotifications setObject:notification forKey:notification.fireDate];
+        else
+            [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+    }
+    
+    // Sort the day of notifications by due date
+    NSArray *sortedDayOfNotificationKeys = [[dayOfNotifications allKeys] sortedArrayUsingSelector:@selector(compare:)];
+    NSMutableArray *sortedDayOfNotifications = [NSMutableArray arrayWithCapacity:[sortedDayOfNotificationKeys count]];
+    for (id key in sortedDayOfNotificationKeys)
+        [sortedDayOfNotifications addObject:[dayOfNotifications objectForKey:key]];
+    
+    // Set the badge count change appropriately
+    int badgeCount = [self overdueCountForQueues:queues];
+    for (UILocalNotification *notification in sortedDayOfNotifications)
+    {
+        badgeCount++;
+        notification.applicationIconBadgeNumber = badgeCount;
+        
+        // Schedule the day of notification with the system
+        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     }
 }
 
