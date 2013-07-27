@@ -145,21 +145,21 @@ static double defaultMeetInterval = 3 * 30.5 * 24 * 60 * 60; /* 1 month ~ 31.5 d
 
 - (NSDate *)lastMeetingDateIncludingSnoozes:(BOOL)snoozes
 {
-//    NSDate *lastMeetingDate;
-//    if ([self.meetings count] <= 0) lastMeetingDate = self.dateAdded;
+    NSDate *lastMeetingDate;
+    if ([self.meetings count] <= 0) lastMeetingDate = self.dateAdded;
+    else lastMeetingDate = [[[self sortedMeetings] objectAtIndex:0] date]; // Sort the meetings by date and grab the most recent date
+    return lastMeetingDate;
     
     // Find the last meeting that isn't a snooze
 //    else
 //    {
-        for (Meeting *meeting in [self sortedMeetings])
-        {
-            if (![meeting.method isEqualToString:@"snooze"] || snoozes)
-                return [meeting date];
-        }
+//        for (Meeting *meeting in [self sortedMeetings])
+//        {
+//            if (![meeting.method isEqualToString:@"snooze"] || snoozes)
+//                return [meeting date];
+//        }
 //    }
-//    else lastMeetingDate = [[[self sortedMeetings] objectAtIndex:0] date]; // Sort the meetings by date and grab the most recent date
-//    return lastMeetingDate;
-    return self.dateAdded;
+//    return self.dateAdded;
 }
 
 - (double)weeksUntilDue
