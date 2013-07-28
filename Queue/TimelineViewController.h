@@ -10,13 +10,14 @@
 #import "AddMeetingViewController.h"
 #import "AddContactViewController.h"
 #import "LLDataDownloader.h"
+#import "LLSwipeyCell.h"
 @class Contact;
 @class Meeting;
 @class QueueViewController;
 
 @protocol TimelineViewControllerDelegate;
 
-@interface TimelineViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, AddMeetingViewControllerDelegate, AddContactViewControllerDelegate, LLDataDownloaderDelegate>
+@interface TimelineViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, AddMeetingViewControllerDelegate, AddContactViewControllerDelegate, LLDataDownloaderDelegate, LLSwipeyCellDelegate>
 
 @property (weak, nonatomic) id<TimelineViewControllerDelegate> delegate;
 @property (strong, nonatomic) Contact * contact;

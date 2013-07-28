@@ -9,10 +9,11 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import <GoogleMaps/GoogleMaps.h>
-#import "LLDataDownloader.h" 
+#import "LLDataDownloader.h"
+#import "LLSwipeyCell.h"
 @class Meeting;
 
-@interface MeetingCell : UITableViewCell <LLDataDownloaderDelegate>
+@interface MeetingCell : LLSwipeyCell <LLDataDownloaderDelegate>
 
 @property (strong, nonatomic) UILabel *noteLabel;
 @property (strong, nonatomic) UILabel *dateLabel;

@@ -32,9 +32,17 @@
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     if (self)
     {
-        UIView *background = [[UIView alloc] initWithFrame:self.frame];
-        background.backgroundColor = [UIColor whiteColor];
-        self.backgroundView = background;
+        
+        // Set the threshold after which the event is deleted on drag
+        self.dragThreshold = self.frame.size.width * 0.75;
+        
+//        UIView *background = [[UIView alloc] initWithFrame:self.frame];
+//        background.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"queue_background.png"]];
+//        background.backgroundColor = [UIColor whiteColor];
+//        self.backgroundView = background;
+        self.swipeyView.backgroundColor = [UIColor whiteColor];
+//        self.contentView.backgroundColor = [UIColor whiteColor];
+        self.underView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"queue_background.png"]];
         
         UILabel *dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(MARGIN_LEFT,
                                                                        MARGIN_TOP,
@@ -44,7 +52,7 @@
         dateLabel.textColor = [UIColor colorWithRed:151.0/255.0 green:151.0/255.0 blue:151.0/255.0 alpha:1.0];
         dateLabel.backgroundColor = [UIColor clearColor];
         self.dateLabel = dateLabel;
-        [self addSubview:self.dateLabel];
+        [self.swipeyView addSubview:self.dateLabel];
         
         UILabel *noteLabel = [[UILabel alloc] initWithFrame:CGRectMake(MARGIN_LEFT,
                                                                        MARGIN_TOP + DATE_HEIGHT,
@@ -55,7 +63,7 @@
         noteLabel.backgroundColor = [UIColor clearColor];
         noteLabel.numberOfLines = 0;
         self.noteLabel = noteLabel;
-        [self addSubview:self.noteLabel];
+        [self.swipeyView addSubview:self.noteLabel];
         
         CGRect mapFrame = CGRectMake(0, self.noteLabel.frame.origin.y + self.noteLabel.frame.size.height + MARGIN_BOTTOM + 0.5, self.frame.size.width, 0);
         UIView *mapViewBackground = [[UIView alloc] initWithFrame:mapFrame];
@@ -64,8 +72,8 @@
         mapView.backgroundColor = [UIColor clearColor];
         self.mapViewBackground = mapViewBackground;
         self.mapView = mapView;
-        [self addSubview:self.mapViewBackground];
-        [self addSubview:self.mapView];
+        [self.swipeyView addSubview:self.mapViewBackground];
+        [self.swipeyView addSubview:self.mapView];
 //        mapView_ = [GMSMapView mapWithFrame:mapFrame camera:nil];
 //        mapView_.settings.scrollGestures = NO;
 //        mapView_.settings.zoomGestures = NO;
@@ -78,31 +86,31 @@
         topLine.backgroundColor = [UIColor whiteColor];
         topLine.alpha = 0.2;
         self.topLine = topLine;
-        [self addSubview:self.topLine];
+        [self.swipeyView addSubview:self.topLine];
         
         UIView *bottomLine = [[UIView alloc] initWithFrame:lineFrame];
         bottomLine.backgroundColor = [UIColor blackColor];
         bottomLine.alpha = 0.1;
         self.bottomLine = bottomLine;
-        [self addSubview:self.bottomLine];
+        [self.swipeyView addSubview:self.bottomLine];
     
         UIView *mapTopLineDark = [[UIView alloc] initWithFrame:lineFrame];
         mapTopLineDark.backgroundColor = [UIColor whiteColor];
         mapTopLineDark.alpha = 0.2;
         self.mapTopLineDark = mapTopLineDark;
-        [self addSubview:self.mapTopLineDark];
+        [self.swipeyView addSubview:self.mapTopLineDark];
         
         UIView *mapTopLineLight = [[UIView alloc] initWithFrame:lineFrame];
         mapTopLineLight.backgroundColor = [UIColor whiteColor];
         mapTopLineLight.alpha = 0.2;
         self.mapTopLineLight = mapTopLineLight;
-        [self addSubview:self.mapTopLineLight];
+        [self.swipeyView addSubview:self.mapTopLineLight];
         
         UIView *mapBottomLine = [[UIView alloc] initWithFrame:lineFrame];
         mapBottomLine.backgroundColor = [UIColor blackColor];
         mapBottomLine.alpha = 0.1;
         self.mapBottomLine = mapBottomLine;
-        [self addSubview:self.mapBottomLine];
+        [self.swipeyView addSubview:self.mapBottomLine];
         
 //        UIView *tableTopLine = [[UIView alloc] initWithFrame:lineFrame];
 //        tableTopLine.backgroundColor = [UIColor blackColor];
@@ -129,7 +137,7 @@
 }
 
 - (void)configureWithMeeting:(Meeting *)meeting
-{
+{    
     self.noteLabel.text = meeting.note;
     [self.noteLabel sizeToFit];
     

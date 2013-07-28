@@ -15,10 +15,16 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self)
     {
+        _underView = [[UIView alloc] initWithFrame:self.bounds];
+        _swipeyView = [[UIView alloc] initWithFrame:self.bounds];
+        
+        [self addSubview:_underView];
+        [self addSubview:_swipeyView];
+        
         // Add pan gesture recognizer for swiping
         UIPanGestureRecognizer *queueGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
         queueGesture.delegate = self;
-        [self.contentView addGestureRecognizer:queueGesture];
+        [_swipeyView addGestureRecognizer:queueGesture];
     }
     return self;
 }
@@ -29,8 +35,8 @@
 // -----------------------------
 - (void)handleGesture:(UIPanGestureRecognizer *)gestureRecognizer
 {
-    CGPoint distance = [gestureRecognizer translationInView:self.contentView.superview];
-    CGRect bounds;
+    CGPoint distance = [gestureRecognizer translationInView:_swipeyView.superview];
+    CGRect frame;
     
     switch (gestureRecognizer.state) {
         case UIGestureRecognizerStateBegan:
@@ -39,12 +45,13 @@
             break;
             
         case UIGestureRecognizerStateChanged:
-            bounds = self.contentView.bounds;
+            NSLog(@"%f, %f", _dragThreshold, distance.x);
+            frame = _swipeyView.frame;
             
             if (distance.x < 0)
             {
-                bounds.origin.x = -distance.x;
-                [self.contentView setBounds:bounds];
+                frame.origin.x = distance.x;
+                [_swipeyView setFrame:frame];
             }
             
             if ([_delegate respondsToSelector:@selector(swipeyCellDidDrag:)])
@@ -53,10 +60,10 @@
             break;
             
         case UIGestureRecognizerStateEnded:
-            if (distance.x > _dragThreshold)
-                [self dismissCellWithAnimation:YES andVelocity:[gestureRecognizer velocityInView:self.contentView.superview]];
+            if (ABS(distance.x) > _dragThreshold)
+                [self dismissCellWithAnimation:YES velocity:[gestureRecognizer velocityInView:_swipeyView.superview]];
             else
-                [self resetCellPositionWithAnimation:YES];
+                [self resetCellWithAnimation:YES];
             
             if ([_delegate respondsToSelector:@selector(swipeyCellDidEndDragging:)])
                 [_delegate swipeyCellDidEndDragging:self];
@@ -100,6 +107,62 @@
 // -----------------------------
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
     return YES;
+}
+
+// -----------------------------
+// Convenience methods for cell
+// reposition to common points
+// -----------------------------
+- (void)resetCellWithAnimation:(BOOL)animated
+{
+    [self setCellPosition:CGPointMake(0, 0) withAnimation:animated duration:0.25];
+}
+
+- (void)dismissCellWithAnimation:(BOOL)animated velocity:(CGPoint)velocity
+{
+    CGPoint dismissedPoint = CGPointMake(-self.frame.size.width, 0);
+    CGFloat duration = ABS( (dismissedPoint.x - _swipeyView.frame.origin.x) / velocity.x);
+    duration = MIN(duration, 0.4);
+    [self setCellPosition:dismissedPoint withAnimation:animated duration:duration];
+}
+
+// -----------------------------
+// Reposition the cell with or
+// without animation
+// -----------------------------
+- (void)setCellPosition:(CGPoint)position withAnimation:(BOOL)animated duration:(CGFloat)duration
+{
+    CGFloat totalDuration = animated ? duration : 0.0;
+    CGFloat bounceBack = 0.05;
+    
+    // Determine how far the cell needs to travel
+    CGFloat distance = ABS(_swipeyView.frame.origin.x) - position.x;
+    CGFloat bounceDistance = distance * bounceBack;
+    
+    // Determine the new positions
+    CGPoint bouncePosition = CGPointMake(position.x + bounceDistance, 0);
+    CGRect initialFrame = _swipeyView.frame;
+    initialFrame.origin.x = bouncePosition.x;
+    
+    CGRect finalFrame = _swipeyView.frame;
+    finalFrame.origin.x = position.x;
+    
+    // Animate the change of position
+    [UIView animateWithDuration:totalDuration
+                          delay:0.0
+                        options:UIViewAnimationOptionAllowUserInteraction|UIViewAnimationCurveEaseInOut
+                     animations:^{
+                         _swipeyView.frame = initialFrame;
+                     }
+                     completion:^(BOOL finished){
+                         [UIView animateWithDuration:totalDuration
+                                               delay:0.0
+                                             options:UIViewAnimationOptionAllowUserInteraction|UIViewAnimationCurveEaseInOut
+                                          animations:^{
+                                              _swipeyView.frame = finalFrame;
+                                          }
+                                          completion:^(BOOL finished){}];
+                     }];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

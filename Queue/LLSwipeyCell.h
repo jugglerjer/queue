@@ -13,6 +13,8 @@
 @interface LLSwipeyCell : UITableViewCell <UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) id <LLSwipeyCellDelegate> delegate;
+@property (strong, nonatomic) UIView *swipeyView;
+@property (strong, nonatomic) UIView *underView;
 @property CGFloat dragThreshold;
 
 @end

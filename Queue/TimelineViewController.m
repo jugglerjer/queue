@@ -14,6 +14,7 @@
 #import "Meeting.h"
 #import "Location.h"
 #import "LLPullNavigationTableView.h"
+#import "LLSwipeyCell.h"
 
 #define kDateRow    0
 #define kNoteRow    1
@@ -426,6 +427,13 @@ static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/a
     
     lineFrame.origin.y = [self tableView:tableView heightForRowAtIndexPath:indexPath] - 0.5;
     cell.bottomLine.frame = lineFrame;
+    
+    CGRect viewFrame = cell.frame;
+    viewFrame.size.height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
+    [cell.underView setFrame:viewFrame];
+    [cell.swipeyView setFrame:viewFrame];
+    
+    cell.delegate = self;
 
     return cell;
 }
