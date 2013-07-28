@@ -124,6 +124,7 @@
 		695BF15C1781222C00A3F865 /* snooze-drop@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 695BF15B1781222C00A3F865 /* snooze-drop@2x.png */; };
 		695BF16117878BA000A3F865 /* ContactChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 695BF16017878BA000A3F865 /* ContactChooserViewController.m */; };
 		695BF165179874C000A3F865 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 695BF164179874C000A3F865 /* GoogleMaps.bundle */; };
+		695BF16817A4576F00A3F865 /* LLSwipeyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 695BF16717A4576F00A3F865 /* LLSwipeyCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -281,6 +282,8 @@
 		695BF15F17878BA000A3F865 /* ContactChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactChooserViewController.h; sourceTree = "<group>"; };
 		695BF16017878BA000A3F865 /* ContactChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactChooserViewController.m; sourceTree = "<group>"; };
 		695BF164179874C000A3F865 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = "../../../../Downloads/GoogleMaps-iOS-1.3.1/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle"; sourceTree = "<group>"; };
+		695BF16617A4576F00A3F865 /* LLSwipeyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLSwipeyCell.h; sourceTree = "<group>"; };
+		695BF16717A4576F00A3F865 /* LLSwipeyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLSwipeyCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -397,6 +400,8 @@
 				3F3264A317642362000BCF83 /* LLPullNavigationScrollView.m */,
 				3F3264A517647A09000BCF83 /* LLPullNavigationTableView.h */,
 				3F3264A617647A09000BCF83 /* LLPullNavigationTableView.m */,
+				695BF16617A4576F00A3F865 /* LLSwipeyCell.h */,
+				695BF16717A4576F00A3F865 /* LLSwipeyCell.m */,
 				3FABEE7D17483ED700BBB760 /* QueuesViewController.h */,
 				3FABEE7E17483ED800BBB760 /* QueuesViewController.m */,
 				3F3264D4176AD842000BCF83 /* QueueCell.h */,
@@ -729,6 +734,7 @@
 				3F94A967178659350054A733 /* ContactImageView.m in Sources */,
 				695BF16117878BA000A3F865 /* ContactChooserViewController.m in Sources */,
 				3FAA91DD179658090002670F /* Contact+LocalNotifications.m in Sources */,
+				695BF16817A4576F00A3F865 /* LLSwipeyCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
