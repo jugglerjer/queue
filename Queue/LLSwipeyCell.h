@@ -8,14 +8,24 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum
+{
+    LLSwipeyCellDetailTypeUnderneath,
+    LLSwipeyCellDetailTypeAdjacent
+} LLSwipeyCellDetailType;
+
 @protocol LLSwipeyCellDelegate;
 
 @interface LLSwipeyCell : UITableViewCell <UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) id <LLSwipeyCellDelegate> delegate;
+@property LLSwipeyCellDetailType detailType;
 @property (strong, nonatomic) UIView *swipeyView;
 @property (strong, nonatomic) UIView *underView;
+@property BOOL isDragging;
 @property CGFloat dragThreshold;
+
+- (id)initWithDetailType:(LLSwipeyCellDetailType)detailType reuseIdentifier:(NSString *)reuseIdentifier;
 
 @end
 

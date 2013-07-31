@@ -423,18 +423,7 @@ static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/a
         }
     }
     
-    CGRect lineFrame = CGRectMake(0,0,cell.bounds.size.width, 0.5);
-    
-    lineFrame.origin.y = [self tableView:tableView heightForRowAtIndexPath:indexPath] - 0.5;
-    cell.bottomLine.frame = lineFrame;
-    
-    CGRect viewFrame = cell.frame;
-    viewFrame.size.height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
-    [cell.underView setFrame:viewFrame];
-    [cell.swipeyView setFrame:viewFrame];
-    
     cell.delegate = self;
-
     return cell;
 }
 
@@ -544,6 +533,18 @@ static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/a
     } else {
         [self.tableView reloadData];
     }
+}
+
+# pragma mark swipey cell delegate methods
+
+- (void)swipeyCellDidBeginDragging:(LLSwipeyCell *)cell
+{
+    [self.tableView setScrollEnabled:NO];
+}
+
+- (void)swipeyCellDidEndDragging:(LLSwipeyCell *)cell
+{
+    [self.tableView setScrollEnabled:YES];
 }
 
 @end

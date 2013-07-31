@@ -23,13 +23,17 @@
 #define TIMELINE_MARGIN_LEFT    36
 #define TIMELINE_WIDTH          2
 
+#define DELETE_ICON_WIDTH    15
+#define DELETE_ICON_MARGIN   8
+
+
 @implementation MeetingCell
 
 @synthesize mapView_;
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
-    self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+    self = [super initWithDetailType:LLSwipeyCellDetailTypeAdjacent reuseIdentifier:reuseIdentifier];
     if (self)
     {
         
@@ -43,6 +47,7 @@
         self.swipeyView.backgroundColor = [UIColor whiteColor];
 //        self.contentView.backgroundColor = [UIColor whiteColor];
         self.underView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"queue_background.png"]];
+        self.underView.backgroundColor = [UIColor orangeColor];
         
         UILabel *dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(MARGIN_LEFT,
                                                                        MARGIN_TOP,
@@ -130,6 +135,22 @@
 //        self.timeline = timeline;
 //        [self addSubview:self.timeline];
         
+        // Create delete underview        
+        self.deleteLabel = [[UILabel alloc] initWithFrame:CGRectMake(DELETE_ICON_MARGIN*2 + DELETE_ICON_WIDTH,
+                                                                     0,
+                                                                     self.frame.size.width - DELETE_ICON_WIDTH*2 - DELETE_ICON_MARGIN*4,
+                                                                     self.frame.size.height)];
+        _deleteLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
+        _deleteLabel.textColor = [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:0.4];
+        _deleteLabel.shadowColor = [UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:0.4];
+        _deleteLabel.shadowOffset = CGSizeMake(0, -0.5);
+        _deleteLabel.backgroundColor = [UIColor clearColor];
+        _deleteLabel.text = @"Slide to delete";
+        [self.underView addSubview:_deleteLabel];
+        
+        // Adjust the underview position
+        
+        
         self.selectionStyle = UITableViewCellSelectionStyleNone;
 
     }
@@ -138,6 +159,8 @@
 
 - (void)configureWithMeeting:(Meeting *)meeting
 {    
+    _meeting = meeting;
+    
     self.noteLabel.text = meeting.note;
     [self.noteLabel sizeToFit];
     
@@ -199,6 +222,8 @@
 //    [mapView_ setCamera:camera];
 //    [mapView_ stopRendering];
 //    [mapView_ performSelector:@selector(stopRendering) withObject:nil afterDelay:0.4];
+    
+    [self resizeCellElements];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -206,6 +231,45 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+// -------------------------
+// Resize any elements of the
+// cell that depend on it's height
+// -------------------------
+- (void)resizeCellElements
+{
+    CGRect lineFrame = CGRectMake(0,0,self.bounds.size.width, 0.5);
+    
+    lineFrame.origin.y = [self height] - 0.5;
+    self.bottomLine.frame = lineFrame;
+    
+    CGRect viewFrame = self.frame;
+    viewFrame.size.height = [self height];
+    
+    CGRect underViewFrame = self.underView.frame;
+    CGRect swipeyViewFrame = self.swipeyView.frame;
+    underViewFrame.size.height = [self height];
+    swipeyViewFrame.size.height = [self height];
+    [self.underView setFrame:underViewFrame];
+    [self.swipeyView setFrame:swipeyViewFrame];
+    
+    CGRect deleteFrame = _deleteLabel.frame;
+    deleteFrame.size.height = [self height];
+    [_deleteLabel setFrame:deleteFrame];
+}
+
+- (CGFloat)height
+{
+    NSString *text = _noteLabel.text;
+    CGSize constraint = CGSizeMake(self.frame.size.width - MARGIN_LEFT - MARGIN_RIGHT, 20000.0f);
+    CGSize size = [text sizeWithFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:14.0] constrainedToSize:constraint];
+    
+    int mapHeight = 0;
+    if (_meeting.location)
+        mapHeight = 100.5;
+    
+    return size.height + MARGIN_TOP + MARGIN_BOTTOM + DATE_HEIGHT + mapHeight + 1;
 }
 
 @end

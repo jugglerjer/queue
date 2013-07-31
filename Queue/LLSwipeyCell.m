@@ -10,12 +10,18 @@
 
 @implementation LLSwipeyCell
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+- (id)initWithDetailType:(LLSwipeyCellDetailType)detailType reuseIdentifier:(NSString *)reuseIdentifier
 {
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     if (self)
     {
-        _underView = [[UIView alloc] initWithFrame:self.bounds];
+        _detailType = detailType;
+        
+        CGRect underViewFrame = self.bounds;
+        if (detailType == LLSwipeyCellDetailTypeAdjacent)
+            underViewFrame.origin.x = underViewFrame.origin.x + self.frame.size.width;
+        
+        _underView = [[UIView alloc] initWithFrame:underViewFrame];
         _swipeyView = [[UIView alloc] initWithFrame:self.bounds];
         
         [self addSubview:_underView];
@@ -36,23 +42,18 @@
 - (void)handleGesture:(UIPanGestureRecognizer *)gestureRecognizer
 {
     CGPoint distance = [gestureRecognizer translationInView:_swipeyView.superview];
-    CGRect frame;
     
     switch (gestureRecognizer.state) {
         case UIGestureRecognizerStateBegan:
+            _isDragging = YES;
+            
             if ([_delegate respondsToSelector:@selector(swipeyCellDidBeginDragging:)])
                 [_delegate swipeyCellDidBeginDragging:self];
             break;
             
-        case UIGestureRecognizerStateChanged:
-            NSLog(@"%f, %f", _dragThreshold, distance.x);
-            frame = _swipeyView.frame;
-            
+        case UIGestureRecognizerStateChanged:            
             if (distance.x < 0)
-            {
-                frame.origin.x = distance.x;
-                [_swipeyView setFrame:frame];
-            }
+                [self setSwipeOffset:CGPointMake(distance.x, 0)];
             
             if ([_delegate respondsToSelector:@selector(swipeyCellDidDrag:)])
                 [_delegate swipeyCellDidDrag:self];
@@ -60,6 +61,8 @@
             break;
             
         case UIGestureRecognizerStateEnded:
+            _isDragging = NO;
+            
             if (ABS(distance.x) > _dragThreshold)
                 [self dismissCellWithAnimation:YES velocity:[gestureRecognizer velocityInView:_swipeyView.superview]];
             else
@@ -74,6 +77,8 @@
             break;
             
         case UIGestureRecognizerStateCancelled:
+            _isDragging = NO;
+            
             if ([_delegate respondsToSelector:@selector(swipeyCellDidEndDragging:)])
                 [_delegate swipeyCellDidEndDragging:self];
             break;
@@ -107,6 +112,18 @@
 // -----------------------------
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
     return YES;
+}
+
+// -----------------------------
+// Move the cell along with the
+// user's finger
+// -----------------------------
+- (void)setSwipeOffset:(CGPoint)offset
+{
+    CGRect frame = self.frame;
+    frame.origin.x = offset.x;
+    frame.origin.y = offset.y;
+    [_swipeyView setFrame:frame];
 }
 
 // -----------------------------

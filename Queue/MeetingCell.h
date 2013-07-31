@@ -15,8 +15,11 @@
 
 @interface MeetingCell : LLSwipeyCell <LLDataDownloaderDelegate>
 
+@property (strong, nonatomic) Meeting *meeting;
+
 @property (strong, nonatomic) UILabel *noteLabel;
 @property (strong, nonatomic) UILabel *dateLabel;
+@property (strong, nonatomic) UILabel *deleteLabel;
 
 @property (strong, nonatomic) UIView *topLine;
 @property (strong, nonatomic) UIView *bottomLine;
