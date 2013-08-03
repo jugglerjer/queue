@@ -55,6 +55,17 @@ static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/a
     return self;
 }
 
+// ------------------------------
+// Save the updated contact data
+// ------------------------------
+- (void)save
+{
+    NSError *error = nil;
+    if (![self.managedObjectContext save:&error]) {
+        // Handle the error.
+    }
+}
+
 - (void)addMeeting
 {
     AddMeetingViewController *addMeetingController = [[AddMeetingViewController alloc] init];
@@ -77,6 +88,7 @@ static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/a
     
     [self.contact addMeetingsObject:newMeeting];
     [self addMeeting:newMeeting forContact:self.contact];
+    [self save];
 }
 
 - (void)showSettings
@@ -535,6 +547,20 @@ static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/a
     }
 }
 
+- (void)deleteMeeting:(Meeting *)meeting atRow:(NSUInteger)row animated:(BOOL)animated
+{    
+    if (animated)
+    {
+        [self.tableView beginUpdates];
+        [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:row inSection:0]] withRowAnimation:UITableViewRowAnimationLeft];
+        [self.tableView endUpdates];
+    }
+    else
+    {
+        [self.tableView reloadData];
+    }
+}
+
 # pragma mark swipey cell delegate methods
 
 - (void)swipeyCellDidBeginDragging:(LLSwipeyCell *)cell
@@ -545,6 +571,19 @@ static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/a
 - (void)swipeyCellDidEndDragging:(LLSwipeyCell *)cell
 {
     [self.tableView setScrollEnabled:YES];
+}
+
+- (void)meetingCell:(MeetingCell *)meetingCell didDeleteMeeting:(Meeting *)meeting
+{
+    [self.contact removeMeetingsObject:meeting];
+    NSUInteger row = [self.meetingsArray indexOfObject:meeting];
+    [self updateMeetingsArrayWithTableReload:NO];
+    [self deleteMeeting:meeting atRow:row animated:YES];
+    [self save];
+    
+    // Update the contact's queue cell
+    if ([self.delegate respondsToSelector:@selector(timelineViewController:didUpdateContact:withMeeting:)])
+        [self.delegate timelineViewController:self didUpdateContact:self.contact withMeeting:meeting];
 }
 
 @end

@@ -213,7 +213,11 @@ BOOL isScrollingDown;
 //    else
 //        duration = 0.0;
     
-    
+    // Save the changes
+    NSError *error = nil;
+    if (![self.managedObjectContext save:&error]) {
+        // Handle the error.
+    }
 }
 
 - (void)queueContactCellDidBeginDragging:(QueueContactCell *)cell

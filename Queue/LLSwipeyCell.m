@@ -31,6 +31,9 @@
         UIPanGestureRecognizer *queueGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
         queueGesture.delegate = self;
         [_swipeyView addGestureRecognizer:queueGesture];
+        
+        // Set initial properites
+        _swipingEnabled = YES;
     }
     return self;
 }
@@ -97,6 +100,9 @@
 // -----------------------------
 - (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)gestureRecognizer
 {
+    if (!_swipingEnabled)
+        return NO;
+    
     if ([gestureRecognizer respondsToSelector:@selector(velocityInView:)])
     {
         CGPoint velocity = [gestureRecognizer velocityInView:self.contentView.superview];
@@ -124,6 +130,11 @@
     frame.origin.x = offset.x;
     frame.origin.y = offset.y;
     [_swipeyView setFrame:frame];
+    
+    CGRect detailFrame = _underView.frame;
+    if (_detailType == LLSwipeyCellDetailTypeAdjacent)
+        detailFrame.origin.x = offset.x + frame.size.width;
+    [_underView setFrame:detailFrame];
 }
 
 // -----------------------------
@@ -164,12 +175,21 @@
     CGRect finalFrame = _swipeyView.frame;
     finalFrame.origin.x = position.x;
     
+    CGRect initialDetailFrame = _underView.frame;
+    CGRect finalDetailFrame = _underView.frame;
+    if (_detailType == LLSwipeyCellDetailTypeAdjacent)
+    {
+        initialDetailFrame.origin.x = bouncePosition.x + initialFrame.size.width;
+        finalDetailFrame.origin.x = position.x + initialFrame.size.width;
+    }
+    
     // Animate the change of position
     [UIView animateWithDuration:totalDuration
                           delay:0.0
                         options:UIViewAnimationOptionAllowUserInteraction|UIViewAnimationCurveEaseInOut
                      animations:^{
                          _swipeyView.frame = initialFrame;
+                         _underView.frame = initialDetailFrame;
                      }
                      completion:^(BOOL finished){
                          [UIView animateWithDuration:totalDuration
@@ -177,6 +197,7 @@
                                              options:UIViewAnimationOptionAllowUserInteraction|UIViewAnimationCurveEaseInOut
                                           animations:^{
                                               _swipeyView.frame = finalFrame;
+                                              _underView.frame = finalDetailFrame;
                                           }
                                           completion:^(BOOL finished){}];
                      }];

@@ -18,14 +18,19 @@ typedef enum
 
 @interface LLSwipeyCell : UITableViewCell <UIGestureRecognizerDelegate>
 
-@property (weak, nonatomic) id <LLSwipeyCellDelegate> delegate;
+@property (nonatomic, assign) id <LLSwipeyCellDelegate> delegate;
 @property LLSwipeyCellDetailType detailType;
 @property (strong, nonatomic) UIView *swipeyView;
 @property (strong, nonatomic) UIView *underView;
 @property BOOL isDragging;
 @property CGFloat dragThreshold;
 
+@property BOOL swipingEnabled;
+
 - (id)initWithDetailType:(LLSwipeyCellDetailType)detailType reuseIdentifier:(NSString *)reuseIdentifier;
+- (void)resetCellWithAnimation:(BOOL)animated;
+- (void)dismissCellWithAnimation:(BOOL)animated velocity:(CGPoint)velocity;
+
 
 @end
 

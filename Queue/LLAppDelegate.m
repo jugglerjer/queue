@@ -155,6 +155,8 @@
     NSArray *queues = [self queues];
     [UIApplication sharedApplication].applicationIconBadgeNumber = [self overdueCountForQueues:queues];
     [self scheduleLocalNotificationsForQueues:queues];
+    
+    [self saveContext];
 }
 
 - (NSArray *)queues

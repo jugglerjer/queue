@@ -13,13 +13,19 @@
 #import "LLSwipeyCell.h"
 @class Meeting;
 
+@protocol MeetingCellDelegate;
+
 @interface MeetingCell : LLSwipeyCell <LLDataDownloaderDelegate>
 
+@property (nonatomic, assign) id<MeetingCellDelegate> delegate;
 @property (strong, nonatomic) Meeting *meeting;
 
 @property (strong, nonatomic) UILabel *noteLabel;
 @property (strong, nonatomic) UILabel *dateLabel;
+
 @property (strong, nonatomic) UILabel *deleteLabel;
+@property (strong, nonatomic) UIButton *confirmDeleteButton;
+@property (strong, nonatomic) UIButton *cancelDeleteButton;
 
 @property (strong, nonatomic) UIView *topLine;
 @property (strong, nonatomic) UIView *bottomLine;
@@ -35,5 +41,11 @@
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
 - (void)configureWithMeeting:(Meeting *)meeting;
+
+@end
+
+@protocol MeetingCellDelegate <NSObject, LLSwipeyCellDelegate>
+
+- (void)meetingCell:(MeetingCell *)meetingCell didDeleteMeeting:(Meeting *)meeting;
 
 @end
