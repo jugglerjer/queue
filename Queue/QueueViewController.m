@@ -12,6 +12,7 @@
 #import "Contact.h"
 #import "Queue.h"
 #import "Meeting.h"
+#import "Location.h"
 #import "LLPullNavigationController.h"
 #import "LLPullNavigationTableView.h"
 #import "LLPullNavigationScrollView.h"
@@ -26,6 +27,9 @@
 
 @property (strong, nonatomic) UIPanGestureRecognizer *navBarGesture;
 //@property (strong, nonatomic) UIPanGestureRecognizer *tableGesture;
+
+@property (strong, nonatomic) Meeting *defaultMeeting;
+@property (strong, nonatomic) LLLocationManager *locationManager;
 
 @property BOOL isScrollingToNewContact;
 @property BOOL isTimelineExpanded;
@@ -172,39 +176,45 @@ BOOL isScrollingDown;
     [self.tableView reloadRowsAtIndexPaths:@[self.selectedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
-- (void)queueContactCell:(QueueContactCell *)cell didDismissWithType:(QueueContactCellDismissalType)type
+- (void)queueContactCell:(QueueContactCell *)cell didDismissWithType:(QueueContactCellDismissalType)type andMeeting:(Meeting *)meeting
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     Contact *contact = [self.contactsArray objectAtIndex:indexPath.row];
-    Meeting *newMeeting = (Meeting *)[NSEntityDescription insertNewObjectForEntityForName:@"Meeting"
+    
+    if (!meeting)
+        meeting = (Meeting *)[NSEntityDescription insertNewObjectForEntityForName:@"Meeting"
                                                                    inManagedObjectContext:_managedObjectContext];
     switch (type) {
         case QueueContactCellDismissalTypeQueue:
-            newMeeting.date = [NSDate date];
-            newMeeting.note = @"Queued";
-            newMeeting.method = @"queue";
+            meeting.date = [NSDate date];
+            meeting.note = @"Queued";
+            meeting.method = @"queue";
             break;
             
         case QueueContactCellDismissalTypeSnooze:
-            newMeeting.date = [NSDate date];
-            newMeeting.note = @"Snoozed";
-            newMeeting.method = @"snooze";
+            meeting.date = [NSDate date];
+            meeting.note = @"Snoozed";
+            meeting.method = @"snooze";
+            break;
+            
+        case QueueContactCellDismissalTypeMeeting:
             break;
             
         default:
-            newMeeting.date = [NSDate date];
-            newMeeting.note = @"Queued";
-            newMeeting.method = @"queue";
+            meeting.date = [NSDate date];
+            meeting.note = @"Queued";
+            meeting.method = @"queue";
             break;
     }
     
     
-    [contact addMeetingsObject:newMeeting];
+    [contact addMeetingsObject:meeting];
     self.selectedIndexPath = indexPath;
     
     CGFloat delay = 0.5;
+    [cell resetCellWithAnimation:YES];
     [self performSelector:@selector(repositionSelectedContact) withObject:nil afterDelay:delay];
-    [cell performSelector:@selector(resetCellPositionWithAnimation:) withObject:nil afterDelay:delay + 0.25];
+//    [cell performSelector:@selector(resetCellWithAnimation:) withObject:nil afterDelay:delay + 0.25];
 //    [self repositionSelectedContact];
 //    int newRow = [self.contactsArray indexOfObject:contact];
     
@@ -220,12 +230,32 @@ BOOL isScrollingDown;
     }
 }
 
-- (void)queueContactCellDidBeginDragging:(QueueContactCell *)cell
+- (void)queueContactCell:(QueueContactCell *)cell didRequestMeetingEditWithMeeting:(Meeting *)meeting
+{
+    AddMeetingViewController *addMeetingController = [[AddMeetingViewController alloc] initWithMeeting:meeting];
+    addMeetingController.managedObjectContext = _managedObjectContext;
+    addMeetingController.contact = [self.contactsArray objectAtIndex:[self.tableView indexPathForCell:cell].row];
+    addMeetingController.delegate = self;
+    addMeetingController.editMeetingType = QueueEditMeetingTypeUpdate;
+    UINavigationController *navContoller = [[UINavigationController alloc] initWithRootViewController:addMeetingController];
+    
+    // Find the nearest navigation controller up the view hierarchy
+    [self presentViewController:navContoller animated:YES completion:nil];
+}
+
+- (void)addMeetingViewController:(AddMeetingViewController *)addMeetingViewController didUpdateMeeting:(Meeting *)meeting forContact:(Contact *)contact
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[self.contactsArray indexOfObject:contact] inSection:0];
+    QueueContactCell *cell = (QueueContactCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    [cell configureWithMeeting:meeting];
+}
+
+- (void)swipeyCellDidBeginDragging:(QueueContactCell *)cell
 {
     self.tableView.scrollEnabled = NO;
 }
 
-- (void)queueContactCellDidEndDragging:(QueueContactCell *)cell
+- (void)swipeyCellDidEndDragging:(QueueContactCell *)cell
 {
     self.tableView.scrollEnabled = YES;
 }
@@ -415,12 +445,13 @@ BOOL isScrollingDown;
     }
     
     [cell configureWithContact:[self.contactsArray objectAtIndex:indexPath.row] andImage:image];
+    [cell configureWithMeeting:_defaultMeeting];
     CGRect frame = cell.bounds;
     frame.size.height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
     frame.size.width = cell.frame.size.width;
     frame.origin.x = 0;
     cell.backgroundWell.frame = frame;
-    [cell bringSubviewToFront:cell.contentView];
+//    [cell bringSubviewToFront:cell.contentView];
     
     return cell;
 }
@@ -691,6 +722,21 @@ BOOL isScrollingDown;
     
 }
 
+#pragma mark - Location Management Methods
+- (void)locationManager:(LLLocationManager *)locationManger didFinishGeocodingLocation:(NSDictionary *)location
+{
+    Location *newLocation = (Location *)[NSEntityDescription insertNewObjectForEntityForName:@"Location"
+                                                                                              inManagedObjectContext:_managedObjectContext];
+    [newLocation populateWithGoogleReverseGeocodeResult:location];
+    
+    // Post a notification to all of the cells that the location has changed
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"DefaultLocationDidChange"
+     object:newLocation];
+    
+    _defaultMeeting.location = newLocation;
+}
+
 # pragma mark - View Management Methods
 
 - (void)viewDidLoad
@@ -730,6 +776,16 @@ BOOL isScrollingDown;
     
     [self updateContactsArrayWithTableReload:NO];
     _imagesDictionary = [NSMutableDictionary dictionaryWithCapacity:[self.contactsArray count]];
+    
+    // Set up the default meeting
+    _defaultMeeting = (Meeting *)[NSEntityDescription insertNewObjectForEntityForName:@"Meeting"
+                                                       inManagedObjectContext:_managedObjectContext];
+    _defaultMeeting.date = [NSDate date];
+    
+    // Find the current location for the default meeting
+    _locationManager = [[LLLocationManager alloc] initWithDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
+    _locationManager.delegate = self;
+    [_locationManager startStandardUpdates];
 }
 
 - (void)back

@@ -12,10 +12,11 @@
 #import "AddContactViewController.h"
 #import "TimelineViewController.h"
 #import "QueueContactCell.h"
+#import "LLLocationManager.h"
 @class Queue;
 @class LLPullNavigationTableView;
 
-@interface QueueViewController : UIViewController <ABPeoplePickerNavigationControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, TimelineViewControllerDelegate, UIGestureRecognizerDelegate, QueueContactCellDelegate, AddContactViewControllerDelegate>
+@interface QueueViewController : UIViewController <ABPeoplePickerNavigationControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, TimelineViewControllerDelegate, UIGestureRecognizerDelegate, QueueContactCellDelegate, AddContactViewControllerDelegate, LLLocationManagerDelegate, AddMeetingViewControllerDelegate>
 
 @property (strong, nonatomic) Queue *queue;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;

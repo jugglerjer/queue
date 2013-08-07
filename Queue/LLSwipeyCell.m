@@ -105,7 +105,7 @@
     
     if ([gestureRecognizer respondsToSelector:@selector(velocityInView:)])
     {
-        CGPoint velocity = [gestureRecognizer velocityInView:self.contentView.superview];
+        CGPoint velocity = [gestureRecognizer velocityInView:self.swipeyView.superview];
         if ( ABS(velocity.x) > ABS(velocity.y) && velocity.x < 0)
             return YES;
     }
@@ -118,6 +118,53 @@
 // -----------------------------
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
     return YES;
+}
+
+// -----------------------------
+// Stop the pan gesture when the
+// cell has crossed its threshold
+// -----------------------------
+//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+//{
+//    UIPanGestureRecognizer *panGesture = (UIPanGestureRecognizer *)gestureRecognizer;
+//    if ([panGesture respondsToSelector:@selector(translationInView:)])
+//    {
+//        if ([self hasCrossedQueueThresholdWithPoint:[panGesture translationInView:self.swipeyView.superview]])
+//            return NO;
+//    }
+//    return YES;
+//}
+
+// -----------------------------
+// Determine whether the cell
+// has been dragged past its
+// queue threshold
+// -----------------------------
+- (BOOL)hasCrossedQueueThresholdWithPoint:(CGPoint)point
+{
+    if (ABS(point.x) > _dragThreshold)
+        return YES;
+    return NO;
+    
+}
+
+// -----------------------------
+// Determine how far the cell has
+// been dragged relative to the threshold
+// -----------------------------
+- (CGFloat)percentageDragged
+{
+    return [self percentageDraggedWithDragPoint:CGPointMake(_swipeyView.bounds.origin.x, 0)];
+}
+
+// -----------------------------
+// Determine how far the cell has
+// been dragged relative to the threshold
+// with a given drag point
+// -----------------------------
+- (CGFloat)percentageDraggedWithDragPoint:(CGPoint)dragPoint
+{
+    return ABS(dragPoint.x) / _dragThreshold;
 }
 
 // -----------------------------
@@ -144,6 +191,7 @@
 - (void)resetCellWithAnimation:(BOOL)animated
 {
     [self setCellPosition:CGPointMake(0, 0) withAnimation:animated duration:0.25];
+    _isDismissed = NO;
 }
 
 - (void)dismissCellWithAnimation:(BOOL)animated velocity:(CGPoint)velocity
@@ -152,6 +200,7 @@
     CGFloat duration = ABS( (dismissedPoint.x - _swipeyView.frame.origin.x) / velocity.x);
     duration = MIN(duration, 0.4);
     [self setCellPosition:dismissedPoint withAnimation:animated duration:duration];
+    _isDismissed = YES;
 }
 
 // -----------------------------

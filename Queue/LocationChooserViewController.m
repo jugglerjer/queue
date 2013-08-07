@@ -90,6 +90,12 @@ static NSString *const googlePlacesNearbySearchURL = @"https://maps.googleapis.c
     }
 }
 
+// Handle errors in location detection
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    NSLog(@"%@", error);
+}
+
 // Perform search for the location that the user entered
 - (void)performSearchWithDefaultLocation:(BOOL)defaultLocation
 {

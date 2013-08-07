@@ -23,11 +23,17 @@ typedef enum
 @property (strong, nonatomic) UIView *swipeyView;
 @property (strong, nonatomic) UIView *underView;
 @property BOOL isDragging;
+@property BOOL isDismissed;
 @property CGFloat dragThreshold;
 
 @property BOOL swipingEnabled;
 
 - (id)initWithDetailType:(LLSwipeyCellDetailType)detailType reuseIdentifier:(NSString *)reuseIdentifier;
+- (BOOL)hasCrossedQueueThresholdWithPoint:(CGPoint)point;
+- (CGFloat)percentageDragged;
+- (CGFloat)percentageDraggedWithDragPoint:(CGPoint)dragPoint;
+- (void)setSwipeOffset:(CGPoint)offset;
+- (void)setCellPosition:(CGPoint)position withAnimation:(BOOL)animated duration:(CGFloat)duration;
 - (void)resetCellWithAnimation:(BOOL)animated;
 - (void)dismissCellWithAnimation:(BOOL)animated velocity:(CGPoint)velocity;
 
