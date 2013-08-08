@@ -411,7 +411,7 @@ BOOL isScrollingDown;
         if (cell == nil) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TimelineRowIdentifier];
         }
-        
+
         TimelineViewController *timelineView = [[TimelineViewController alloc] initWithContact:[self.contactsArray objectAtIndex:indexPath.row - 1]];
         timelineView.managedObjectContext = self.managedObjectContext;
         timelineView.queueViewController = self;
@@ -420,9 +420,11 @@ BOOL isScrollingDown;
         frame.size.height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
 //        frame.origin.y -= frame.size.height;
         timelineView.view.frame = frame;
+//        frame.size.height = 0;
+//        [cell setFrame:frame];
         self.timeline = timelineView;
         [cell addSubview:timelineView.view];
-//        cell.clipsToBounds = YES;
+        cell.clipsToBounds = YES;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
@@ -464,7 +466,7 @@ BOOL isScrollingDown;
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.isTimelineExpanded && [indexPath isEqual:[self timelineIndexPath]])
-        return self.tableView.frame.size.height - contactRowHeight;
+        return 0.0;
     return contactRowHeight;
 }
 
@@ -584,7 +586,6 @@ BOOL isScrollingDown;
         {
             [pullController adjustToPoint:CGPointMake(0, scrollView.contentOffset.y)];
             [UIView animateWithDuration:0.0 animations:^{self.navigationController.navigationBar.alpha = 0.0;}];
-            NSLog(@"%f", scrollView.contentOffset.y);
 //            [self.view setTransform:CGAffineTransformMakeTranslation(0, scrollView.contentOffset.y)];
         }
     }
@@ -635,12 +636,20 @@ BOOL isScrollingDown;
     self.selectedIndexPath = indexPath;
     self.tableView.scrollEnabled = NO;
     NSIndexPath *timelineIndexPath = [self timelineIndexPath];
-//    [self slideTimelineDown];
-//    [self performSelector:@selector(slideTimeline) withObject:nil afterDelay:0.4];
     [self rotateRightNavButtonToClose];
-    [self.tableView insertRowsAtIndexPaths:@[timelineIndexPath] withRowAnimation:UITableViewRowAnimationTop];
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    [self.tableView insertRowsAtIndexPaths:@[timelineIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+//    [self.tableView reloadData];
+    [self slideTimelineDown];
+//    [self performSelector:@selector(slideTimeline) withObject:nil afterDelay:0.3];
+    [self performSelector:@selector(scrollCellAtIndexPathToTop:) withObject:timelineIndexPath afterDelay:0.3];
+    [self scrollCellAtIndexPathToTop:timelineIndexPath];
+//    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
 //    [self.addButton setEnabled:NO];
+    
+    // Post a notification to all of the cells that timeline is expanded
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"TimelineDidExpand"
+     object:nil];
 }
 
 - (void)hideTimelineWithContactReposition:(BOOL)reposition
@@ -651,7 +660,8 @@ BOOL isScrollingDown;
 //    [self slideTimelineUp];
 //    [self performSelector:@selector(slideTimeline) withObject:nil afterDelay:0.4];
     [self rotateRightNavButtonToAdd];
-    [self.tableView deleteRowsAtIndexPaths:@[timelineIndexPath] withRowAnimation:UITableViewRowAnimationTop];
+//    [self.tableView reloadData];
+    [self.tableView deleteRowsAtIndexPaths:@[timelineIndexPath] withRowAnimation:UITableViewRowAnimationNone];
     self.tableView.scrollEnabled = YES;
     
     if (reposition)
@@ -660,15 +670,43 @@ BOOL isScrollingDown;
     [self.timeline hideToolbelt];
     [self.timeline.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.4];
     [self.addButton setEnabled:YES];
+    
+    // Post a notification to all of the cells that timeline is expanded
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"TimelineDidContract"
+     object:nil];
+}
+
+- (void)scrollCellAtIndexPathToTop:(NSIndexPath *)indexPath
+{
+//    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+
+    CGFloat offset = (indexPath.row-1) * contactRowHeight;
+    [self.tableView setContentOffset:CGPointMake(0, offset) animated:YES];
 }
 
 - (void)slideTimelineDown
 {
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[self timelineIndexPath]];
+    CGRect cellFrame = cell.frame;
+    cellFrame.size.height = self.tableView.frame.size.height - contactRowHeight;
+    
     CGRect frame = self.timeline.view.frame;
     frame.origin.y = frame.origin.y + frame.size.height;
+
     [UIView animateWithDuration:0.3
                      animations:^{
-                         self.timeline.view.frame = frame;
+//                         self.timeline.view.frame = frame;
+                         [cell setFrame:cellFrame];
+                         
+                         // Move all the other cells down
+                         for (int i= [self timelineIndexPath].row + 1; i <= [self.contactsArray count]; i++)
+                         {
+                             UITableViewCell *otherCell = (UITableViewCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+                             CGRect otherCellFrame = otherCell.frame;
+                             otherCellFrame.origin.y += self.tableView.frame.size.height - contactRowHeight;
+                             [otherCell setFrame:otherCellFrame];
+                         }
                      }];
 }
 

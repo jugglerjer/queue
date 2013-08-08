@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "QueueContactImageView.h"
 #import "LLSwipeyCell.h"
-#import "AddMeetingViewController.h"
 @class Contact;
 @class Meeting;
 @class Location;
@@ -23,7 +22,7 @@ typedef enum
     QueueContactCellDismissalTypeMeeting
 } QueueContactCellDismissalType;
 
-@interface QueueContactCell : LLSwipeyCell <UIGestureRecognizerDelegate, QueueContactImageViewDelegate, AddMeetingViewControllerDelegate>
+@interface QueueContactCell : LLSwipeyCell <UIGestureRecognizerDelegate, QueueContactImageViewDelegate>
 
 @property (nonatomic, assign) id <QueueContactCellDelegate> delegate;
 @property (strong, nonatomic) UIImageView *backgroundWell;
@@ -33,9 +32,11 @@ typedef enum
 @property (strong, nonatomic) UILabel *unitsLabel;
 @property (strong, nonatomic) UILabel *statusLabel;
 @property (strong, nonatomic) UILabel *dueLabel;
-@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+
+@property BOOL snoozingEnabled;
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
+- (void)setExpanded:(BOOL)expanded animated:(BOOL)animated;
 - (void)configureWithContact:(Contact *)contact andImage:(UIImage *)image;
 - (void)configureWithMeeting:(Meeting *)meeting;
 - (UIImage *)avatarImageForContact:(Contact *)contact;

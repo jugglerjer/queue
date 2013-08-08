@@ -208,7 +208,7 @@ int pageToSwitchTo;
         }
         
         double currentPosition = ABS(scrollView.contentOffset.y - scrollView.frame.size.height) / self.cellHeight;
-        int nextPage = floor(currentPosition) - 1 > 0 ? floor(currentPosition) - 1 : 0;
+        int nextPage = floor(currentPosition) > 0 ? floor(currentPosition) : 0;
         
         if (nextPage != currentPage)
         {
@@ -357,7 +357,11 @@ int pageToSwitchTo;
 //    {
         float scrollDistance = ABS(self.scrollView.contentOffset.y - self.scrollView.frame.size.height);
         float alpha = scrollDistance/self.cellHeight <= 1.0 ? scrollDistance/self.cellHeight : 1.0;
-        self.instructionView.alpha = alpha;
+//    float alpha = scrollDistance/self.cellHeight == 0.0 ? 0.0 : 1.0;
+//    if (self.instructionView.alpha != alpha)
+//        [UIView animateWithDuration:0.25 animations:^{self.instructionView.alpha = alpha;}];
+    
+    self.instructionView.alpha = alpha;
 //    }
 //    NSLog(@"%f", alpha);
     

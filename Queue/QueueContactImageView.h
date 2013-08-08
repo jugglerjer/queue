@@ -14,6 +14,7 @@
 
 @property (weak, nonatomic) id<QueueContactImageViewDelegate> delegate;
 @property CGFloat marginLeft;
+@property BOOL snoozingEnabled;
 
 - (UIImage *)imageWithGloss:(UIImage *)image;
 

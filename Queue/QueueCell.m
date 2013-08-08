@@ -172,7 +172,8 @@
 
 - (void)setActive:(BOOL)active animated:(BOOL)animated
 {
-    UIColor *color = active ? self.activeColor : self.inactiveColor;
+    UIColor *color = active ? self.activeColor : self.activeColor;
+    CGFloat alpha = active ? 1.0 : 0.2;
 //    CGSize size = active ? CGSizeMake(0.0, -1.0) : CGSizeMake(0.0, 1.0);
     CGFloat duration = animated ? 0.1 : 0.0;
     
@@ -181,6 +182,7 @@
                        options:UIViewAnimationOptionTransitionCrossDissolve
                     animations:^{
                         [self.queueNameLabel setTextColor:color];
+                        [self.queueNameLabel setAlpha:alpha];
 //                        self.queueNameLabel.layer.shadowOffset = size;
                     }
                     completion:nil];

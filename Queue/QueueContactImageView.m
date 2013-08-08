@@ -74,6 +74,9 @@ float wellMarginRight = 10.0;
 // -----------------------------
 - (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)gestureRecognizer
 {
+    if (!_snoozingEnabled)
+        return NO;
+    
     if ([gestureRecognizer respondsToSelector:@selector(velocityInView:)])
     {
         CGPoint velocity = [gestureRecognizer velocityInView:self.superview];

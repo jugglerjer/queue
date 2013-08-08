@@ -12,6 +12,7 @@
 #import "Location.h"
 #import "Meeting.h"
 #import "UIView+NearestViewController.h"
+#import "TimelineViewController.h"
 
 #define INSTRUCTION_IMAGE_HEIGHT        31.0
 #define INSTRUCTION_IMAGE_WIDTH         31.0
@@ -62,6 +63,17 @@ double queueDistance = 0.75;
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(configureWithDefaultLocation:)
                                                      name:@"DefaultLocationDidChange"
+                                                   object:nil];
+        
+        // Register for notifications about timeline opening and closing
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(preventSwipes)
+                                                     name:@"TimelineDidExpand"
+                                                   object:nil];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(allowSwipes)
+                                                     name:@"TimelineDidContract"
                                                    object:nil];
         
         // Swipe Instruction View
@@ -330,6 +342,38 @@ double queueDistance = 0.75;
 }
 
 // -----------------------------
+// Handle the expansion and
+// contraction of the cell
+// -----------------------------
+- (void)setExpanded:(BOOL)expanded animated:(BOOL)animated
+{
+//    TimelineViewController *timelineView = [[TimelineViewController alloc] initWithContact:_contact];
+//    timelineView.managedObjectContext = self.managedObjectContext;
+//    timelineView.queueViewController = self;
+//    timelineView.delegate = self;
+}
+
+// -----------------------------
+// Disable snoozing and swiping
+// -----------------------------
+- (void)preventSwipes
+{
+    self.swipingEnabled = NO;
+    self.snoozingEnabled = NO;
+    self.contactImage.snoozingEnabled = NO;
+}
+
+// -----------------------------
+// Enable snoozing and swiping
+// -----------------------------
+- (void)allowSwipes
+{
+    self.swipingEnabled = YES;
+    self.snoozingEnabled = YES;
+    self.contactImage.snoozingEnabled = YES;
+}
+
+// -----------------------------
 // Show the meeting editor
 // -----------------------------
 - (void)editMeeting
@@ -400,30 +444,6 @@ double queueDistance = 0.75;
     CGFloat instructionDragPercentage = [self percentageDraggedWithDragPoint:dragPoint] <= 1.0 ? [self percentageDraggedWithDragPoint:dragPoint] : 1.0;
     return instructionStartingPoint - (totalInstructionDistance * instructionDragPercentage);
 }
-
-// -----------------------------
-// Update the instruction view
-// based on the cell dragging
-// -----------------------------
-//- (void)updateInstructionView
-//{
-//    // Calculate the new position on the instruction view
-////    CGFloat xPosition = self.frame.size.width - self.contentView.bounds.origin.x;
-//    
-//    CGRect newFrame = self.queueInstructionView.frame;
-//    newFrame.origin.x = [self instructionPosition];
-//    
-//    [self.queueInstructionView setFrame:newFrame];
-//    
-//    // Calculate the alpha for the check mark
-////    CGFloat alpha = (self.frame.size.width - self.queueInstructionView.frame.origin.x) / (self.frame.size.width * queueDistance);
-//    self.queueInstructionImageView.alpha = [self percentageDragged];
-//    
-//    if ([self percentageDragged] >= 1.0)
-//        self.queueInstructionLabel.text = @"Release to queue";
-//    else
-//        self.queueInstructionLabel.text = @"Slide to queue";
-//}
 
 // -----------------------------
 // Cancel the swipe to queue UI
