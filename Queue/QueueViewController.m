@@ -33,6 +33,7 @@
 
 @property BOOL isScrollingToNewContact;
 @property BOOL isTimelineExpanded;
+@property BOOL hasTimelineAnimated;
 @property BOOL isOutOfBounds;
 
 @property (nonatomic) NSMutableDictionary *imagesDictionary;
@@ -466,8 +467,18 @@ BOOL isScrollingDown;
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.isTimelineExpanded && [indexPath isEqual:[self timelineIndexPath]])
-        return 0.0;
+    {
+        if (_hasTimelineAnimated)
+            return [self fullTimelineHeight];
+        else
+            return 0.0;
+    }
     return contactRowHeight;
+}
+
+- (CGFloat)fullTimelineHeight
+{
+    return self.tableView.frame.size.height - contactRowHeight;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -632,6 +643,7 @@ BOOL isScrollingDown;
 - (void)showTimelineWithIndexPath:(NSIndexPath *)indexPath
 {
     // Expand the height of the selected cell to expose enough room for the timeline
+    _hasTimelineAnimated = NO;
     self.isTimelineExpanded = YES;
     self.selectedIndexPath = indexPath;
     self.tableView.scrollEnabled = NO;
@@ -639,7 +651,7 @@ BOOL isScrollingDown;
     [self rotateRightNavButtonToClose];
     [self.tableView insertRowsAtIndexPaths:@[timelineIndexPath] withRowAnimation:UITableViewRowAnimationNone];
 //    [self.tableView reloadData];
-    [self slideTimelineDown];
+    [self slideTimelineDownWithAnimation:YES];
 //    [self performSelector:@selector(slideTimeline) withObject:nil afterDelay:0.3];
     [self performSelector:@selector(scrollCellAtIndexPathToTop:) withObject:timelineIndexPath afterDelay:0.3];
     [self scrollCellAtIndexPathToTop:timelineIndexPath];
@@ -649,7 +661,7 @@ BOOL isScrollingDown;
     // Post a notification to all of the cells that timeline is expanded
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"TimelineDidExpand"
-     object:nil];
+     object:self];
 }
 
 - (void)hideTimelineWithContactReposition:(BOOL)reposition
@@ -674,7 +686,7 @@ BOOL isScrollingDown;
     // Post a notification to all of the cells that timeline is expanded
     [[NSNotificationCenter defaultCenter]
      postNotificationName:@"TimelineDidContract"
-     object:nil];
+     object:self];
 }
 
 - (void)scrollCellAtIndexPathToTop:(NSIndexPath *)indexPath
@@ -685,8 +697,10 @@ BOOL isScrollingDown;
     [self.tableView setContentOffset:CGPointMake(0, offset) animated:YES];
 }
 
-- (void)slideTimelineDown
-{
+- (void)slideTimelineDownWithAnimation:(BOOL)animated
+{    
+    CGFloat duration = animated ? 0.3 : 0.0;
+    
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[self timelineIndexPath]];
     CGRect cellFrame = cell.frame;
     cellFrame.size.height = self.tableView.frame.size.height - contactRowHeight;
@@ -694,7 +708,7 @@ BOOL isScrollingDown;
     CGRect frame = self.timeline.view.frame;
     frame.origin.y = frame.origin.y + frame.size.height;
 
-    [UIView animateWithDuration:0.3
+    [UIView animateWithDuration:duration
                      animations:^{
 //                         self.timeline.view.frame = frame;
                          [cell setFrame:cellFrame];
@@ -707,6 +721,8 @@ BOOL isScrollingDown;
                              otherCellFrame.origin.y += self.tableView.frame.size.height - contactRowHeight;
                              [otherCell setFrame:otherCellFrame];
                          }
+                     } completion:^(BOOL finished){
+                         _hasTimelineAnimated = YES;
                      }];
 }
 

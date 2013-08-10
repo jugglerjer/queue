@@ -23,6 +23,7 @@
 @property (strong, nonatomic) Contact * contact;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (strong, nonatomic) QueueViewController *queueViewController;
+@property (strong, nonatomic) UIImageView *innerShadowView;
 
 - (id)initWithContact:(Contact *)contact;
 - (void)showToolbelt;
