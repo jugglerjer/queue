@@ -41,6 +41,7 @@ float wellMarginRight = 10.0;
         gloss = [UIImage imageNamed:@"avatar-gloss.png"];
         
         self.userInteractionEnabled = YES;
+        self.snoozingEnabled = YES;
         
         // Add dragging gesture recognizer
         UIPanGestureRecognizer *snoozeGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];

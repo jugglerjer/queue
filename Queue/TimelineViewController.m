@@ -344,9 +344,11 @@ static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/a
     
     
     UIImage *innerShadow = [[UIImage imageNamed:@"timeline-inner-shadow.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:5];
-    UIImageView *innerShadowView = [[UIImageView alloc] initWithImage:innerShadow];
-    innerShadowView.frame = self.tableView.bounds;
-    [self.view addSubview:innerShadowView];
+    _innerShadowView = [[UIImageView alloc] initWithImage:innerShadow];
+    CGRect shadowFrame = self.tableView.bounds;
+    shadowFrame.size.height = 0.0f;
+    _innerShadowView.frame = shadowFrame;
+    [self.view addSubview:_innerShadowView];
     
     // Add the add meeting button to the right side of the nav bar
 //    QueueBarButtonItem *addMeetingButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeAdd target:self action:@selector(addMeeting)];

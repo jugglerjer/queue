@@ -63,6 +63,7 @@
 		3F977644175726B000E6B5B7 /* calendar_full@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F977642175726B000E6B5B7 /* calendar_full@2x.png */; };
 		3F977645175726B000E6B5B7 /* notepad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F977643175726B000E6B5B7 /* notepad@2x.png */; };
 		3F97764717572C4900E6B5B7 /* light-background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F97764617572C4900E6B5B7 /* light-background@2x.png */; };
+		3F97F72517BB4B63003CF7DB /* NSObject+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F97F72417BB4B63003CF7DB /* NSObject+Blocks.m */; };
 		3F98A2EC17529196006A3668 /* timeline-inner-shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F98A2EB17529196006A3668 /* timeline-inner-shadow.png */; };
 		3F98A2EF17529A32006A3668 /* MeetingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F98A2EE17529A32006A3668 /* MeetingCell.m */; };
 		3F98A2F11752ED3A006A3668 /* expand-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F98A2F01752ED39006A3668 /* expand-button.png */; };
@@ -205,6 +206,8 @@
 		3F977642175726B000E6B5B7 /* calendar_full@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "calendar_full@2x.png"; path = "Queue/calendar_full@2x.png"; sourceTree = "<group>"; };
 		3F977643175726B000E6B5B7 /* notepad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "notepad@2x.png"; path = "Queue/notepad@2x.png"; sourceTree = "<group>"; };
 		3F97764617572C4900E6B5B7 /* light-background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "light-background@2x.png"; path = "Queue/light-background@2x.png"; sourceTree = "<group>"; };
+		3F97F72317BB4B63003CF7DB /* NSObject+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Blocks.h"; sourceTree = "<group>"; };
+		3F97F72417BB4B63003CF7DB /* NSObject+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Blocks.m"; sourceTree = "<group>"; };
 		3F98A2EB17529196006A3668 /* timeline-inner-shadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "timeline-inner-shadow.png"; path = "Queue/timeline-inner-shadow.png"; sourceTree = "<group>"; };
 		3F98A2ED17529A32006A3668 /* MeetingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeetingCell.h; sourceTree = "<group>"; };
 		3F98A2EE17529A32006A3668 /* MeetingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeetingCell.m; sourceTree = "<group>"; };
@@ -390,6 +393,8 @@
 		3FA1019117447769007D2520 /* Queue */ = {
 			isa = PBXGroup;
 			children = (
+				3F97F72317BB4B63003CF7DB /* NSObject+Blocks.h */,
+				3F97F72417BB4B63003CF7DB /* NSObject+Blocks.m */,
 				3F94A959178621A10054A733 /* UIImage+Alpha.h */,
 				3F94A95A178621A10054A733 /* UIImage+Alpha.m */,
 				3F94A95B178621A10054A733 /* UIImage+Resize.h */,
@@ -759,6 +764,7 @@
 				695BF16817A4576F00A3F865 /* LLSwipeyCell.m in Sources */,
 				3FAC0F7017B0C4530057D9AF /* LLLocationManager.m in Sources */,
 				3FAC0F7317B20D6A0057D9AF /* UIView+NearestViewController.m in Sources */,
+				3F97F72517BB4B63003CF7DB /* NSObject+Blocks.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -18,6 +18,7 @@
 #import "LLPullNavigationScrollView.h"
 #import "QueuesViewController.h"
 #import "ContactChooserViewController.h"
+#import "NSObject+Blocks.h"
 
 @interface QueueViewController ()
 
@@ -668,25 +669,34 @@ BOOL isScrollingDown;
 {
     // Contract the cell to hide the timeline
     self.isTimelineExpanded = NO;
-    NSIndexPath *timelineIndexPath = [self timelineIndexPath];
-//    [self slideTimelineUp];
-//    [self performSelector:@selector(slideTimeline) withObject:nil afterDelay:0.4];
     [self rotateRightNavButtonToAdd];
-//    [self.tableView reloadData];
-    [self.tableView deleteRowsAtIndexPaths:@[timelineIndexPath] withRowAnimation:UITableViewRowAnimationNone];
-    self.tableView.scrollEnabled = YES;
-    
-    if (reposition)
-        [self performSelector:@selector(repositionSelectedContact) withObject:nil afterDelay:0.4];
-    
     [self.timeline hideToolbelt];
-    [self.timeline.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.4];
-    [self.addButton setEnabled:YES];
+    NSIndexPath *timelineIndexPath = [self timelineIndexPath];
+    [self slideTimelineUpWithAnimation:YES completion:^{
+    
+        [self.tableView deleteRowsAtIndexPaths:@[timelineIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+        if (reposition)
+            [self repositionSelectedContact];
+        self.tableView.scrollEnabled = YES;
+        [self.addButton setEnabled:YES];
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"TimelineDidContract"
+         object:self];
+    
+    }];
+//    [self performSelector:@selector(slideTimeline) withObject:nil afterDelay:0.4];
+//    [self.tableView reloadData];
+//    [NSObject performBlock:^{
+//        [self.tableView deleteRowsAtIndexPaths:@[timelineIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+//        if (reposition)
+//            [self repositionSelectedContact];
+//    }
+//                afterDelay:0.3];
+//    [self.timeline.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.4];
+    
     
     // Post a notification to all of the cells that timeline is expanded
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"TimelineDidContract"
-     object:self];
+    ;
 }
 
 - (void)scrollCellAtIndexPathToTop:(NSIndexPath *)indexPath
@@ -703,15 +713,19 @@ BOOL isScrollingDown;
     
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[self timelineIndexPath]];
     CGRect cellFrame = cell.frame;
-    cellFrame.size.height = self.tableView.frame.size.height - contactRowHeight;
+    cellFrame.size.height = [self fullTimelineHeight];
     
-    CGRect frame = self.timeline.view.frame;
-    frame.origin.y = frame.origin.y + frame.size.height;
+//    CGRect frame = self.timeline.view.frame;
+//    frame.origin.y = frame.origin.y + frame.size.height;
+    
+    CGRect shadowFrame = self.timeline.view.bounds;
+    shadowFrame.size.height = [self fullTimelineHeight];
 
     [UIView animateWithDuration:duration
                      animations:^{
 //                         self.timeline.view.frame = frame;
                          [cell setFrame:cellFrame];
+                         [self.timeline.innerShadowView setFrame:shadowFrame];
                          
                          // Move all the other cells down
                          for (int i= [self timelineIndexPath].row + 1; i <= [self.contactsArray count]; i++)
@@ -726,13 +740,34 @@ BOOL isScrollingDown;
                      }];
 }
 
-- (void)slideTimelineUp
+- (void)slideTimelineUpWithAnimation:(BOOL)animated completion:(void (^)(void))block
 {
-    CGRect frame = self.timeline.view.frame;
-    frame.origin.y -= frame.size.height;
-    [UIView animateWithDuration:0.3
+    CGFloat duration = animated ? 0.3 : 0.0;
+    
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[self timelineIndexPath]];
+    CGRect cellFrame = cell.frame;
+    cellFrame.size.height = 0.0;
+    
+    CGRect shadowFrame = self.timeline.innerShadowView.frame;
+    shadowFrame.size.height = 0.0;
+    
+//    CGRect frame = self.timeline.view.frame;
+//    frame.origin.y -= frame.size.height;
+    [UIView animateWithDuration:duration
                      animations:^{
-                         self.timeline.view.frame = frame;
+                         [cell setFrame:cellFrame];
+                         [self.timeline.innerShadowView setFrame:shadowFrame];
+                         
+                         // Move all the other cells up
+                         for (int i= [self timelineIndexPath].row + 1; i <= [self.contactsArray count]; i++)
+                         {
+                             UITableViewCell *otherCell = (UITableViewCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+                             CGRect otherCellFrame = otherCell.frame;
+                             otherCellFrame.origin.y -= self.tableView.frame.size.height - contactRowHeight;
+                             [otherCell setFrame:otherCellFrame];
+                         }
+                     } completion:^(BOOL finished) {
+                         block();
                      }];
 }
 
