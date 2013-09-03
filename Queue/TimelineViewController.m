@@ -504,7 +504,7 @@ static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/a
     CGSize size = [text sizeWithFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:14.0] constrainedToSize:constraint];
     
     int mapHeight = 0;
-    if ([[self.meetingsArray objectAtIndex:indexPath.row] location])
+    if ([(Meeting *)[self.meetingsArray objectAtIndex:indexPath.row] location])
         mapHeight = 100.5;
     
     return size.height + MARGIN_TOP + MARGIN_BOTTOM + DATE_HEIGHT + mapHeight + 1;
