@@ -270,7 +270,7 @@ static CGFloat keyboardHeight = 216;
 
 - (CGFloat)noteViewContainerHeight
 {
-    return self.view.bounds.size.height - keyboardHeight - self.navigationController.navigationBar.frame.size.height - NOTE_TEXT_HEIGHT - NOTE_TEXT_MARGIN_TOP - NOTE_TEXT_MARGIN_BOTTOM - [self dateViewContainerHeight];
+    return self.view.bounds.size.height - keyboardHeight - self.navigationController.navigationBar.frame.size.height - NOTE_TEXT_HEIGHT - NOTE_TEXT_MARGIN_TOP - NOTE_TEXT_MARGIN_BOTTOM - [self dateViewContainerHeight] - [UIApplication sharedApplication].statusBarFrame.size.height;
 }
 
 

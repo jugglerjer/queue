@@ -21,7 +21,7 @@
 float shadowFlatOpacity = 0.05;
 float shadowElevatedOpacity = 0.4;
 float shadowFlatRadius = 0.0;
-float shadowElevatedRadius = 5.0;
+float shadowElevatedRadius = 3.0;
 float wellMarginRight = 10.0;
 
 - (id)initWithFrame:(CGRect)frame

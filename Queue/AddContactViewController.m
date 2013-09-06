@@ -466,7 +466,7 @@ static CGFloat keyboardHeight = 216;
 - (CGFloat)intervalViewContainerHeight { return /* INTERVAL_TEXT_HEIGHT + INTERVAL_MARGIN_TOP + INTERVAL_MARGIN_BOTTOM*/ 0; }
 - (CGFloat)noteViewContainerHeight
 {
-    return self.view.bounds.size.height - keyboardHeight - self.navigationController.navigationBar.frame.size.height - NOTE_TEXT_HEIGHT - NOTE_TEXT_MARGIN_TOP - NOTE_TEXT_MARGIN_BOTTOM - [self dueDateViewContainerHeight] - [self intervalViewContainerHeight];
+    return self.view.bounds.size.height - keyboardHeight - self.navigationController.navigationBar.frame.size.height - NOTE_TEXT_HEIGHT - NOTE_TEXT_MARGIN_TOP - NOTE_TEXT_MARGIN_BOTTOM - [self dueDateViewContainerHeight] - [self intervalViewContainerHeight] - [UIApplication sharedApplication].statusBarFrame.size.height;
 }
 - (CGFloat)reminderViewContainerHeight
 {

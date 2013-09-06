@@ -44,7 +44,7 @@
         UIImage *normalImage = [UIImage imageNamed:normalImageName];
         
         // Create the button
-        CGFloat buttonMargin = 10.0f;
+        CGFloat buttonMargin = 0.0f;
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.frame = CGRectMake(buttonMargin, 0, normalImage.size.width + (2*buttonMargin), normalImage.size.height + (2*buttonMargin));
         button.contentMode = UIViewContentModeCenter;
@@ -52,7 +52,7 @@
 //        UIImageView *imageView = [[UIImageView alloc] initWithImage:normalImage];
 //        [button addSubview:imageView];
         [button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
-        button.showsTouchWhenHighlighted = YES;
+//        button.showsTouchWhenHighlighted = YES;
 //        button.autoresizingMask = UIViewAutoresizingNone;
         button.imageView.autoresizingMask = UIViewAutoresizingNone;
         button.imageView.contentMode = UIViewContentModeCenter;

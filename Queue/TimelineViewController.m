@@ -271,7 +271,7 @@ static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/a
     UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
                                                                            self.view.bounds.origin.y,
                                                                            self.view.bounds.size.width,
-                                                                           self.view.bounds.size.height - 44 - 72 /* Nav Bar Height & Contact Row Height */)
+                                                                           self.view.bounds.size.height - 72 - 44 - [UIApplication sharedApplication].statusBarFrame.size.height)
                                                           style:UITableViewStylePlain];
     tableView.backgroundColor = [UIColor colorWithPatternImage: [UIImage imageNamed:@"queue_background.png"]];
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -287,7 +287,7 @@ static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/a
     
     
     // Add floating buttons
-    CGFloat buttonTopMargin = self.view.frame.size.height - self.queueViewController.navigationController.navigationBar.frame.size.height - [self.queueViewController tableView:self.queueViewController.tableView heightForRowAtIndexPath:self.queueViewController.selectedIndexPath];
+    CGFloat buttonTopMargin = self.view.frame.size.height - self.queueViewController.navigationController.navigationBar.frame.size.height - [self.queueViewController tableView:self.queueViewController.tableView heightForRowAtIndexPath:self.queueViewController.selectedIndexPath] - [UIApplication sharedApplication].statusBarFrame.size.height;
     
     UIButton *addButton = [UIButton buttonWithType:UIButtonTypeCustom];
     addButton.frame = CGRectMake(self.view.frame.size.width - BUTTON_WIDTH - BUTTON_MARGIN_RIGHT,

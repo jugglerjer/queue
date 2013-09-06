@@ -54,15 +54,24 @@ int pageToSwitchTo;
 {
     [super viewDidLoad];
     
+    // Set the app's background color to sit beneath the status bar
+    self.view.backgroundColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1];
+    
     // Add the root view to the heirarchy
     [self addChildViewController:self.rootViewController];
     self.rootViewController.view.frame = self.view.bounds;
     [self.view addSubview:self.rootViewController.view];
     [self.rootViewController didMoveToParentViewController:self];
     
+    // Adjust root view controller's frame to account for iOS7 status bar overlap
+    CGRect frame = self.rootViewController.view.frame;
+    frame.origin.y += [UIApplication sharedApplication].statusBarFrame.size.height;
+    self.rootViewController.view.frame = frame;
+    
 	// Setup the scroll view that will
     // hold the presented subview
-    CGRect frame = self.view.bounds;
+//    CGRect frame = self.view.frame;
+//    frame.origin.y += 20.0;
 //    frame.origin.y = self.view.frame.size.height;
     LLPullNavigationScrollView *scrollView = [[LLPullNavigationScrollView alloc] initWithFrame:frame];
     [scrollView setDelaysContentTouches:NO];

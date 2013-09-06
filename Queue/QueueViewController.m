@@ -439,7 +439,8 @@ BOOL isScrollingDown;
     }
     
     cell.delegate = self;
-    Contact *contact = [self.contactsArray objectAtIndex:indexPath.row];
+    int contactIndex = _isTimelineExpanded && [self timelineIndexPath].row < indexPath.row ? indexPath.row - 1 : indexPath.row;
+    Contact *contact = [self.contactsArray objectAtIndex:contactIndex];
     UIImage *image = [_imagesDictionary objectForKey:[NSNumber numberWithInteger:[contact hash]]];
     if (!image)
     {
@@ -448,13 +449,14 @@ BOOL isScrollingDown;
 //        [_imagesDictionary setObject:image forKey:indexPath];
     }
     
-    [cell configureWithContact:[self.contactsArray objectAtIndex:indexPath.row] andImage:image];
+    [cell configureWithContact:contact andImage:image];
     [cell configureWithMeeting:_defaultMeeting];
     CGRect frame = cell.bounds;
     frame.size.height = [self tableView:tableView heightForRowAtIndexPath:indexPath];
     frame.size.width = cell.frame.size.width;
     frame.origin.x = 0;
     cell.backgroundWell.frame = frame;
+    cell.underView.backgroundColor = [UIColor colorWithPatternImage: [UIImage imageNamed:@"queue_background.png"]];
 //    [cell bringSubviewToFront:cell.contentView];
     
     return cell;
@@ -479,7 +481,8 @@ BOOL isScrollingDown;
 
 - (CGFloat)fullTimelineHeight
 {
-    return self.tableView.frame.size.height - contactRowHeight;
+//    NSLog(@"%f", self.tableView.frame.size.height - contactRowHeight - [UIApplication sharedApplication].statusBarFrame.size.height - self.navigationController.navigationBar.frame.size.height);
+    return self.tableView.frame.size.height - contactRowHeight/* - [UIApplication sharedApplication].statusBarFrame.size.height - self.navigationController.navigationBar.frame.size.height*/;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -654,8 +657,8 @@ BOOL isScrollingDown;
 //    [self.tableView reloadData];
     [self slideTimelineDownWithAnimation:YES];
 //    [self performSelector:@selector(slideTimeline) withObject:nil afterDelay:0.3];
-    [self performSelector:@selector(scrollCellAtIndexPathToTop:) withObject:timelineIndexPath afterDelay:0.3];
-    [self scrollCellAtIndexPathToTop:timelineIndexPath];
+    [self performSelector:@selector(scrollCellAtIndexPathToTop:) withObject:timelineIndexPath afterDelay:0.25];
+//    [self scrollCellAtIndexPathToTop:timelineIndexPath];
 //    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
 //    [self.addButton setEnabled:NO];
     
@@ -674,7 +677,8 @@ BOOL isScrollingDown;
     NSIndexPath *timelineIndexPath = [self timelineIndexPath];
     [self slideTimelineUpWithAnimation:YES completion:^{
     
-        [self.tableView deleteRowsAtIndexPaths:@[timelineIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+//        [self.tableView deleteRowsAtIndexPaths:@[timelineIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView reloadData];
         if (reposition)
             [self repositionSelectedContact];
         self.tableView.scrollEnabled = YES;
@@ -728,7 +732,7 @@ BOOL isScrollingDown;
                          [self.timeline.innerShadowView setFrame:shadowFrame];
                          
                          // Move all the other cells down
-                         for (int i= [self timelineIndexPath].row + 1; i <= [self.contactsArray count]; i++)
+                         for (int i = [self timelineIndexPath].row + 1; i <= [self.contactsArray count]; i++)
                          {
                              UITableViewCell *otherCell = (UITableViewCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
                              CGRect otherCellFrame = otherCell.frame;
@@ -840,10 +844,10 @@ BOOL isScrollingDown;
     self.view.backgroundColor = [UIColor clearColor];
 	
     // Create a table view to hold the contacts
-    LLPullNavigationTableView *tableView = [[LLPullNavigationTableView alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
-                                                                           self.view.bounds.origin.y/* + self.navigationController.navigationBar.frame.size.height*/,
+    LLPullNavigationTableView *tableView = [[LLPullNavigationTableView alloc] initWithFrame:CGRectMake(self.view.frame.origin.x,
+                                                                           self.view.frame.origin.y/* + self.navigationController.navigationBar.frame.size.height*/,
                                                                            self.view.frame.size.width,
-                                                                           self.view.frame.size.height - self.navigationController.navigationBar.frame.size.height)
+                                                                           self.view.frame.size.height - self.navigationController.navigationBar.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height)
                                                           style:UITableViewStylePlain];
     tableView.backgroundColor = [UIColor colorWithPatternImage: [UIImage imageNamed:@"queue_background.png"]];
 //    tableView.backgroundColor = [UIColor clearColor];
@@ -886,10 +890,10 @@ BOOL isScrollingDown;
 {
     [super viewWillAppear:animated];
     // Unselect the selected row if any
-    NSIndexPath*    selection = [self.tableView indexPathForSelectedRow];
-    if (selection) {
-        [self.tableView deselectRowAtIndexPath:selection animated:YES];
-    }
+//    NSIndexPath*    selection = [self.tableView indexPathForSelectedRow];
+//    if (selection) {
+//        [self.tableView deselectRowAtIndexPath:selection animated:YES];
+//    }
 }
 
 - (void)viewDidAppear:(BOOL)animated

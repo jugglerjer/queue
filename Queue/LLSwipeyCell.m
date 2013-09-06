@@ -259,4 +259,11 @@
     // Configure the view for the selected state
 }
 
+- (void)setFrame:(CGRect)frame
+{
+    [super setFrame:frame];
+    [self.swipeyView setFrame:self.bounds];
+    [self.underView setFrame:self.bounds];
+}
+
 @end

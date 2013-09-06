@@ -21,6 +21,7 @@ typedef NSURL *(^GMSTileURLConstructor)(NSUInteger x, NSUInteger y, NSUInteger z
 /**
  * GMSURLTileProvider fetches tiles based on the URLs returned from a
  * GMSTileURLConstructor. For example:
+ * <pre>
  *   GMSTileURLConstructor constructor = ^(NSUInteger x, NSUInteger y, NSUInteger zoom) {
  *     NSString *URLStr = [NSString stringWithFormat:@"http://example.com/%d/%d/%d.png", x, y, zoom];
  *     return [NSURL URLWithString:URLStr];
@@ -29,6 +30,7 @@ typedef NSURL *(^GMSTileURLConstructor)(NSUInteger x, NSUInteger y, NSUInteger z
  *       [GMSURLTileLayer tileLayerWithURLConstructor:constructor];
  *   layer.userAgent = @"SDK user agent";
  *   layer.map = map;
+ * </pre>
  *
  * GMSURLTileProvider may not be subclassed and should only be created via its
  * convenience constructor.
@@ -42,6 +44,6 @@ typedef NSURL *(^GMSTileURLConstructor)(NSUInteger x, NSUInteger y, NSUInteger z
  * Specify the user agent to describe your application. If this is nil (the
  * default), the default iOS user agent is used for HTTP requests.
  */
-@property (nonatomic, copy) NSString *userAgent;
+@property(nonatomic, copy) NSString *userAgent;
 
 @end
