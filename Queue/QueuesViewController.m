@@ -237,6 +237,7 @@ CGFloat rowHeight = 44.0;
         self.queueViewController = queueView;
         
         navController = [[UINavigationController alloc] initWithRootViewController:queueView];
+        navController.navigationBar.barTintColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1];
         [self.queueViewControllersArray replaceObjectAtIndex:index withObject:navController];
     }
     else

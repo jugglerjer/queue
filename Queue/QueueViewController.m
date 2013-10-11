@@ -67,6 +67,7 @@ BOOL isScrollingDown;
     [[ABPeoplePickerNavigationController alloc] init];
     picker.peoplePickerDelegate = self;
     picker.delegate = self;
+    picker.navigationBar.barTintColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1];
     
 //    ContactChooserViewController *picker = [[ContactChooserViewController alloc] initWithStyle:UITableViewStylePlain];
 //    UINavigationController *controller = [[UINavigationController alloc] initWithRootViewController:picker];
@@ -847,7 +848,7 @@ BOOL isScrollingDown;
     LLPullNavigationTableView *tableView = [[LLPullNavigationTableView alloc] initWithFrame:CGRectMake(self.view.frame.origin.x,
                                                                            self.view.frame.origin.y/* + self.navigationController.navigationBar.frame.size.height*/,
                                                                            self.view.frame.size.width,
-                                                                           self.view.frame.size.height - self.navigationController.navigationBar.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height)
+                                                                           self.view.frame.size.height/* - self.navigationController.navigationBar.frame.size.height*/ - [UIApplication sharedApplication].statusBarFrame.size.height)
                                                           style:UITableViewStylePlain];
     tableView.backgroundColor = [UIColor colorWithPatternImage: [UIImage imageNamed:@"queue_background.png"]];
 //    tableView.backgroundColor = [UIColor clearColor];

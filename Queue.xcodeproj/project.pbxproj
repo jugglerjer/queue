@@ -59,7 +59,8 @@
 		3F94A96A1786625F0054A733 /* avatar-gloss-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F94A9691786625E0054A733 /* avatar-gloss-small@2x.png */; };
 		3F94A96B1786625F0054A733 /* avatar-gloss-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F94A9691786625E0054A733 /* avatar-gloss-small@2x.png */; };
 		3F96995517D9B4A80018A2A2 /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F96995417D9B4A80018A2A2 /* GoogleMaps.framework */; };
-		3F96995717D9B4B60018A2A2 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3F96995617D9B4B50018A2A2 /* GoogleMaps.bundle */; };
+		3F97456417DB94040036D117 /* Reveal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F97456317DB94040036D117 /* Reveal.framework */; };
+		3F97456617DB94560036D117 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F97456517DB94560036D117 /* CFNetwork.framework */; };
 		3F977641175723C200E6B5B7 /* LocationChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F977640175723C200E6B5B7 /* LocationChooserViewController.m */; };
 		3F977644175726B000E6B5B7 /* calendar_full@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F977642175726B000E6B5B7 /* calendar_full@2x.png */; };
 		3F977645175726B000E6B5B7 /* notepad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F977643175726B000E6B5B7 /* notepad@2x.png */; };
@@ -113,6 +114,13 @@
 		3FAC625F1763017F00E20373 /* NSArray-SortUsingArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FAC625D1762FD0600E20373 /* NSArray-SortUsingArray.m */; };
 		3FB5D98A17ADCB2D0086DCFE /* cancel-delete-meeting@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FB5D98817ADCB2D0086DCFE /* cancel-delete-meeting@2x.png */; };
 		3FB5D98B17ADCB2D0086DCFE /* delete-meeting@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FB5D98917ADCB2D0086DCFE /* delete-meeting@2x.png */; };
+		3FD76DCB1800A4F400077CDF /* LLDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD76DC01800A4F400077CDF /* LLDatePicker.m */; };
+		3FD76DCC1800A4F400077CDF /* LLCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD76DC21800A4F400077CDF /* LLCalendarView.m */; };
+		3FD76DCD1800A4F400077CDF /* LLCalendarViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD76DC41800A4F400077CDF /* LLCalendarViewLayout.m */; };
+		3FD76DCE1800A4F400077CDF /* LLSpringyCalendarViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD76DC61800A4F400077CDF /* LLSpringyCalendarViewLayout.m */; };
+		3FD76DCF1800A4F400077CDF /* LLCalendarDayCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD76DC81800A4F400077CDF /* LLCalendarDayCell.m */; };
+		3FD76DD01800A4F400077CDF /* LLCalendarMonthTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD76DCA1800A4F400077CDF /* LLCalendarMonthTitleView.m */; };
+		3FD76DD31800A62000077CDF /* NSDate+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD76DD21800A62000077CDF /* NSDate+Helper.m */; };
 		3FE80CE6174DBFEC0009D61D /* nav-bar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CE5174DBFEC0009D61D /* nav-bar@2x.png */; };
 		3FE80CE8174DC82D0009D61D /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CE7174DC82D0009D61D /* back@2x.png */; };
 		3FE80CEC174DCBE90009D61D /* add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FE80CEB174DCBE90009D61D /* add@2x.png */; };
@@ -201,7 +209,8 @@
 		3F94A966178659350054A733 /* ContactImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactImageView.m; sourceTree = "<group>"; };
 		3F94A9691786625E0054A733 /* avatar-gloss-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "avatar-gloss-small@2x.png"; path = "Queue/avatar-gloss-small@2x.png"; sourceTree = "<group>"; };
 		3F96995417D9B4A80018A2A2 /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
-		3F96995617D9B4B50018A2A2 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = "../../../Downloads/GoogleMaps-iOS-1.4.2/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle"; sourceTree = "<group>"; };
+		3F97456317DB94040036D117 /* Reveal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Reveal.framework; sourceTree = "<group>"; };
+		3F97456517DB94560036D117 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		3F97763F175723C200E6B5B7 /* LocationChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationChooserViewController.h; sourceTree = "<group>"; };
 		3F977640175723C200E6B5B7 /* LocationChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationChooserViewController.m; sourceTree = "<group>"; };
 		3F977642175726B000E6B5B7 /* calendar_full@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "calendar_full@2x.png"; path = "Queue/calendar_full@2x.png"; sourceTree = "<group>"; };
@@ -274,6 +283,20 @@
 		3FAC625D1762FD0600E20373 /* NSArray-SortUsingArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray-SortUsingArray.m"; sourceTree = "<group>"; };
 		3FB5D98817ADCB2D0086DCFE /* cancel-delete-meeting@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cancel-delete-meeting@2x.png"; path = "Queue/cancel-delete-meeting@2x.png"; sourceTree = "<group>"; };
 		3FB5D98917ADCB2D0086DCFE /* delete-meeting@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "delete-meeting@2x.png"; path = "Queue/delete-meeting@2x.png"; sourceTree = "<group>"; };
+		3FD76DBF1800A4F400077CDF /* LLDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLDatePicker.h; sourceTree = "<group>"; };
+		3FD76DC01800A4F400077CDF /* LLDatePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLDatePicker.m; sourceTree = "<group>"; };
+		3FD76DC11800A4F400077CDF /* LLCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLCalendarView.h; sourceTree = "<group>"; };
+		3FD76DC21800A4F400077CDF /* LLCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLCalendarView.m; sourceTree = "<group>"; };
+		3FD76DC31800A4F400077CDF /* LLCalendarViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLCalendarViewLayout.h; sourceTree = "<group>"; };
+		3FD76DC41800A4F400077CDF /* LLCalendarViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLCalendarViewLayout.m; sourceTree = "<group>"; };
+		3FD76DC51800A4F400077CDF /* LLSpringyCalendarViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLSpringyCalendarViewLayout.h; sourceTree = "<group>"; };
+		3FD76DC61800A4F400077CDF /* LLSpringyCalendarViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLSpringyCalendarViewLayout.m; sourceTree = "<group>"; };
+		3FD76DC71800A4F400077CDF /* LLCalendarDayCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLCalendarDayCell.h; sourceTree = "<group>"; };
+		3FD76DC81800A4F400077CDF /* LLCalendarDayCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLCalendarDayCell.m; sourceTree = "<group>"; };
+		3FD76DC91800A4F400077CDF /* LLCalendarMonthTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLCalendarMonthTitleView.h; sourceTree = "<group>"; };
+		3FD76DCA1800A4F400077CDF /* LLCalendarMonthTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLCalendarMonthTitleView.m; sourceTree = "<group>"; };
+		3FD76DD11800A62000077CDF /* NSDate+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Helper.h"; sourceTree = "<group>"; };
+		3FD76DD21800A62000077CDF /* NSDate+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Helper.m"; sourceTree = "<group>"; };
 		3FE80CE5174DBFEC0009D61D /* nav-bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "nav-bar@2x.png"; path = "Queue/nav-bar@2x.png"; sourceTree = "<group>"; };
 		3FE80CE7174DC82D0009D61D /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "back@2x.png"; path = "Queue/back@2x.png"; sourceTree = "<group>"; };
 		3FE80CEB174DCBE90009D61D /* add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "add@2x.png"; path = "Queue/add@2x.png"; sourceTree = "<group>"; };
@@ -306,6 +329,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F97456617DB94560036D117 /* CFNetwork.framework in Frameworks */,
 				3F934458175AF245000FD331 /* AVFoundation.framework in Frameworks */,
 				3F934459175AF245000FD331 /* CoreText.framework in Frameworks */,
 				3F93445A175AF245000FD331 /* GLKit.framework in Frameworks */,
@@ -313,6 +337,7 @@
 				3F93445C175AF245000FD331 /* libc++.dylib in Frameworks */,
 				3F93445D175AF245000FD331 /* libicucore.dylib in Frameworks */,
 				3F96995517D9B4A80018A2A2 /* GoogleMaps.framework in Frameworks */,
+				3F97456417DB94040036D117 /* Reveal.framework in Frameworks */,
 				3F93445E175AF245000FD331 /* libz.dylib in Frameworks */,
 				3F93445F175AF245000FD331 /* OpenGLES.framework in Frameworks */,
 				3F934460175AF245000FD331 /* QuartzCore.framework in Frameworks */,
@@ -380,7 +405,8 @@
 		3FA1018A17447769007D2520 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3F96995617D9B4B50018A2A2 /* GoogleMaps.bundle */,
+				3F97456517DB94560036D117 /* CFNetwork.framework */,
+				3F97456317DB94040036D117 /* Reveal.framework */,
 				3F96995417D9B4A80018A2A2 /* GoogleMaps.framework */,
 				3FA1018B17447769007D2520 /* UIKit.framework */,
 				3FA1018D17447769007D2520 /* Foundation.framework */,
@@ -393,6 +419,7 @@
 		3FA1019117447769007D2520 /* Queue */ = {
 			isa = PBXGroup;
 			children = (
+				3FD76DBE1800A4EA00077CDF /* LLDatePicker */,
 				3F97F72317BB4B63003CF7DB /* NSObject+Blocks.h */,
 				3F97F72417BB4B63003CF7DB /* NSObject+Blocks.m */,
 				3F94A959178621A10054A733 /* UIImage+Alpha.h */,
@@ -508,6 +535,27 @@
 				3FAC625A1762FC7D00E20373 /* IntervalPicker.plist */,
 			);
 			name = plists;
+			sourceTree = "<group>";
+		};
+		3FD76DBE1800A4EA00077CDF /* LLDatePicker */ = {
+			isa = PBXGroup;
+			children = (
+				3FD76DD11800A62000077CDF /* NSDate+Helper.h */,
+				3FD76DD21800A62000077CDF /* NSDate+Helper.m */,
+				3FD76DBF1800A4F400077CDF /* LLDatePicker.h */,
+				3FD76DC01800A4F400077CDF /* LLDatePicker.m */,
+				3FD76DC11800A4F400077CDF /* LLCalendarView.h */,
+				3FD76DC21800A4F400077CDF /* LLCalendarView.m */,
+				3FD76DC31800A4F400077CDF /* LLCalendarViewLayout.h */,
+				3FD76DC41800A4F400077CDF /* LLCalendarViewLayout.m */,
+				3FD76DC51800A4F400077CDF /* LLSpringyCalendarViewLayout.h */,
+				3FD76DC61800A4F400077CDF /* LLSpringyCalendarViewLayout.m */,
+				3FD76DC71800A4F400077CDF /* LLCalendarDayCell.h */,
+				3FD76DC81800A4F400077CDF /* LLCalendarDayCell.m */,
+				3FD76DC91800A4F400077CDF /* LLCalendarMonthTitleView.h */,
+				3FD76DCA1800A4F400077CDF /* LLCalendarMonthTitleView.m */,
+			);
+			name = LLDatePicker;
 			sourceTree = "<group>";
 		};
 		3FE80CE4174DBFA50009D61D /* Images */ = {
@@ -670,7 +718,6 @@
 				3FAC62561762F78700E20373 /* reminder-icon@2x.png in Resources */,
 				3FAC62581762F8AD00E20373 /* reminder-icon-disabled@2x.png in Resources */,
 				3FAC625B1762FC7D00E20373 /* IntervalPicker.plist in Resources */,
-				3F96995717D9B4B60018A2A2 /* GoogleMaps.bundle in Resources */,
 				3F3264971763A328000BCF83 /* reminder-day-of-disabled@2x.png in Resources */,
 				3F3264991763A37F000BCF83 /* reminder-day-of-enabled@2x.png in Resources */,
 				3F32649C1763AAD6000BCF83 /* reminder-day-before-disabled@2x.png in Resources */,
@@ -728,6 +775,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FD76DD01800A4F400077CDF /* LLCalendarMonthTitleView.m in Sources */,
 				3FAC625F1763017F00E20373 /* NSArray-SortUsingArray.m in Sources */,
 				3F93443B175ADBC5000FD331 /* LLDataDownloader.m in Sources */,
 				3FA1019817447769007D2520 /* main.m in Sources */,
@@ -742,10 +790,15 @@
 				3FF2C027174B52DC007203D8 /* TimelineViewController.m in Sources */,
 				3FE80D00174DE8A30009D61D /* QueueBarButtonItem.m in Sources */,
 				3FE80D07174F0D380009D61D /* QueueContactCell.m in Sources */,
+				3FD76DCF1800A4F400077CDF /* LLCalendarDayCell.m in Sources */,
 				3F98A2EF17529A32006A3668 /* MeetingCell.m in Sources */,
+				3FD76DCE1800A4F400077CDF /* LLSpringyCalendarViewLayout.m in Sources */,
 				3F977641175723C200E6B5B7 /* LocationChooserViewController.m in Sources */,
 				3F934444175ADDF2000FD331 /* SBJSON.m in Sources */,
+				3FD76DCB1800A4F400077CDF /* LLDatePicker.m in Sources */,
+				3FD76DCC1800A4F400077CDF /* LLCalendarView.m in Sources */,
 				3F934445175ADDF2000FD331 /* SBJsonBase.m in Sources */,
+				3FD76DCD1800A4F400077CDF /* LLCalendarViewLayout.m in Sources */,
 				3F934446175ADDF2000FD331 /* SBJsonParser.m in Sources */,
 				3F934447175ADDF2000FD331 /* SBJsonWriter.m in Sources */,
 				3F9EF887175C10BD0089EC2A /* Location.m in Sources */,
@@ -758,6 +811,7 @@
 				3F94A95F178621A20054A733 /* UIImage+Alpha.m in Sources */,
 				3F94A961178621A20054A733 /* UIImage+Resize.m in Sources */,
 				3F94A963178621A20054A733 /* UIImage+RoundedCorner.m in Sources */,
+				3FD76DD31800A62000077CDF /* NSDate+Helper.m in Sources */,
 				3F94A967178659350054A733 /* ContactImageView.m in Sources */,
 				695BF16117878BA000A3F865 /* ContactChooserViewController.m in Sources */,
 				3FAA91DD179658090002670F /* Contact+LocalNotifications.m in Sources */,
@@ -816,10 +870,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					"$(ARCHS_STANDARD)",
-					armv7,
-				);
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -842,7 +893,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = armv7;
@@ -853,10 +904,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					"$(ARCHS_STANDARD)",
-					armv7,
-				);
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;

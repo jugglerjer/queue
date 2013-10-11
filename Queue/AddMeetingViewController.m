@@ -10,6 +10,7 @@
 #import "QueueBarButtonItem.h"
 #import "Meeting.h"
 #import "Contact.h"
+#import "LLDatePicker.h"
 
 #define kDateCellRow    0
 #define kNoteCellRow    1
@@ -17,7 +18,7 @@
 @interface AddMeetingViewController ()
 
 @property (strong, nonatomic) Meeting * meeting;
-@property (strong, nonatomic) UIDatePicker *datePicker;
+@property (strong, nonatomic) LLDatePicker *datePicker;
 @property (strong, nonatomic) UITextView * textView;
 @property (strong, nonatomic) UILabel * dateLabel;
 @property (strong, nonatomic) LocationChooserViewController *locationChooser;
@@ -242,18 +243,20 @@ static CGFloat keyboardHeight = 216;
 //    self.locationExpanderButton = scrollButton;
 //    [self.scrollView addSubview:scrollButton];
     
-    UIDatePicker *datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
-                                                                              self.view.bounds.size.height,
+    LLDatePicker *datePicker = [[LLDatePicker alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
+                                                                              self.view.bounds.size.height - (keyboardHeight + 44) - (44 + 20),
                                                                               self.view.bounds.size.width,
-                                                                              keyboardHeight)];
-    datePicker.datePickerMode = UIDatePickerModeDate;
-    datePicker.maximumDate = [NSDate date];
+                                                                              keyboardHeight + 44)];
+//    datePicker.datePickerMode = UIDatePickerModeDate;
+//    datePicker.maximumDate = [NSDate date];
     datePicker.date = self.meeting.date;
     [datePicker addTarget:self action:@selector(datePickerDateDidChange:) forControlEvents:UIControlEventValueChanged];
     self.datePicker = datePicker;
     [self.view addSubview:self.datePicker];
+    self.isDatePickerVisible = YES;
+    [self hideDatePickerAnimated:NO completion:nil];
     
-    self.isDatePickerVisible = NO;
+//    self.isDatePickerVisible = NO;
     self.isKeyboardVisible = NO;
     
     if (self.editMeetingType == QueueEditMeetingTypeAdd) {
@@ -455,44 +458,54 @@ static CGFloat keyboardHeight = 216;
 - (void)showDatePickerAnimated:(BOOL)animated completion:(void (^)())completionBlock;
 {
     if (self.isDatePickerVisible == NO) {
-        CGRect newFrame = CGRectMake(self.view.bounds.origin.x,
-                                     self.view.bounds.size.height - keyboardHeight,
-                                     self.view.bounds.size.width,
-                                     keyboardHeight);
-        float duration = animated ? 0.25f : 0.0f;
-        float delay = self.isKeyboardVisible ? 0.25f : 0.0f;
-        [UIView animateWithDuration:duration delay:delay options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveLinear
-                         animations:^{self.datePicker.frame = newFrame;}
-                         completion:^(BOOL finished){
-                             [self setIsDatePickerVisible:YES];
-                             if (completionBlock != nil)
-                                 completionBlock();
-                         }];
+//        CGRect newFrame = CGRectMake(self.view.bounds.origin.x,
+//                                     self.view.bounds.size.height - keyboardHeight,
+//                                     self.view.bounds.size.width,
+//                                     keyboardHeight);
+//        float duration = animated ? 0.25f : 0.0f;
+        float delay = self.isKeyboardVisible ? 0.5f : 0.0f;
+//        [UIView animateWithDuration:duration delay:delay options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveLinear
+//                         animations:^{self.datePicker.frame = newFrame;}
+//                         completion:^(BOOL finished){
+//                             [self setIsDatePickerVisible:YES];
+//                             if (completionBlock != nil)
+//                                 completionBlock();
+//                         }];
+        [_datePicker showWithAnimation:animated afterDelay:delay completion:^{
+            [self setIsDatePickerVisible:YES];
+            if (completionBlock != nil)
+                completionBlock();
+        }];
     }
 }
 
 - (void)hideDatePickerAnimated:(BOOL)animated completion:(void (^)())completionBlock;
 {
     if (self.isDatePickerVisible == YES) {
-        CGRect newFrame = CGRectMake(self.view.bounds.origin.x,
-                                     self.view.bounds.size.height,
-                                     self.view.bounds.size.width,
-                                     keyboardHeight);
-        float duration = animated ? 0.25f : 0.0f;
+//        CGRect newFrame = CGRectMake(self.view.bounds.origin.x,
+//                                     self.view.bounds.size.height,
+//                                     self.view.bounds.size.width,
+//                                     keyboardHeight);
+//        float duration = animated ? 0.25f : 0.0f;
         float delay = 0.0f;
-        [UIView animateWithDuration:duration delay:delay options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveLinear
-                         animations:^{self.datePicker.frame = newFrame;}
-                         completion:^(BOOL finished){
-                             [self setIsDatePickerVisible:NO];
-                             if (completionBlock != nil)
-                                 completionBlock();
-                         }];
+//        [UIView animateWithDuration:duration delay:delay options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveLinear
+//                         animations:^{self.datePicker.frame = newFrame;}
+//                         completion:^(BOOL finished){
+//                             [self setIsDatePickerVisible:NO];
+//                             if (completionBlock != nil)
+//                                 completionBlock();
+//                         }];
+        [_datePicker hideWithAnimation:animated afterDelay:delay completion:^{
+            [self setIsDatePickerVisible:NO];
+            if (completionBlock != nil)
+                completionBlock();
+        }];
     }
 }
 
 - (void)datePickerDateDidChange:(id)sender
 {
-    UIDatePicker *datePicker = (UIDatePicker *)sender;
+    LLDatePicker *datePicker = (LLDatePicker *)sender;
     self.meeting.date = datePicker.date;
     self.dateLabel.text = [self stringForMeetingDate:self.meeting.date];
 }
