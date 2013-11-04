@@ -28,6 +28,20 @@ BOOL isScrollingUp = NO;
     }
     return self;
 }
+
+- (void)setContentOffset:(CGPoint)contentOffset {
+    [super setContentOffset:contentOffset];
+//    NSLog(@"%f", contentOffset.y);
+}
+
+- (void)setFrame:(CGRect)frame {
+    [super setFrame:frame];
+}
+
+- (void)setTransform:(CGAffineTransform)transform {
+    [super setTransform:transform];
+}
+
 //
 //- (void)handleSwipe:(UISwipeGestureRecognizer *)recognizer
 //{

@@ -33,7 +33,6 @@
 static int defaultCellHeight = 44;
 BOOL isScrollViewDismissed;
 BOOL isInSelectionMode;
-BOOL isSwitchingToPage;
 int currentPage = -1;
 int pageToSwitchTo;
 #define degreesToRadians(x) (M_PI * x / 180.0)
@@ -137,6 +136,9 @@ int pageToSwitchTo;
 {
     pageToSwitchTo = page;
     
+    // Disengage the page switcher
+//    [self resignScrollControl];
+    
     if (self.currentViewController)
     {
         // Remove the current presented view from the heirarchy
@@ -167,9 +169,13 @@ int pageToSwitchTo;
 // -----------------------------------------
 - (void)resumeCurrentViewController:(UIViewController *)currentViewController atPage:(NSUInteger)page
 {
+    // Disengage the page switcher
+//    [self performSelector:@selector(resignScrollControl) withObject:nil afterDelay:0.4];
+//    [self resignScrollControl];
+    
     pageToSwitchTo = page;
-    [self setPageSwitchingMode:YES withDelay:0.0];
-    [self setPageSwitchingMode:NO withDelay:0.4];
+//    [self setPageSwitchingMode:YES withDelay:0.0];
+//    [self setPageSwitchingMode:NO withDelay:0.4];
 }
 
 // -----------------------------------------
@@ -187,29 +193,13 @@ int pageToSwitchTo;
 // Recognizes when the user scrolls to a
 // particular page location but before a
 // selection is made
-//
-// &
-//
-// Removes the scrollView from view when the
-// user scrolls it more than 50% of the way
-// down the screen's view area
 // -----------------------------------------
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-//   NSLog(@"%f", scrollView.contentOffset.y);
     // Let the delegate know that we stopped hovering over the previous page
     // and began hovering over the next
     if (isInSelectionMode)
     {
-        // Dismiss the scroll view if it's been dragged far enough
-//        float minOffset = scrollView.frame.size.height - (self.cellHeight * 3.0);
-//        if (ABS(scrollView.contentOffset.y) <= minOffset)
-//        {
-//            [self exitSelectionMode];
-//            [self dismissScrollView];
-//
-//        }
-        
         if ([self shouldDismissScrollView])
         {
             if ([_delegate respondsToSelector:@selector(pullNavigationController:canNoLongerSelectPage:)])
@@ -231,10 +221,10 @@ int pageToSwitchTo;
     }
     
     // If we're just starting to scroll, slowly fade in the instruction view
-    [self updateInstructionView];
+//    [self updateInstructionView];
     
     // If we're switching to a page, notify the delegate when we reach the beginning of the page
-    if (isSwitchingToPage)
+    if (_isSwitchingToPage)
     {
         double currentPosition = ABS(scrollView.contentOffset.y - scrollView.frame.size.height);
         double pagePosition = (self.cellHeight * pageToSwitchTo);
@@ -251,7 +241,8 @@ int pageToSwitchTo;
 // -----------------------------------------
 - (void)adjustToPoint:(CGPoint)point
 {
-    [self.scrollView setContentOffset:CGPointMake(point.x, point.y + self.scrollView.frame.size.height)];
+    [self.scrollView setContentOffset:CGPointMake(point.x, point.y + self.view.frame.size.height)];
+    NSLog(@"Pull View Content Offset: %f", _scrollView.contentOffset.y - _scrollView.frame.size.height);
 }
 
 // -----------------------------------------
@@ -309,7 +300,8 @@ int pageToSwitchTo;
 //                         self.scrollView.frame = frame;
 //                     }];
     self.scrollView.userInteractionEnabled = YES;
-    [self setPageSwitchingMode:YES withDelay:0.0];
+//    [self setPageSwitchingMode:YES withDelay:0.0];
+    _isSwitchingToPage = YES;
     [self.scrollView setContentOffset:CGPointMake(0, self.view.frame.size.height) animated:YES];
     [self setPageSwitchingMode:NO withDelay:0.4];
     
@@ -326,7 +318,7 @@ int pageToSwitchTo;
 
 - (void)setPageSwitchingMode:(NSNumber *)mode
 {
-    isSwitchingToPage = [mode boolValue];
+    _isSwitchingToPage = [mode boolValue];
 }
 
 // -----------------------------------------
@@ -364,7 +356,8 @@ int pageToSwitchTo;
 {
 //    if (!isSwitchingToPage)
 //    {
-        float scrollDistance = ABS(self.scrollView.contentOffset.y - self.scrollView.frame.size.height);
+    float scrollDistance = ABS(self.scrollView.contentOffset.y - self.view.frame.size.height);
+    NSLog(@"%f", scrollDistance);
         float alpha = scrollDistance/self.cellHeight <= 1.0 ? scrollDistance/self.cellHeight : 1.0;
 //    float alpha = scrollDistance/self.cellHeight == 0.0 ? 0.0 : 1.0;
 //    if (self.instructionView.alpha != alpha)

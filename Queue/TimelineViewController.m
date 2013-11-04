@@ -73,8 +73,9 @@ static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/a
     addMeetingController.contact = self.contact;
     addMeetingController.delegate = self;
     addMeetingController.editMeetingType = QueueEditMeetingTypeAdd;
-    UINavigationController *navContoller = [[UINavigationController alloc] initWithRootViewController:addMeetingController];
-    [self.queueViewController.navigationController presentViewController:navContoller animated:YES completion:nil];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:addMeetingController];
+    navController.navigationBar.barTintColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1];
+    [self.queueViewController.navigationController presentViewController:navController animated:YES completion:nil];
 }
 
 - (void)snoozeContact
@@ -99,6 +100,7 @@ static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/a
     addContactController.delegate = self;
     addContactController.editContactType = QueueEditContactTypeUpdate;
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:addContactController];
+    navController.navigationBar.barTintColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1];
     [self.queueViewController.navigationController presentViewController:navController animated:YES completion:nil];
 }
 

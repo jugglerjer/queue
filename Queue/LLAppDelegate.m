@@ -25,18 +25,14 @@
 {
 //    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"nav-bar.png"] forBarMetrics:UIBarMetricsDefault];
 //    [[UINavigationBar appearance] setBackgroundColor:[UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1]];
-//    [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1]];
+    [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1]];
     
     [[UINavigationBar appearance] setTitleTextAttributes:
      [NSDictionary dictionaryWithObjectsAndKeys:
       [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0],
-      UITextAttributeTextColor,
-      [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.2],
-      UITextAttributeTextShadowColor,
-      [NSValue valueWithUIOffset:UIOffsetMake(0, -1)],
-      UITextAttributeTextShadowOffset,
+      NSForegroundColorAttributeName,
       [UIFont fontWithName:@"HelveticaNeue-Light" size:21.0],
-      UITextAttributeFont,
+      NSFontAttributeName,
       nil]];
     
     UIImage *backButtonImageNormal = [UIImage imageNamed:@"nav_button_back.png"];
@@ -91,11 +87,12 @@
     queueTable.managedObjectContext = context;
     
     // Add the table to the nav controller
-    LLPullNavigationController *pullController = [[LLPullNavigationController alloc] initWithRootViewController:queueTable];
-    self.pullController = pullController;
+    _pullController = [[LLPullNavigationController alloc] initWithRootViewController:queueTable];
+//    _navController = [[UINavigationController alloc] initWithRootViewController:queueTable];
+//    self.pullController = pullController;
     
     // Add the nav controller to the window
-    self.window.rootViewController = self.pullController;
+    self.window.rootViewController = _pullController;
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];

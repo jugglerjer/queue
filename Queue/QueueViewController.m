@@ -25,12 +25,23 @@
 @property (nonatomic) NSMutableArray *contactsArray;
 @property (strong, nonatomic) TimelineViewController *timeline;
 @property (strong, nonatomic) QueueBarButtonItem *addButton;
+@property (strong, nonatomic) LLPullNavigationController *pullController;
 
 @property (strong, nonatomic) UIPanGestureRecognizer *navBarGesture;
 //@property (strong, nonatomic) UIPanGestureRecognizer *tableGesture;
 
 @property (strong, nonatomic) Meeting *defaultMeeting;
 @property (strong, nonatomic) LLLocationManager *locationManager;
+
+// Store the table view's bounds before and after
+// expanding the timeline in order to animate back
+// to that position once the timeline is removed
+@property CGRect contractedBounds;
+@property CGRect expandedBounds;
+
+// Store the indexPath of a new contact in order to
+// insert the given row after animating to its position
+@property (strong, nonatomic) NSIndexPath *addedContactIndexPath;
 
 @property BOOL isScrollingToNewContact;
 @property BOOL isTimelineExpanded;
@@ -311,28 +322,30 @@ BOOL isScrollingDown;
 - (void)insertRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Only perform this animation once the view has scrolled to the new contact
-    // This method will continue to call itself every few milliseconds until
-    // the view has finished scrolling
-    
+    _addedContactIndexPath = indexPath;
     NSIndexPath *scrollToIndexPath;
     if (indexPath.row == [self.contactsArray count] - 1)
         scrollToIndexPath = [NSIndexPath indexPathForRow:[self.contactsArray count] - 2 inSection:0];
     else
         scrollToIndexPath = indexPath;
     
-    if ([self.contactsArray count] > 1)
-    {
-        [self.tableView scrollToRowAtIndexPath:scrollToIndexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
-        
-        if ([self.tableView.indexPathsForVisibleRows containsObject:scrollToIndexPath])
-            [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-        else
-            [self performSelector:@selector(insertRowAtIndexPath:) withObject:scrollToIndexPath afterDelay:50];
-    }
-    else
-    {
-        [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-    }
+//    if ([self.contactsArray count] > 1)
+//    {
+//        _isScrollingToNewContact = YES;
+//        [self.tableView scrollToRowAtIndexPath:scrollToIndexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+//    
+//        if ([self.tableView.indexPathsForVisibleRows containsObject:scrollToIndexPath])
+//            [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+//        else
+//            [self performSelector:@selector(insertRowAtIndexPath:) withObject:indexPath afterDelay:50];
+//    }
+//    else
+//    {
+//        [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+//    }
+    
+    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+    [self.tableView scrollToRowAtIndexPath:scrollToIndexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
 
 }
 
@@ -376,13 +389,14 @@ BOOL isScrollingDown;
 // to a just-added contact so the new row will be
 // in view when it is inserted
 // --------------------------------------------------------
-//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-//{
-//    if (self.isScrollingToNewContact)
-//    {
-//        self.isScrollingToNewContact = NO;
-//    }
-//}
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
+{
+    if (self.isScrollingToNewContact)
+    {
+        self.isScrollingToNewContact = NO;
+        [self.tableView insertRowsAtIndexPaths:@[_addedContactIndexPath] withRowAnimation:UITableViewRowAnimationLeft];
+    }
+}
 
 - (NSIndexPath *)timelineIndexPath
 {
@@ -588,28 +602,56 @@ BOOL isScrollingDown;
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     LLPullNavigationController *pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
-    if (scrollView.contentOffset.y <= 0)
+    if ([self.tableView.panGestureRecognizer velocityInView:[_tableView superview]].y > 0
+        && scrollView.contentOffset.y <= -self.navigationController.navigationBar.frame.size.height)
+    {
+        [self prepareForQueueSelectionModeToBegin];
         [pullController engageWithGestureRecognizer:self.tableView.panGestureRecognizer];
+    }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    NSLog(@"Scroll View Offset: %f", scrollView.contentOffset.y);
+    NSLog(@"Scroll View Inset: %f", scrollView.contentInset.top);
     LLPullNavigationController *pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
     if (scrollView.contentOffset.y < 0)
     {
         isScrollingDown = YES;
-        if (pullController.isEngaged)
+        if (pullController.isEngaged/* || pullController.isSwitchingToPage*/)
         {
             [pullController adjustToPoint:CGPointMake(0, scrollView.contentOffset.y)];
-            [UIView animateWithDuration:0.0 animations:^{self.navigationController.navigationBar.alpha = 0.0;}];
-//            [self.view setTransform:CGAffineTransformMakeTranslation(0, scrollView.contentOffset.y)];
+            [self.view setTransform:CGAffineTransformMakeTranslation(0, (scrollView.contentOffset.y + self.navigationController.navigationBar.frame.size.height))];
         }
     }
-    else
+//    else
+//    {
+//        isScrollingDown = NO;
+//        [pullController disengageWithPotentialPageSwitch:NO];
+//        [self prepareForQueueSelectionModeToEnd];
+//    }
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    LLPullNavigationController *pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
+    if (/*isScrollingDown && */pullController.isEngaged)
     {
-        isScrollingDown = NO;
-        [pullController disengageWithPotentialPageSwitch:NO];
-        [UIView animateWithDuration:0.0 animations:^{self.navigationController.navigationBar.alpha = 1.0;}];
+        [pullController disengageWithPotentialPageSwitch:YES];
+        if (pullController.isSwitchingToPage) {
+            pullController.isEngaged = NO;
+            [self prepareForQueueSelectionModeToEnd];
+        }
+    }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+//    LLPullNavigationController *pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
+    if (scrollView.frame.origin.y != 0.0)
+    {
+        _pullController.isEngaged = NO;
+        [self prepareForQueueSelectionModeToEnd];
     }
 }
 
@@ -617,11 +659,25 @@ BOOL isScrollingDown;
 // Prepare for queue selection mode when
 // The user begins dragging the table
 // -----------------------------------------
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+- (void)prepareForQueueSelectionModeToBegin
 {
-    LLPullNavigationController *pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
-    if (isScrollingDown && pullController.isEngaged)
-        [pullController disengageWithPotentialPageSwitch:YES];
+//    [_tableView setTransform:CGAffineTransformMakeTranslation(0.0, _tableView.contentInset.top)];
+    [UIView animateWithDuration:0.0 animations:^{self.navigationController.navigationBar.alpha = 0.0;}];
+    [_tableView setContentInset:UIEdgeInsetsZero];
+    _tableView.showsVerticalScrollIndicator = NO;
+}
+
+// -----------------------------------------
+// Prepare for resumption of normal mode when
+// the user stops dragging the table
+// -----------------------------------------
+- (void)prepareForQueueSelectionModeToEnd
+{
+    [UIView animateWithDuration:0.0 animations:^{self.navigationController.navigationBar.alpha = 1.0;}];
+    [_tableView setContentInset:UIEdgeInsetsMake(self.navigationController.navigationBar.frame.size.height, 0.0, 0.0, 0.0)];
+    [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    [_tableView setTransform:CGAffineTransformMakeTranslation(0.0, 0.0)];
+    _tableView.showsVerticalScrollIndicator = YES;
 }
 
 # pragma mark - Queue Row Selection Methods
@@ -658,7 +714,7 @@ BOOL isScrollingDown;
 //    [self.tableView reloadData];
     [self slideTimelineDownWithAnimation:YES];
 //    [self performSelector:@selector(slideTimeline) withObject:nil afterDelay:0.3];
-    [self performSelector:@selector(scrollCellAtIndexPathToTop:) withObject:timelineIndexPath afterDelay:0.25];
+//    [self performSelector:@selector(scrollCellAtIndexPathToTop:) withObject:_selectedIndexPath afterDelay:0.25];
 //    [self scrollCellAtIndexPathToTop:timelineIndexPath];
 //    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
 //    [self.addButton setEnabled:NO];
@@ -708,7 +764,7 @@ BOOL isScrollingDown;
 {
 //    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
 
-    CGFloat offset = (indexPath.row-1) * contactRowHeight;
+    CGFloat offset = (indexPath.row-1) * contactRowHeight - 64 /* iOS7 status bar + nav bar */;
     [self.tableView setContentOffset:CGPointMake(0, offset) animated:YES];
 }
 
@@ -725,12 +781,21 @@ BOOL isScrollingDown;
     
     CGRect shadowFrame = self.timeline.view.bounds;
     shadowFrame.size.height = [self fullTimelineHeight];
+    
+    // Change the table view's bounds so that the selected cell is
+    // scrolled to the top. We do this instead of just setting the scroll position
+    // or contentOffset because we want it to animate while the cells are sliding down
+    // beneath it.
+    _contractedBounds = _tableView.bounds;
+    _expandedBounds = _contractedBounds;
+    _expandedBounds.origin.y = _selectedIndexPath.row * contactRowHeight - self.navigationController.navigationBar.frame.size.height;
 
     [UIView animateWithDuration:duration
                      animations:^{
 //                         self.timeline.view.frame = frame;
                          [cell setFrame:cellFrame];
                          [self.timeline.innerShadowView setFrame:shadowFrame];
+                         [_tableView setBounds:_expandedBounds];
                          
                          // Move all the other cells down
                          for (int i = [self timelineIndexPath].row + 1; i <= [self.contactsArray count]; i++)
@@ -762,6 +827,7 @@ BOOL isScrollingDown;
                      animations:^{
                          [cell setFrame:cellFrame];
                          [self.timeline.innerShadowView setFrame:shadowFrame];
+                         [_tableView setBounds:_contractedBounds];
                          
                          // Move all the other cells up
                          for (int i= [self timelineIndexPath].row + 1; i <= [self.contactsArray count]; i++)
@@ -837,6 +903,10 @@ BOOL isScrollingDown;
 {
     [super viewDidLoad];
     
+    // Don't inset scroll view content - iOS7
+//    self.automaticallyAdjustsScrollViewInsets = NO;
+//    self.extendedLayoutIncludesOpaqueBars = NO;
+    
     // A a gesture recognizer to the navigation bar to let the user pull to switch queues using its area
     UIPanGestureRecognizer *navBarGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
     navBarGesture.delegate = self;
@@ -845,16 +915,17 @@ BOOL isScrollingDown;
     self.view.backgroundColor = [UIColor clearColor];
 	
     // Create a table view to hold the contacts
-    LLPullNavigationTableView *tableView = [[LLPullNavigationTableView alloc] initWithFrame:CGRectMake(self.view.frame.origin.x,
-                                                                           self.view.frame.origin.y/* + self.navigationController.navigationBar.frame.size.height*/,
+    LLPullNavigationTableView *tableView = [[LLPullNavigationTableView alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
+                                                                           self.view.bounds.origin.y/* + self.navigationController.navigationBar.frame.size.height*/,
                                                                            self.view.frame.size.width,
-                                                                           self.view.frame.size.height/* - self.navigationController.navigationBar.frame.size.height*/ - [UIApplication sharedApplication].statusBarFrame.size.height)
+                                                                           self.view.frame.size.height /*+ self.navigationController.navigationBar.frame.size.height*/ - [UIApplication sharedApplication].statusBarFrame.size.height)
                                                           style:UITableViewStylePlain];
     tableView.backgroundColor = [UIColor colorWithPatternImage: [UIImage imageNamed:@"queue_background.png"]];
 //    tableView.backgroundColor = [UIColor clearColor];
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     tableView.delegate = self;
     tableView.dataSource = self;
+    tableView.rowHeight = contactRowHeight;
 //    tableView.delaysContentTouches = NO;
     
     self.tableView = tableView;
@@ -890,16 +961,19 @@ BOOL isScrollingDown;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    // Unselect the selected row if any
-//    NSIndexPath*    selection = [self.tableView indexPathForSelectedRow];
-//    if (selection) {
-//        [self.tableView deselectRowAtIndexPath:selection animated:YES];
-//    }
+    
+    // Scroll back to the selected row if timeline is expanded
+    // to counter an iOS7 issue where the scroll view's content offset
+    // is adjusted when a new view is pushed on top of it and no one knows why
+    if (_isTimelineExpanded)
+    {
+        [_tableView setBounds:_expandedBounds];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
-
+    _pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
 }
 
 - (void)didReceiveMemoryWarning

@@ -107,6 +107,18 @@
 
 static CGFloat keyboardHeight = 216;
 
+- (id)init
+{
+    if (self = [super init])
+    {
+        // Make sure that the content doesn't hide behind the nav bar in iOS7
+        // This is appropriate because nothing on this page scrolls
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
+    
+    return self;
+}
+
 // ------------------------------
 // Save the updated settings
 // and dismiss the view

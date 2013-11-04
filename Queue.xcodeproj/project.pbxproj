@@ -26,6 +26,7 @@
 		3F5FA4B6175458FE002A0F5B /* email-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F5FA4B1175458FD002A0F5B /* email-button@2x.png */; };
 		3F5FA4B7175458FE002A0F5B /* settings-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F5FA4B2175458FD002A0F5B /* settings-button@2x.png */; };
 		3F5FA4B8175458FE002A0F5B /* snooze-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F5FA4B3175458FE002A0F5B /* snooze-button@2x.png */; };
+		3F8B3985181DA32A00F1125C /* UITableView+ScrollWithCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F8B3984181DA32A00F1125C /* UITableView+ScrollWithCallback.m */; };
 		3F934437175AD49C000FD331 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F934436175AD49C000FD331 /* CoreLocation.framework */; };
 		3F93443A175AD9DE000FD331 /* LLDataDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F934439175AD9DE000FD331 /* LLDataDownloader.m */; };
 		3F93443B175ADBC5000FD331 /* LLDataDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F934439175AD9DE000FD331 /* LLDataDownloader.m */; };
@@ -59,7 +60,6 @@
 		3F94A96A1786625F0054A733 /* avatar-gloss-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F94A9691786625E0054A733 /* avatar-gloss-small@2x.png */; };
 		3F94A96B1786625F0054A733 /* avatar-gloss-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F94A9691786625E0054A733 /* avatar-gloss-small@2x.png */; };
 		3F96995517D9B4A80018A2A2 /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F96995417D9B4A80018A2A2 /* GoogleMaps.framework */; };
-		3F97456417DB94040036D117 /* Reveal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F97456317DB94040036D117 /* Reveal.framework */; };
 		3F97456617DB94560036D117 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F97456517DB94560036D117 /* CFNetwork.framework */; };
 		3F977641175723C200E6B5B7 /* LocationChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F977640175723C200E6B5B7 /* LocationChooserViewController.m */; };
 		3F977644175726B000E6B5B7 /* calendar_full@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F977642175726B000E6B5B7 /* calendar_full@2x.png */; };
@@ -94,6 +94,7 @@
 		3FA101B417447769007D2520 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3FA101B217447769007D2520 /* InfoPlist.strings */; };
 		3FA101B717447769007D2520 /* QueueTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA101B617447769007D2520 /* QueueTests.m */; };
 		3FA101C8174484AB007D2520 /* LLPullNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FA101C7174484AB007D2520 /* LLPullNavigationController.m */; };
+		3FA8F73E182710B10097640D /* Reveal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FA8F73D182710B10097640D /* Reveal.framework */; };
 		3FAA91DD179658090002670F /* Contact+LocalNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FAA91DC179658090002670F /* Contact+LocalNotifications.m */; };
 		3FABEE231745F9A200BBB760 /* QueueViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FABEE221745F9A200BBB760 /* QueueViewController.m */; };
 		3FABEE291746012600BBB760 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FABEE271746012600BBB760 /* AddressBook.framework */; };
@@ -174,6 +175,8 @@
 		3F5FA4B1175458FD002A0F5B /* email-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "email-button@2x.png"; path = "Queue/email-button@2x.png"; sourceTree = "<group>"; };
 		3F5FA4B2175458FD002A0F5B /* settings-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "settings-button@2x.png"; path = "Queue/settings-button@2x.png"; sourceTree = "<group>"; };
 		3F5FA4B3175458FE002A0F5B /* snooze-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "snooze-button@2x.png"; path = "Queue/snooze-button@2x.png"; sourceTree = "<group>"; };
+		3F8B3983181DA32A00F1125C /* UITableView+ScrollWithCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+ScrollWithCallback.h"; sourceTree = "<group>"; };
+		3F8B3984181DA32A00F1125C /* UITableView+ScrollWithCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+ScrollWithCallback.m"; sourceTree = "<group>"; };
 		3F934436175AD49C000FD331 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		3F934438175AD9DE000FD331 /* LLDataDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLDataDownloader.h; sourceTree = "<group>"; };
 		3F934439175AD9DE000FD331 /* LLDataDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLDataDownloader.m; sourceTree = "<group>"; };
@@ -209,7 +212,6 @@
 		3F94A966178659350054A733 /* ContactImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactImageView.m; sourceTree = "<group>"; };
 		3F94A9691786625E0054A733 /* avatar-gloss-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "avatar-gloss-small@2x.png"; path = "Queue/avatar-gloss-small@2x.png"; sourceTree = "<group>"; };
 		3F96995417D9B4A80018A2A2 /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
-		3F97456317DB94040036D117 /* Reveal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Reveal.framework; sourceTree = "<group>"; };
 		3F97456517DB94560036D117 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		3F97763F175723C200E6B5B7 /* LocationChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationChooserViewController.h; sourceTree = "<group>"; };
 		3F977640175723C200E6B5B7 /* LocationChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationChooserViewController.m; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 		3FA101B617447769007D2520 /* QueueTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QueueTests.m; sourceTree = "<group>"; };
 		3FA101C6174484AB007D2520 /* LLPullNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLPullNavigationController.h; sourceTree = "<group>"; };
 		3FA101C7174484AB007D2520 /* LLPullNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLPullNavigationController.m; sourceTree = "<group>"; };
+		3FA8F73D182710B10097640D /* Reveal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Reveal.framework; sourceTree = "<group>"; };
 		3FAA91DB179658080002670F /* Contact+LocalNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Contact+LocalNotifications.h"; sourceTree = "<group>"; };
 		3FAA91DC179658090002670F /* Contact+LocalNotifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Contact+LocalNotifications.m"; sourceTree = "<group>"; };
 		3FABEE211745F9A200BBB760 /* QueueViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QueueViewController.h; sourceTree = "<group>"; };
@@ -336,8 +339,8 @@
 				3F93445B175AF245000FD331 /* ImageIO.framework in Frameworks */,
 				3F93445C175AF245000FD331 /* libc++.dylib in Frameworks */,
 				3F93445D175AF245000FD331 /* libicucore.dylib in Frameworks */,
+				3FA8F73E182710B10097640D /* Reveal.framework in Frameworks */,
 				3F96995517D9B4A80018A2A2 /* GoogleMaps.framework in Frameworks */,
-				3F97456417DB94040036D117 /* Reveal.framework in Frameworks */,
 				3F93445E175AF245000FD331 /* libz.dylib in Frameworks */,
 				3F93445F175AF245000FD331 /* OpenGLES.framework in Frameworks */,
 				3F934460175AF245000FD331 /* QuartzCore.framework in Frameworks */,
@@ -405,8 +408,8 @@
 		3FA1018A17447769007D2520 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3FA8F73D182710B10097640D /* Reveal.framework */,
 				3F97456517DB94560036D117 /* CFNetwork.framework */,
-				3F97456317DB94040036D117 /* Reveal.framework */,
 				3F96995417D9B4A80018A2A2 /* GoogleMaps.framework */,
 				3FA1018B17447769007D2520 /* UIKit.framework */,
 				3FA1018D17447769007D2520 /* Foundation.framework */,
@@ -428,6 +431,8 @@
 				3F94A95C178621A10054A733 /* UIImage+Resize.m */,
 				3F94A95D178621A10054A733 /* UIImage+RoundedCorner.h */,
 				3F94A95E178621A20054A733 /* UIImage+RoundedCorner.m */,
+				3F8B3983181DA32A00F1125C /* UITableView+ScrollWithCallback.h */,
+				3F8B3984181DA32A00F1125C /* UITableView+ScrollWithCallback.m */,
 				3F93443C175ADDF2000FD331 /* SBJSON.h */,
 				3F93443D175ADDF2000FD331 /* SBJSON.m */,
 				3F93443E175ADDF2000FD331 /* SBJsonBase.h */,
@@ -811,6 +816,7 @@
 				3F94A95F178621A20054A733 /* UIImage+Alpha.m in Sources */,
 				3F94A961178621A20054A733 /* UIImage+Resize.m in Sources */,
 				3F94A963178621A20054A733 /* UIImage+RoundedCorner.m in Sources */,
+				3F8B3985181DA32A00F1125C /* UITableView+ScrollWithCallback.m in Sources */,
 				3FD76DD31800A62000077CDF /* NSDate+Helper.m in Sources */,
 				3F94A967178659350054A733 /* ContactImageView.m in Sources */,
 				695BF16117878BA000A3F865 /* ContactChooserViewController.m in Sources */,

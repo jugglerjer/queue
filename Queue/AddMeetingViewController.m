@@ -109,6 +109,18 @@ static CGFloat keyboardHeight = 216;
 #define ICON_HEIGHT                  14
 #define ICON_WIDTH                   13
 
+- (id)init
+{
+    if (self = [super init])
+    {
+        // Make sure that the content doesn't hide behind the nav bar in iOS7
+        // This is appropriate because nothing on this page scrolls
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
+    
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -118,6 +130,9 @@ static CGFloat keyboardHeight = 216;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    // Make sure that the content doesn't hide behind the nav bar in iOS7
+    // This is appropriate because nothing on this page scrolls
     
     // Create Meeting Object
     if (self.meeting == nil) {

@@ -128,6 +128,12 @@ CGFloat rowHeight = 44.0;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self switchToQueueAtIndex:indexPath.row];
+//    QueueViewController *queueView = [[QueueViewController alloc] initWithQueue:[self.queuesArray objectAtIndex:indexPath.row]];
+//    queueView.managedObjectContext = self.managedObjectContext;
+//    queueView.title = [[self.queuesArray objectAtIndex:indexPath.row] name];
+//    
+//    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:queueView];
+//    [self.navigationController presentViewController:navController animated:YES completion:nil];
 }
 
 - (NSUInteger)pullNavigationControllerNumberOfPages:(LLPullNavigationController *)pullNavigationViewController

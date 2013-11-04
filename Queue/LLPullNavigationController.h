@@ -19,6 +19,7 @@
 @property (strong, nonatomic) LLPullNavigationScrollView *scrollView;
 @property int numberOfPages;
 @property BOOL isEngaged;
+@property BOOL isSwitchingToPage;
 
 - (id)initWithRootViewController:(UIViewController *)rootViewController;
 - (NSUInteger)currentPage;
