@@ -251,10 +251,11 @@ BOOL isScrollingDown;
     addMeetingController.contact = [self.contactsArray objectAtIndex:[self.tableView indexPathForCell:cell].row];
     addMeetingController.delegate = self;
     addMeetingController.editMeetingType = QueueEditMeetingTypeUpdate;
-    UINavigationController *navContoller = [[UINavigationController alloc] initWithRootViewController:addMeetingController];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:addMeetingController];
+    navController.navigationBar.barTintColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1];
     
     // Find the nearest navigation controller up the view hierarchy
-    [self presentViewController:navContoller animated:YES completion:nil];
+    [self presentViewController:navController animated:YES completion:nil];
 }
 
 - (void)addMeetingViewController:(AddMeetingViewController *)addMeetingViewController didUpdateMeeting:(Meeting *)meeting forContact:(Contact *)contact

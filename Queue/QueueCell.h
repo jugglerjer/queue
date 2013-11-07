@@ -7,13 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LLSwipeyCell.h"
 
 @protocol QueueCellDelegate;
 
-@interface QueueCell : UITableViewCell <UITextFieldDelegate, UIGestureRecognizerDelegate>
+@interface QueueCell : LLSwipeyCell <UITextFieldDelegate, UIGestureRecognizerDelegate>
 
-@property (weak, nonatomic) id <QueueCellDelegate> delegate;
+@property (nonatomic, assign) id <QueueCellDelegate> delegate;
 @property (strong, nonatomic) UITextField *queueNameLabel;
+@property (strong, nonatomic) UILabel *deleteLabel;
 @property (strong, nonatomic) UIImageView *unselectedImageView;
 @property (strong, nonatomic) UIImageView *selectedImageView;
 @property (strong, nonatomic) UIImageView *selectableBackgroundView;
@@ -25,8 +27,9 @@
 
 @end
 
-@protocol QueueCellDelegate <NSObject>
+@protocol QueueCellDelegate <NSObject, LLSwipeyCellDelegate>
 
 - (void)queueCell:(QueueCell *)cell didEndNameEditingWithNewName:(NSString *)name;
+- (void)queueCellDidDeleteQueue:(QueueCell *)cell;
 
 @end

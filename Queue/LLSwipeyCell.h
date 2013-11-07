@@ -44,6 +44,7 @@ typedef enum
 
 - (void)swipeyCellDidBeginDragging:(LLSwipeyCell *)cell;
 - (void)swipeyCellDidDrag:(LLSwipeyCell *)cell;
+- (void)swipeyCell:(LLSwipeyCell *)cell didDragToPoint:(CGPoint)point;
 - (void)swipeyCellDidEndDragging:(LLSwipeyCell *)cell;
 - (void)swipeyCellDidDismiss:(LLSwipeyCell *)cell;
 - (void)swipeyCellDidReset:(LLSwipeyCell *)cell;

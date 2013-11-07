@@ -34,6 +34,7 @@
         
         // Set initial properites
         _swipingEnabled = YES;
+        _dragThreshold = self.frame.size.width / 2.0;
     }
     return self;
 }
@@ -60,6 +61,8 @@
             
             if ([_delegate respondsToSelector:@selector(swipeyCellDidDrag:)])
                 [_delegate swipeyCellDidDrag:self];
+            if ([_delegate respondsToSelector:@selector(swipeyCell:didDragToPoint:)])
+                [_delegate swipeyCell:self didDragToPoint:CGPointMake(distance.x, 0)];
             
             break;
             
@@ -190,7 +193,11 @@
 // -----------------------------
 - (void)resetCellWithAnimation:(BOOL)animated
 {
-    [self setCellPosition:CGPointMake(0, 0) withAnimation:animated duration:0.25];
+    __weak LLSwipeyCell *this = self;
+    [self setCellPosition:CGPointMake(0, 0) withAnimation:animated duration:0.25 completion:^{
+        if ([this.delegate respondsToSelector:@selector(swipeyCellDidReset:)])
+            [this.delegate swipeyCellDidReset:this];
+    }];
     _isDismissed = NO;
 }
 
@@ -199,7 +206,12 @@
     CGPoint dismissedPoint = CGPointMake(-self.frame.size.width, 0);
     CGFloat duration = ABS( (dismissedPoint.x - _swipeyView.frame.origin.x) / velocity.x);
     duration = MIN(duration, 0.4);
-    [self setCellPosition:dismissedPoint withAnimation:animated duration:duration];
+    
+    __weak LLSwipeyCell *this = self;
+    [self setCellPosition:dismissedPoint withAnimation:animated duration:duration completion:^{
+        if ([this.delegate respondsToSelector:@selector(swipeyCellDidDismiss:)])
+            [this.delegate swipeyCellDidDismiss:this];
+    }];
     _isDismissed = YES;
 }
 
@@ -207,7 +219,7 @@
 // Reposition the cell with or
 // without animation
 // -----------------------------
-- (void)setCellPosition:(CGPoint)position withAnimation:(BOOL)animated duration:(CGFloat)duration
+- (void)setCellPosition:(CGPoint)position withAnimation:(BOOL)animated duration:(CGFloat)duration completion:(void (^)(void))block
 {
     CGFloat totalDuration = animated ? duration : 0.0;
     CGFloat bounceBack = 0.05;
@@ -248,7 +260,10 @@
                                               _swipeyView.frame = finalFrame;
                                               _underView.frame = finalDetailFrame;
                                           }
-                                          completion:^(BOOL finished){}];
+                                          completion:^(BOOL finished){
+                                              if (block)
+                                                  block();
+                                          }];
                      }];
 }
 

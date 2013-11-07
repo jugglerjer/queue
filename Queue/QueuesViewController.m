@@ -24,6 +24,7 @@
 @property (nonatomic) NSMutableArray *queuesArray;
 @property (strong, nonatomic) NSMutableArray *queueViewControllersArray;
 @property (weak, nonatomic) QueueViewController *queueViewController;
+@property (strong, nonatomic) QueueCell *cellForDeletion;
 
 @end
 
@@ -125,6 +126,19 @@ CGFloat rowHeight = 44.0;
                      }];
 }
 
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    QueueCell *cell = (QueueCell *)[tableView cellForRowAtIndexPath:indexPath];
+    if ([cell isEqual:_cellForDeletion])
+        return nil;
+    
+    if (_cellForDeletion)
+        [_cellForDeletion resetCellWithAnimation:YES];
+    
+    return indexPath;
+    
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self switchToQueueAtIndex:indexPath.row];
@@ -196,6 +210,7 @@ CGFloat rowHeight = 44.0;
 - (void)pullNavigationControllerHasBeenDismissed:(LLPullNavigationController *)pullNavigationViewController
 {
     [self updateAllCellsWithEmphasis:YES animated:YES];
+    [self showNewQueueSectionWithAnimation:YES];
 }
 
 - (NSString *)pullNavigationController:(LLPullNavigationController *)pullNavigationViewController nameForViewAtPage:(NSUInteger)page
@@ -289,6 +304,16 @@ CGFloat rowHeight = 44.0;
 //    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:NSNotFound inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:animated];
 }
 
+// -----------------------------------------
+// Show the new queue section by changing
+// the table's offset
+// -----------------------------------------
+- (void)showNewQueueSectionWithAnimation:(BOOL)animated
+{
+    [self.tableView setContentOffset:CGPointMake(0.0, 0.0) animated:animated];
+    //    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:NSNotFound inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:animated];
+}
+
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField
 {
     return YES;
@@ -357,7 +382,7 @@ CGFloat rowHeight = 44.0;
     }
     
     // Hide the create new queue section
-    [self hideNewQueueSectionWithAnimation:NO];
+//    [self hideNewQueueSectionWithAnimation:NO];
 }
 
 #pragma mark Queue Position Editing
@@ -390,6 +415,77 @@ CGFloat rowHeight = 44.0;
     [self.queueViewControllersArray insertObject:navController atIndex:toIndexPath.row];
     
     [tableView reloadData];
+}
+
+# pragma mark - Queue Deletion Methods
+
+// -----------------------------------------
+// Respond to cell swiping in order to
+// - Update the delete instruction
+// - Close any currently open deletion cells
+// -----------------------------------------
+- (void)swipeyCell:(QueueCell *)cell didDragToPoint:(CGPoint)point
+{
+    if (_cellForDeletion && ![_cellForDeletion isEqual:cell])
+        [_cellForDeletion resetCellWithAnimation:YES];
+    
+    _cellForDeletion = cell;
+    
+    if (ABS(point.x) > cell.dragThreshold)
+        cell.deleteLabel.text = @"Release to delete";
+    else
+        cell.deleteLabel.text = @"Swipe to delete";
+}
+
+// -----------------------------------------
+// Prevent table scrolling when in delete mode
+// -----------------------------------------
+- (void)swipeyCellDidBeginDragging:(LLSwipeyCell *)cell
+{
+    _tableView.scrollEnabled = NO;
+}
+
+// -----------------------------------------
+// Re-enable table scrolling after delete mode
+// -----------------------------------------
+- (void)swipeyCellDidReset:(LLSwipeyCell *)cell
+{
+    _tableView.scrollEnabled = YES;
+}
+
+- (void)swipeyCellDidDismiss:(QueueCell *)cell
+{
+    _tableView.scrollEnabled = YES;
+    cell.deleteLabel.text = @"Seriously, delete this queue?";
+}
+
+// -----------------------------------------
+// Delete a queue
+// -----------------------------------------
+- (void)queueCellDidDeleteQueue:(QueueCell *)cell
+{
+    // Get the queue that has been deleted
+    NSIndexPath *indexPath = [_tableView indexPathForCell:cell];
+    Queue *queue = [_queuesArray objectAtIndex:indexPath.row];
+    
+    // Remove the queue object from our array and from memory
+    [_queuesArray removeObject:queue];
+    [_managedObjectContext deleteObject:queue];
+    NSError *error = nil;
+    if (![self.managedObjectContext save:&error]) {
+        // Handle the error.
+    }
+    
+    // Animate the cell out of the table
+    [_tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+}
+
+# pragma mark - Scroll View Delegate Methods
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (_cellForDeletion)
+        [_cellForDeletion resetCellWithAnimation:YES];
 }
 
 # pragma mark - View Management Methods

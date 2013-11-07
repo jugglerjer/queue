@@ -14,6 +14,15 @@
 #define NAME_LABEL_MARGIN_TOP       10
 #define NAME_LABEL_MARGIN_BOTTOM    9
 
+#define DELETE_LABEL_MARGIN_RIGHT     21
+#define DELETE_LABEL_MARGIN_LEFT      30
+#define DELETE_LABEL_MARGIN_TOP       10
+#define DELETE_LABEL_MARGIN_BOTTOM    9
+
+#define DELETE_BUTTON_MARGIN_RIGHT  21
+#define DELETE_BUTTON_WIDTH         44
+#define DELETE_BUTTON_HEIGHT        44
+
 @interface QueueCell ()
 
 @property (strong, nonatomic) NSString *originalQueueName;
@@ -26,11 +35,12 @@
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
-    self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+    self = [super initWithDetailType:LLSwipeyCellDetailTypeAdjacent reuseIdentifier:reuseIdentifier];
     if (self)
     {
-        self.backgroundView.backgroundColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1];
-        self.contentView.backgroundColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1];
+        self.backgroundColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1];
+        self.underView.backgroundColor = [UIColor colorWithRed:249.0/255.0 green:88.0/255.0 blue:92.0/255.0 alpha:1];
+        self.swipeyView.backgroundColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1];
         
         self.activeColor = [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0];
         self.inactiveColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0];
@@ -39,7 +49,7 @@
         UIImageView *selectableBackgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"queue-cell-background-selectable.png"]];
         selectableBackgroundView.alpha = 0;
         self.selectableBackgroundView = selectableBackgroundView;
-        [self addSubview:self.selectableBackgroundView];
+        [self.swipeyView addSubview:self.selectableBackgroundView];
         
         // Set up queue name label
         CGRect nameFrame = CGRectMake(self.bounds.origin.x + NAME_LABEL_MARGIN_LEFT,
@@ -65,16 +75,46 @@
         queueNameLabel.userInteractionEnabled = NO;
         self.queueNameLabel = queueNameLabel;
         
+        // Set up queue name label
+        CGRect deleteFrame = CGRectMake(self.bounds.origin.x + DELETE_LABEL_MARGIN_LEFT,
+                                      self.bounds.origin.y + DELETE_LABEL_MARGIN_TOP,
+                                      self.frame.size.width - (DELETE_LABEL_MARGIN_LEFT + DELETE_LABEL_MARGIN_RIGHT),
+                                      self.frame.size.height - (DELETE_LABEL_MARGIN_TOP + DELETE_LABEL_MARGIN_BOTTOM));
+        _deleteLabel = [[UILabel alloc] initWithFrame:deleteFrame];
+        _deleteLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
+        _deleteLabel.textColor = [UIColor whiteColor];
+        _deleteLabel.textAlignment = NSTextAlignmentLeft;
+        _deleteLabel.backgroundColor = [UIColor clearColor];
+        _deleteLabel.text = @"Swipe to delete";
+        
+        UIButton *deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        deleteButton.frame = CGRectMake(self.frame.size.width - DELETE_BUTTON_MARGIN_RIGHT - DELETE_BUTTON_WIDTH, 0.0, DELETE_BUTTON_WIDTH, DELETE_BUTTON_HEIGHT);
+        [deleteButton setImage:[UIImage imageNamed:@"confirm-delete-queue.png"] forState:UIControlStateNormal];
+        [deleteButton addTarget:self action:@selector(deleteQueue:) forControlEvents:UIControlEventTouchUpInside];
+        [self.underView addSubview:deleteButton];
+        
         UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
         longPress.minimumPressDuration = 0.5;
         longPress.delegate = self;
         
-        [self addSubview:self.queueNameLabel];
-        [self addGestureRecognizer:longPress];
+        [self.swipeyView addSubview:self.queueNameLabel];
+        [self.swipeyView addGestureRecognizer:longPress];
+        [self.underView addSubview:_deleteLabel];
         
         self.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        self.dragThreshold = self.frame.size.width * .75;
     }
     return self;
+}
+
+// -----------------------------------------
+// Handle queue deletion
+// -----------------------------------------
+- (void)deleteQueue:(id)sender
+{
+    if ([self.delegate respondsToSelector:@selector(queueCellDidDeleteQueue:)])
+        [self.delegate queueCellDidDeleteQueue:self];
 }
 
 // -----------------------------------------
@@ -85,6 +125,11 @@
 {
     self.queueNameLabel.userInteractionEnabled = YES;
     [self.queueNameLabel becomeFirstResponder];
+}
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    return YES;
 }
 
 // -----------------------------------------
@@ -110,8 +155,8 @@
     // Update the name of the queue, unless the new name is blank
     // in which case revert to the old name
     if (![self.queueNameLabel.text isEqualToString:@""]) {
-        if ([_delegate respondsToSelector:@selector(queueCell:didEndNameEditingWithNewName:)])
-            [_delegate queueCell:self didEndNameEditingWithNewName:self.queueNameLabel.text];
+        if ([self.delegate respondsToSelector:@selector(queueCell:didEndNameEditingWithNewName:)])
+            [self.delegate queueCell:self didEndNameEditingWithNewName:self.queueNameLabel.text];
     }
     else {
         self.queueNameLabel.text = self.originalQueueName;
