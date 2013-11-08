@@ -520,8 +520,9 @@ static NSString const *googleStaticMapURL = @"https://maps.googleapis.com/maps/a
     addMeetingController.contact = self.contact;
     addMeetingController.delegate = self;
     addMeetingController.editMeetingType = QueueEditMeetingTypeUpdate;
-    UINavigationController *navContoller = [[UINavigationController alloc] initWithRootViewController:addMeetingController];
-    [self.queueViewController.navigationController presentViewController:navContoller animated:YES completion:nil];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:addMeetingController];
+    navController.navigationBar.barTintColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1];
+    [self.queueViewController.navigationController presentViewController:navController animated:YES completion:nil];
 }
 
 - (void)addNewMeeting:(Meeting *)meeting withRow:(NSUInteger)row animated:(BOOL)animated

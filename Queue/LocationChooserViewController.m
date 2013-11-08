@@ -16,6 +16,7 @@
 #define PLACE_TEXT_MARGIN_LEFT       48
 #define PLACE_TEXT_MARGIN_RIGHT      48
 #define PLACE_TEXT_MARGIN_TOP        10.5
+#define PLACE_TEXT_SEARCH_MARGIN_TOP 24.5
 #define PLACE_TEXT_MARGIN_BOTTOM     10.5
 #define PLACE_TEXT_HEIGHT            18
 #define PLACE_SUBTEXT_HEIGHT         15
@@ -51,6 +52,18 @@ GMSMapView *mapView_;
 static NSString *const googleGeocodeURL =  @"https://maps.googleapis.com/maps/api/geocode/json?";
 static NSString *const googlePlacesTextSearchURL = @"https://maps.googleapis.com/maps/api/place/textsearch/json?key=AIzaSyDJk6VmHmcNveBQjDV91rJ3U4ExV0b4vIc";
 static NSString *const googlePlacesNearbySearchURL = @"https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyDJk6VmHmcNveBQjDV91rJ3U4ExV0b4vIc";
+
+CGFloat marginTop;
+
+- (id)init
+{
+    if (self = [super init])
+    {
+        marginTop = PLACE_TEXT_MARGIN_TOP;
+    }
+    
+    return self;
+}
 
 // Start the location manager
 - (void)startStandardUpdates
@@ -211,22 +224,28 @@ static NSString *const googlePlacesNearbySearchURL = @"https://maps.googleapis.c
 - (void)updateLocationViewMode:(LocationChooserViewMode)mode
 {
     // Generate a string for the image that corresponds to the chosen view mode
+    // and set a new margin for the items in the toolbar so they're shifted either
+    // up or down to account for the iOS7 status bar overlapping the view
     NSString *iconName;
     switch (mode) {
         case LocationChooserViewModeLocationEnabled:
             iconName = @"location-enabled.png";
+            marginTop = PLACE_TEXT_MARGIN_TOP;
             break;
             
         case LocationChooserViewModeLocationDisabled:
             iconName = @"location-disabled.png";
+            marginTop = PLACE_TEXT_MARGIN_TOP;
             break;
             
         case LocationChooserViewModeLocationSearch:
             iconName = @"location-search.png";
+            marginTop = PLACE_TEXT_SEARCH_MARGIN_TOP;
             break;
             
         default:
             iconName = @"location-disabled.png";
+            marginTop = PLACE_TEXT_MARGIN_TOP;
             break;
     }
     
@@ -235,6 +254,17 @@ static NSString *const googlePlacesNearbySearchURL = @"https://maps.googleapis.c
     
     // Assign the image to our icon image view
     [self.modeIconView setImage:iconImage forState:UIControlStateNormal];
+    
+    // Shift the items in the toolbar
+    [UIView animateWithDuration:0.25
+                          delay:0.0
+                        options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveLinear
+                     animations:^{
+                         _locationTitleView.frame = [self titleViewFrame];
+                         _modeIconView.frame = [self modeIconFrame];
+                         _clearButton.frame = [self clearButtonFrame];
+                     }
+                     completion:nil];
     
     self.viewMode = mode;
 }
@@ -254,19 +284,19 @@ static NSString *const googlePlacesNearbySearchURL = @"https://maps.googleapis.c
 
 - (void)activateWithAnimation:(BOOL)animation
 {    
+    [self updateLocationViewMode:LocationChooserViewModeLocationSearch];
+    
     [self.clearButton setImage:[UIImage imageNamed:@"cancel-button-dark.png"] forState:UIControlStateNormal];
     [self.clearButton removeTarget:self action:@selector(clearLocation) forControlEvents:UIControlEventTouchUpInside];
     [self.clearButton addTarget:self action:@selector(changeViewState) forControlEvents:UIControlEventTouchUpInside];
     self.clearButton.hidden = NO;
     
     CGRect searchFieldFrame = self.locationTitleView.frame;
-    searchFieldFrame.origin.y = ((PLACE_TEXT_MARGIN_TOP + PLACE_TEXT_HEIGHT + PLACE_SUBTEXT_HEIGHT + PLACE_TEXT_MARGIN_BOTTOM) - PLACE_TEXT_HEIGHT) / 2;
+    searchFieldFrame.origin.y = ((marginTop + PLACE_TEXT_HEIGHT + PLACE_SUBTEXT_HEIGHT + PLACE_TEXT_MARGIN_BOTTOM) - PLACE_TEXT_HEIGHT) / 2;
     
     CGRect searchResultsFrame = self.searchResultsTable.frame;
     searchResultsFrame.origin.y = PLACE_TEXT_MARGIN_TOP + PLACE_TEXT_HEIGHT + PLACE_SUBTEXT_HEIGHT + PLACE_TEXT_MARGIN_BOTTOM + 1;
     searchResultsFrame.size.height = self.view.frame.size.height - searchResultsFrame.origin.y;
-    
-    [self updateLocationViewMode:LocationChooserViewModeLocationSearch];
     
     [self.locationTitleView becomeFirstResponder];
     
@@ -293,6 +323,11 @@ static NSString *const googlePlacesNearbySearchURL = @"https://maps.googleapis.c
 
 - (void)resignWithAnimation:(BOOL)animation
 {    
+    if (self.isLocationEnabled)
+        [self updateLocationViewMode:LocationChooserViewModeLocationEnabled];
+    else
+        [self updateLocationViewMode:LocationChooserViewModeLocationDisabled];
+    
     [self.clearButton setImage:[UIImage imageNamed:@"clear-button.png"] forState:UIControlStateNormal];
     [self.clearButton removeTarget:self action:@selector(changeViewState) forControlEvents:UIControlEventTouchUpInside];
     [self.clearButton addTarget:self action:@selector(clearLocation) forControlEvents:UIControlEventTouchUpInside];
@@ -313,11 +348,6 @@ static NSString *const googlePlacesNearbySearchURL = @"https://maps.googleapis.c
                                            PLACE_TEXT_MARGIN_TOP + PLACE_TEXT_HEIGHT + PLACE_SUBTEXT_HEIGHT + PLACE_TEXT_MARGIN_BOTTOM + 2 + keyboardHeight,
                                            self.view.frame.size.width,
                                            self.view.frame.size.height - (PLACE_TEXT_MARGIN_TOP + PLACE_TEXT_HEIGHT + PLACE_SUBTEXT_HEIGHT + PLACE_TEXT_MARGIN_BOTTOM + 2 + keyboardHeight));
-    
-    if (self.isLocationEnabled)
-        [self updateLocationViewMode:LocationChooserViewModeLocationEnabled];
-    else
-        [self updateLocationViewMode:LocationChooserViewModeLocationDisabled];
     
     [self.locationTitleView resignFirstResponder];
     
@@ -351,10 +381,7 @@ static NSString *const googlePlacesNearbySearchURL = @"https://maps.googleapis.c
 	
     self.view.backgroundColor = [UIColor colorWithPatternImage: [UIImage imageNamed:@"queue_background.png"]];
     
-    UITextField *titleLabel = [[UITextField alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x + PLACE_TEXT_MARGIN_LEFT,
-                                                                   ((PLACE_TEXT_MARGIN_TOP + PLACE_TEXT_HEIGHT + PLACE_SUBTEXT_HEIGHT + PLACE_TEXT_MARGIN_BOTTOM) - PLACE_TEXT_HEIGHT) / 2,
-                                                                   self.view.bounds.size.width - PLACE_TEXT_MARGIN_LEFT - PLACE_TEXT_MARGIN_RIGHT,
-                                                                   PLACE_TEXT_HEIGHT)];
+    UITextField *titleLabel = [[UITextField alloc] initWithFrame:[self titleViewFrame]];
     titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     titleLabel.textColor = [UIColor colorWithRed:165.0/255.0 green:165.0/255.0 blue:165.0/255.0 alpha:1];
     titleLabel.backgroundColor = [UIColor clearColor];
@@ -375,20 +402,14 @@ static NSString *const googlePlacesNearbySearchURL = @"https://maps.googleapis.c
     self.locationSubtitleView = subtitleLabel;
     [self.view addSubview:self.locationSubtitleView];
     
-    CGRect iconFrame = CGRectMake((PLACE_TEXT_MARGIN_LEFT - ICON_WIDTH)/2,
-                                    ((PLACE_TEXT_MARGIN_TOP + PLACE_SUBTEXT_HEIGHT + PLACE_TEXT_HEIGHT + PLACE_TEXT_MARGIN_BOTTOM) - ICON_HEIGHT)/2,
-                                    ICON_WIDTH,
-                                    ICON_HEIGHT);
+    CGRect iconFrame = [self modeIconFrame];
     UIButton *locationIcon = [[UIButton alloc] initWithFrame:iconFrame];
     self.modeIconView = locationIcon;
     [self updateLocationViewMode:LocationChooserViewModeLocationDisabled];
     [self.modeIconView addTarget:self action:@selector(shouldShowMethodChooser) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.modeIconView];
     
-    CGRect clearButtonFrame = CGRectMake(self.view.frame.size.width - (PLACE_TEXT_MARGIN_RIGHT - CLEAR_BUTTON_WIDTH)/2 - CLEAR_BUTTON_WIDTH,
-                                         ((PLACE_TEXT_MARGIN_TOP + PLACE_SUBTEXT_HEIGHT + PLACE_TEXT_HEIGHT + PLACE_TEXT_MARGIN_BOTTOM) - CLEAR_BUTTON_HEIGHT)/2,
-                                         CLEAR_BUTTON_WIDTH,
-                                         CLEAR_BUTTON_HEIGHT);
+    CGRect clearButtonFrame = [self clearButtonFrame];
     UIButton *clearButton = [UIButton buttonWithType:UIButtonTypeCustom];
     clearButton.frame = clearButtonFrame;
     [clearButton setImage:[UIImage imageNamed:@"clear-button.png"] forState:UIControlStateNormal];
@@ -453,6 +474,30 @@ static NSString *const googlePlacesNearbySearchURL = @"https://maps.googleapis.c
     }
     
     [self startStandardUpdates];
+}
+
+- (CGRect)clearButtonFrame
+{
+    return CGRectMake(self.view.frame.size.width - (PLACE_TEXT_MARGIN_RIGHT - CLEAR_BUTTON_WIDTH)/2 - CLEAR_BUTTON_WIDTH,
+               ((marginTop + PLACE_SUBTEXT_HEIGHT + PLACE_TEXT_HEIGHT + PLACE_TEXT_MARGIN_BOTTOM) - CLEAR_BUTTON_HEIGHT)/2,
+               CLEAR_BUTTON_WIDTH,
+               CLEAR_BUTTON_HEIGHT);
+}
+
+- (CGRect)modeIconFrame
+{
+    return CGRectMake((PLACE_TEXT_MARGIN_LEFT - ICON_WIDTH)/2,
+                      ((marginTop + PLACE_SUBTEXT_HEIGHT + PLACE_TEXT_HEIGHT + PLACE_TEXT_MARGIN_BOTTOM) - ICON_HEIGHT)/2,
+                      ICON_WIDTH,
+                      ICON_HEIGHT);
+}
+
+- (CGRect)titleViewFrame
+{
+    return CGRectMake(self.view.bounds.origin.x + PLACE_TEXT_MARGIN_LEFT,
+                      ((marginTop + PLACE_TEXT_HEIGHT + PLACE_SUBTEXT_HEIGHT + PLACE_TEXT_MARGIN_BOTTOM) - PLACE_TEXT_HEIGHT) / 2,
+                      self.view.bounds.size.width - PLACE_TEXT_MARGIN_LEFT - PLACE_TEXT_MARGIN_RIGHT,
+                      PLACE_TEXT_HEIGHT);
 }
 
 - (void)didReceiveMemoryWarning

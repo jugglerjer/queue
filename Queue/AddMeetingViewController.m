@@ -42,6 +42,10 @@ static CGFloat keyboardHeight = 216;
     self = [super init];
     if (self) {
         self.meeting = meeting;
+        
+        // Make sure that the content doesn't hide behind the nav bar in iOS7
+        // This is appropriate because nothing on this page scrolls
+        self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     return self;
 }
@@ -259,7 +263,7 @@ static CGFloat keyboardHeight = 216;
 //    [self.scrollView addSubview:scrollButton];
     
     LLDatePicker *datePicker = [[LLDatePicker alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
-                                                                              self.view.bounds.size.height - (keyboardHeight + 44) - (44 + 20),
+                                                                              self.view.bounds.size.height - (keyboardHeight) - (44 + 20),
                                                                               self.view.bounds.size.width,
                                                                               keyboardHeight + 44)];
 //    datePicker.datePickerMode = UIDatePickerModeDate;
@@ -369,7 +373,7 @@ static CGFloat keyboardHeight = 216;
 - (void)contractLocation
 {
     [self.navigationController setNavigationBarHidden:NO animated:YES];
-    [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+    [self.scrollView setContentOffset:CGPointMake(0.0, 0.0) animated:YES];
 //    [self showActiveInputView];
     [self.locationChooser resignWithAnimation:YES];
     self.locationExpanderButton.hidden = NO;

@@ -26,7 +26,7 @@ static NSString * const MonthTitleViewIdentifier = @"MonthTitleView";
 
 @implementation LLDatePicker
 
-#define KeyboardHeight           216
+#define KeyboardHeight           172
 #define ToolbarHeight            44
 #define kNumberOfDaysInWeek      7
 #define kNumberOfWeeksInMonth    6

@@ -33,7 +33,7 @@ typedef enum
 - (CGFloat)percentageDragged;
 - (CGFloat)percentageDraggedWithDragPoint:(CGPoint)dragPoint;
 - (void)setSwipeOffset:(CGPoint)offset;
-- (void)setCellPosition:(CGPoint)position withAnimation:(BOOL)animated duration:(CGFloat)duration;
+- (void)setCellPosition:(CGPoint)position withAnimation:(BOOL)animated duration:(CGFloat)duration completion:(void (^)(void))block;
 - (void)resetCellWithAnimation:(BOOL)animated;
 - (void)dismissCellWithAnimation:(BOOL)animated velocity:(CGPoint)velocity;
 

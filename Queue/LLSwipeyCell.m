@@ -34,7 +34,7 @@
         
         // Set initial properites
         _swipingEnabled = YES;
-        _dragThreshold = self.frame.size.width / 2.0;
+//        _dragThreshold = self.frame.size.width / 2.0;
     }
     return self;
 }

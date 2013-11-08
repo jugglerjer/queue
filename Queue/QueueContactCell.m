@@ -393,9 +393,9 @@ double queueDistance = 0.75;
     [self updateBackgroundWell];
 }
 
-- (void)setCellPosition:(CGPoint)position withAnimation:(BOOL)animated duration:(CGFloat)duration
+- (void)setCellPosition:(CGPoint)position withAnimation:(BOOL)animated duration:(CGFloat)duration completion:(void (^)(void))block
 {
-    [super setCellPosition:position withAnimation:animated duration:duration];
+    [super setCellPosition:position withAnimation:animated duration:duration completion:block];
     CGFloat totalDuration = animated ? duration : 0.0;
     [UIView animateWithDuration:totalDuration delay:0.0
                         options:UIViewAnimationOptionAllowUserInteraction|UIViewAnimationCurveEaseInOut

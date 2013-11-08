@@ -9,7 +9,7 @@
 #import "LLCalendarViewLayout.h"
 
 #define kScreenWidth             320
-#define kKeyboardHeight          216
+#define kKeyboardHeight          172
 #define kToolbarHeight           44
 #define kNumberOfDaysInWeek      7
 #define kNumberOfWeeksInMonth    6
