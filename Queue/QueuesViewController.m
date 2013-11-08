@@ -468,8 +468,9 @@ CGFloat rowHeight = 44.0;
     NSIndexPath *indexPath = [_tableView indexPathForCell:cell];
     Queue *queue = [_queuesArray objectAtIndex:indexPath.row];
     
-    // Remove the queue object from our array and from memory
+    // Remove the queue object and its view controller from our arrays and from memory
     [_queuesArray removeObject:queue];
+    [_queueViewControllersArray removeObjectAtIndex:indexPath.row];
     [_managedObjectContext deleteObject:queue];
     NSError *error = nil;
     if (![self.managedObjectContext save:&error]) {
