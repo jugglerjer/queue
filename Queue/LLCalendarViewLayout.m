@@ -16,6 +16,7 @@
 
 static NSString * const LLCalendarLayoutDayCellKind = @"DayCell";
 NSString * const LLCalendarLayoutMonthTitleKind = @"MonthTitle";
+NSString * const LLCalendarLayoutWeekdayTitleKind = @"WeekdayTitle";
 
 @interface LLCalendarViewLayout()
 @property (nonatomic, strong) NSDictionary *layoutInfo;
@@ -49,7 +50,7 @@ NSString * const LLCalendarLayoutMonthTitleKind = @"MonthTitle";
     for (NSInteger section = 0; section < sectionCount; section++)
     {
         indexPath = [NSIndexPath indexPathForItem:0 inSection:section];
-        UICollectionViewLayoutAttributes *titleAttributes = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:LLCalendarLayoutMonthTitleKind withIndexPath:indexPath];
+        UICollectionViewLayoutAttributes *titleAttributes = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:LLCalendarLayoutWeekdayTitleKind withIndexPath:indexPath];
         titleAttributes.frame = [self frameForMonthTitleAtIndexPath:indexPath];
         titleLayoutInfo[indexPath] = titleAttributes;
         
@@ -67,7 +68,7 @@ NSString * const LLCalendarLayoutMonthTitleKind = @"MonthTitle";
     }
     
     newLayoutInfo[LLCalendarLayoutDayCellKind] = cellLayoutInfo;
-    newLayoutInfo[LLCalendarLayoutMonthTitleKind] = titleLayoutInfo;
+    newLayoutInfo[LLCalendarLayoutWeekdayTitleKind] = titleLayoutInfo;
     _layoutInfo = newLayoutInfo;
 }
 
@@ -163,7 +164,7 @@ NSString * const LLCalendarLayoutMonthTitleKind = @"MonthTitle";
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryViewOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
-    return _layoutInfo[LLCalendarLayoutMonthTitleKind][indexPath];
+    return _layoutInfo[LLCalendarLayoutWeekdayTitleKind][indexPath];
 }
 
 - (CGSize)collectionViewContentSize

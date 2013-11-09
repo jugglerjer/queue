@@ -16,3 +16,7 @@
 - (void)configureWithDate:(NSDate *)date andMonthComponent:(NSDateComponents *)monthComponent;
 
 @end
+
+@interface LLCalendarDayCellSelectionCircle : UIView
+
+@end

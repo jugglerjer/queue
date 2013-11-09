@@ -17,6 +17,8 @@
 @property (strong, nonatomic) UIColor *currentMonthTextColor;
 @property (strong, nonatomic) UIColor *otherMonthTextColor;
 
+@property (strong, nonatomic) UIView *circle;
+
 @end
 
 @implementation LLCalendarDayCell
@@ -58,8 +60,27 @@
 - (void)setSelected:(BOOL)selected
 {
     [super setSelected:selected];
-    _dateLabel.backgroundColor = [self dateBackgroundColor];
+//    _dateLabel.backgroundColor = [self dateBackgroundColor];
     _dateLabel.textColor = [self dateTextColor];
+    
+    if (selected)
+    {
+        if (!_circle)
+        {
+            CGFloat circleSize = self.frame.size.height * .90;
+            _circle = [[LLCalendarDayCellSelectionCircle alloc] initWithFrame:CGRectMake((self.frame.size.width - circleSize)/2,
+                                                                                         (self.frame.size.height - circleSize)/2,
+                                                                                         circleSize,
+                                                                                         circleSize)];
+            _circle.backgroundColor = [UIColor clearColor];
+        }
+        [self insertSubview:_circle belowSubview:_dateLabel];
+    }
+    else
+    {
+        if (_circle)
+            [_circle removeFromSuperview];
+    }
 }
 
 - (UIColor *)dateTextColor
@@ -103,6 +124,16 @@
     return newBackgroundColor;
 }
 
+@end
 
+@implementation LLCalendarDayCellSelectionCircle
+
+- (void)drawRect:(CGRect)rect
+{
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGContextAddEllipseInRect(ctx, rect);
+    CGContextSetFillColor(ctx, CGColorGetComponents([[UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1] CGColor]));
+    CGContextFillPath(ctx);
+}
 
 @end

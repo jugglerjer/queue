@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		3F15D11C182B7CF000D9D40E /* confirm-delete-queue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F15D11B182B7CF000D9D40E /* confirm-delete-queue@2x.png */; };
+		3F15D11F182DFB9E00D9D40E /* LLMonthViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F15D11E182DFB9E00D9D40E /* LLMonthViewLayout.m */; };
+		3F15D122182DFC4100D9D40E /* LLMonthView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F15D121182DFC4100D9D40E /* LLMonthView.m */; };
+		3F15D125182DFFE400D9D40E /* LLMonthCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F15D124182DFFE400D9D40E /* LLMonthCell.m */; };
+		3F15D128182E148400D9D40E /* LLCalendarWeekdayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F15D127182E148400D9D40E /* LLCalendarWeekdayView.m */; };
 		3F2CA0F517766022009EAED7 /* reorder-control@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F2CA0F417766022009EAED7 /* reorder-control@2x.png */; };
 		3F2CA0F917796A11009EAED7 /* pull-to-switch-arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F2CA0F817796A11009EAED7 /* pull-to-switch-arrow@2x.png */; };
 		3F3264971763A328000BCF83 /* reminder-day-of-disabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3F3264961763A328000BCF83 /* reminder-day-of-disabled@2x.png */; };
@@ -155,6 +159,14 @@
 
 /* Begin PBXFileReference section */
 		3F15D11B182B7CF000D9D40E /* confirm-delete-queue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "confirm-delete-queue@2x.png"; path = "Queue/confirm-delete-queue@2x.png"; sourceTree = "<group>"; };
+		3F15D11D182DFB9E00D9D40E /* LLMonthViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLMonthViewLayout.h; sourceTree = "<group>"; };
+		3F15D11E182DFB9E00D9D40E /* LLMonthViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLMonthViewLayout.m; sourceTree = "<group>"; };
+		3F15D120182DFC4100D9D40E /* LLMonthView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLMonthView.h; sourceTree = "<group>"; };
+		3F15D121182DFC4100D9D40E /* LLMonthView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLMonthView.m; sourceTree = "<group>"; };
+		3F15D123182DFFE400D9D40E /* LLMonthCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLMonthCell.h; sourceTree = "<group>"; };
+		3F15D124182DFFE400D9D40E /* LLMonthCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLMonthCell.m; sourceTree = "<group>"; };
+		3F15D126182E148400D9D40E /* LLCalendarWeekdayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLCalendarWeekdayView.h; sourceTree = "<group>"; };
+		3F15D127182E148400D9D40E /* LLCalendarWeekdayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLCalendarWeekdayView.m; sourceTree = "<group>"; };
 		3F2CA0F417766022009EAED7 /* reorder-control@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reorder-control@2x.png"; path = "Queue/reorder-control@2x.png"; sourceTree = "<group>"; };
 		3F2CA0F817796A11009EAED7 /* pull-to-switch-arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "pull-to-switch-arrow@2x.png"; path = "Queue/pull-to-switch-arrow@2x.png"; sourceTree = "<group>"; };
 		3F3264961763A328000BCF83 /* reminder-day-of-disabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "reminder-day-of-disabled@2x.png"; path = "Queue/reminder-day-of-disabled@2x.png"; sourceTree = "<group>"; };
@@ -561,6 +573,14 @@
 				3FD76DC81800A4F400077CDF /* LLCalendarDayCell.m */,
 				3FD76DC91800A4F400077CDF /* LLCalendarMonthTitleView.h */,
 				3FD76DCA1800A4F400077CDF /* LLCalendarMonthTitleView.m */,
+				3F15D11D182DFB9E00D9D40E /* LLMonthViewLayout.h */,
+				3F15D11E182DFB9E00D9D40E /* LLMonthViewLayout.m */,
+				3F15D120182DFC4100D9D40E /* LLMonthView.h */,
+				3F15D121182DFC4100D9D40E /* LLMonthView.m */,
+				3F15D123182DFFE400D9D40E /* LLMonthCell.h */,
+				3F15D124182DFFE400D9D40E /* LLMonthCell.m */,
+				3F15D126182E148400D9D40E /* LLCalendarWeekdayView.h */,
+				3F15D127182E148400D9D40E /* LLCalendarWeekdayView.m */,
 			);
 			name = LLDatePicker;
 			sourceTree = "<group>";
@@ -786,7 +806,10 @@
 			files = (
 				3FD76DD01800A4F400077CDF /* LLCalendarMonthTitleView.m in Sources */,
 				3FAC625F1763017F00E20373 /* NSArray-SortUsingArray.m in Sources */,
+				3F15D122182DFC4100D9D40E /* LLMonthView.m in Sources */,
 				3F93443B175ADBC5000FD331 /* LLDataDownloader.m in Sources */,
+				3F15D11F182DFB9E00D9D40E /* LLMonthViewLayout.m in Sources */,
+				3F15D128182E148400D9D40E /* LLCalendarWeekdayView.m in Sources */,
 				3FA1019817447769007D2520 /* main.m in Sources */,
 				3FA1019C17447769007D2520 /* LLAppDelegate.m in Sources */,
 				3FA101C8174484AB007D2520 /* LLPullNavigationController.m in Sources */,
@@ -804,6 +827,7 @@
 				3FD76DCE1800A4F400077CDF /* LLSpringyCalendarViewLayout.m in Sources */,
 				3F977641175723C200E6B5B7 /* LocationChooserViewController.m in Sources */,
 				3F934444175ADDF2000FD331 /* SBJSON.m in Sources */,
+				3F15D125182DFFE400D9D40E /* LLMonthCell.m in Sources */,
 				3FD76DCB1800A4F400077CDF /* LLDatePicker.m in Sources */,
 				3FD76DCC1800A4F400077CDF /* LLCalendarView.m in Sources */,
 				3F934445175ADDF2000FD331 /* SBJsonBase.m in Sources */,

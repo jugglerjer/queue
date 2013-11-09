@@ -23,6 +23,12 @@
         _monthLabel.backgroundColor = [UIColor clearColor];
         _monthLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:_monthLabel];
+        
+        CALayer *bottomBorder = [CALayer layer];
+        bottomBorder.backgroundColor = [UIColor colorWithRed:235.0/255.0 green:235.0/255.0 blue:235.0/255.0 alpha:1.0].CGColor;
+        CGFloat borderWidth = 1.0;
+        bottomBorder.frame = CGRectMake(0.0, self.frame.size.height - borderWidth, self.frame.size.width, borderWidth);
+        [self.layer addSublayer:bottomBorder];
     }
     return self;
 }

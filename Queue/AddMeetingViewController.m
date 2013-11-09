@@ -268,10 +268,10 @@ static CGFloat keyboardHeight = 216;
                                                                               keyboardHeight + 44)];
 //    datePicker.datePickerMode = UIDatePickerModeDate;
 //    datePicker.maximumDate = [NSDate date];
-    datePicker.date = self.meeting.date;
     [datePicker addTarget:self action:@selector(datePickerDateDidChange:) forControlEvents:UIControlEventValueChanged];
     self.datePicker = datePicker;
     [self.view addSubview:self.datePicker];
+    datePicker.date = self.meeting.date;
     self.isDatePickerVisible = YES;
     [self hideDatePickerAnimated:NO completion:nil];
     
@@ -440,6 +440,7 @@ static CGFloat keyboardHeight = 216;
         [self.textView resignFirstResponder];
     
     [self showDatePickerAnimated:YES completion:nil];
+    [_datePicker setDate:_meeting.date animated:YES];
 }
 
 - (void)shouldEditNoteField

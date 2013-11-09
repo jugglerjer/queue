@@ -16,7 +16,9 @@
     if (self) {
         self.pagingEnabled = YES;
         self.showsHorizontalScrollIndicator = NO;
-        self.backgroundColor = [UIColor whiteColor];
+        self.showsVerticalScrollIndicator = NO;
+        self.backgroundColor = [UIColor clearColor];
+        self.directionalLockEnabled = YES;
     }
     return self;
 }
@@ -24,7 +26,7 @@
 // Ensure that iOS7 doesn't break our contentInset
 - (void)setContentInset:(UIEdgeInsets)contentInset
 {
-    [super setContentInset:UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)];
+    [super setContentInset:UIEdgeInsetsMake(44.0, 0.0, 0.0, 0.0)];
 }
 
 @end

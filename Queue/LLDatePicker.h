@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LLMonthView.h";
 
-@interface LLDatePicker : UIControl <UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource>
+@interface LLDatePicker : UIControl <UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource, LLMonthViewDelegate>
 
 @property (strong, nonatomic) NSDate *date;
 

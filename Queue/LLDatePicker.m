@@ -11,28 +11,37 @@
 #import "LLCalendarViewLayout.h"
 #import "LLCalendarDayCell.h"
 #import "LLCalendarMonthTitleView.h"
+#import "LLCalendarWeekdayView.h"
+#import "LLMonthViewLayout.h"
+#import "LLMonthCell.h"
 #import "NSDate+Helper.h"
 
 static NSString * const CalendarDayCellIdentifier = @"CalendarDayCell";
 static NSString * const MonthTitleViewIdentifier = @"MonthTitleView";
+static NSString * const WeekdayTitleViewIdentifier = @"WeekdayTitleView";
+static NSString * const MonthCellIdentifier = @"MonthCell";
 
 @interface LLDatePicker ()
 
 @property NSArray *datesArray;
 @property NSArray *monthsArray;
-@property UICollectionView *calendarView;
+@property LLCalendarView *calendarView;
+@property LLMonthView *monthView;
 
 @end
 
 @implementation LLDatePicker
 
-#define KeyboardHeight           172
+#define KeyboardHeight           216
 #define ToolbarHeight            44
 #define kNumberOfDaysInWeek      7
 #define kNumberOfWeeksInMonth    6
 #define kNumberOfMonthsToDisplay 25
 #define secondsInDay() (60 * 60 * 24)
 #define kCalendarAnimationDuration  0.5f
+
+#define kCalendarView            0
+#define kMonthView               1
 
 - (id)init
 {
@@ -60,17 +69,44 @@ static NSString * const MonthTitleViewIdentifier = @"MonthTitleView";
 {
     [self setupDates];
     
+    // Set global background color
+    self.backgroundColor = [UIColor whiteColor];
+    
     // Create the calendar layout object
     LLCalendarViewLayout *calendarLayout = [[LLCalendarViewLayout alloc] init];
     
     // Create the calendar collection view
-    CGRect calendarFrame = [self shownCalendarFrame];
+    CGRect calendarFrame = CGRectMake(0.0, 0.0, self.frame.size.width, KeyboardHeight);
     _calendarView = [[LLCalendarView alloc] initWithFrame:calendarFrame collectionViewLayout:calendarLayout];
+    _calendarView.contentSize = CGSizeMake(calendarFrame.size.width * kNumberOfMonthsToDisplay, calendarFrame.size.height);
     _calendarView.dataSource = self;
     _calendarView.delegate = self;
+    _calendarView.tag = kCalendarView;
     [_calendarView registerClass:[LLCalendarDayCell class] forCellWithReuseIdentifier:CalendarDayCellIdentifier];
-    [_calendarView registerClass:[LLCalendarMonthTitleView class] forSupplementaryViewOfKind:LLCalendarLayoutMonthTitleKind withReuseIdentifier:MonthTitleViewIdentifier];
+    [_calendarView registerClass:[LLCalendarWeekdayView class] forSupplementaryViewOfKind:LLCalendarLayoutWeekdayTitleKind withReuseIdentifier:WeekdayTitleViewIdentifier];
     [self addSubview:_calendarView];
+    [_calendarView setContentInset:UIEdgeInsetsMake(-44.0, 0.0, 0.0, 0.0)];
+    
+    // Create the month scroll view
+    CGRect monthFrame = CGRectMake(self.frame.size.width * 0.3, 0.0, self.frame.size.width * 0.4, ToolbarHeight);
+    
+    // Put a white background view behind the month slider
+    UIView *monthBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.frame.size.width, ToolbarHeight)];
+    monthBackgroundView.backgroundColor = [UIColor whiteColor];
+    [self addSubview:monthBackgroundView];
+    
+    _monthView = [[LLMonthView alloc] initWithFrame:monthFrame];
+    _monthView.contentSize = CGSizeMake(monthFrame.size.width * kNumberOfMonthsToDisplay, monthFrame.size.height);
+    _monthView.delegate = self;
+    _monthView.tag = kMonthView;
+    [_monthView loadMonths:_datesArray];
+    [self addSubview:_monthView];
+    
+    CALayer *bottomBorder = [CALayer layer];
+    bottomBorder.backgroundColor = [UIColor colorWithRed:235.0/255.0 green:235.0/255.0 blue:235.0/255.0 alpha:1.0].CGColor;
+    CGFloat borderWidth = 1.0;
+    bottomBorder.frame = CGRectMake(0.0, ToolbarHeight - borderWidth, self.frame.size.width, borderWidth);
+    [self.layer addSublayer:bottomBorder];
     
     // Scroll to the current month
     [self setDate:[NSDate date] animated:NO];
@@ -97,7 +133,7 @@ static NSString * const MonthTitleViewIdentifier = @"MonthTitleView";
     return CGRectMake(0.0,
                       0.0,
                       self.frame.size.width,
-                      KeyboardHeight + ToolbarHeight);
+                      KeyboardHeight);
 }
 
 - (CGRect)hiddenCalendarFrame
@@ -105,7 +141,7 @@ static NSString * const MonthTitleViewIdentifier = @"MonthTitleView";
     return CGRectMake(0.0,
                       self.frame.size.height,
                       self.frame.size.width,
-                      KeyboardHeight + ToolbarHeight);
+                      KeyboardHeight);
 }
 
 # pragma mark - Calendar Data Methods
@@ -117,27 +153,36 @@ static NSString * const MonthTitleViewIdentifier = @"MonthTitleView";
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return kNumberOfDaysInWeek * kNumberOfWeeksInMonth;
+    if (collectionView.tag == kCalendarView) return kNumberOfDaysInWeek * kNumberOfWeeksInMonth;
+    /* kMonthView */ else return 1;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    LLCalendarDayCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CalendarDayCellIdentifier forIndexPath:indexPath];
-    
-    NSDate *date = _datesArray[indexPath.section][@"days"][indexPath.item];
-    NSDateComponents *month = _datesArray[indexPath.section][@"month"];
-    [cell configureWithDate:date andMonthComponent:month];
-    return cell;
+    if (collectionView.tag == kCalendarView)
+    {
+        LLCalendarDayCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CalendarDayCellIdentifier forIndexPath:indexPath];
+        
+        NSDate *date = _datesArray[indexPath.section][@"days"][indexPath.item];
+        NSDateComponents *month = _datesArray[indexPath.section][@"month"];
+        [cell configureWithDate:date andMonthComponent:month];
+        return cell;
+    }
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
-    LLCalendarMonthTitleView *monthView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:MonthTitleViewIdentifier forIndexPath:indexPath];
-    NSDate *month = [[NSCalendar currentCalendar] dateFromComponents:_datesArray[indexPath.section][@"month"]];
-    NSDateFormatter *monthFormatter = [[NSDateFormatter alloc] init];
-    [monthFormatter setDateFormat:@"MMMM, y"];
-    monthView.monthLabel.text = [monthFormatter stringFromDate:month];
-    return monthView;
+    if (collectionView.tag == kCalendarView)
+    {
+        LLCalendarWeekdayView *weekdayView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:WeekdayTitleViewIdentifier forIndexPath:indexPath];
+        return weekdayView;
+    }
+    
+    /* kMonthView */
+    else
+    {
+        return nil;
+    }
 }
 
 - (NSIndexPath *)indexPathForDate:(NSDate *)date
@@ -227,6 +272,7 @@ static NSString * const MonthTitleViewIdentifier = @"MonthTitleView";
 {
     NSMutableArray *dates = [NSMutableArray arrayWithCapacity:kNumberOfDaysInWeek * kNumberOfWeeksInMonth];
     NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *dayComponent = [[NSDateComponents alloc] init];
     
     // Determine how many dates that need to be displayed prior to and after the given month
     [components setDay:1];
@@ -238,14 +284,16 @@ static NSString * const MonthTitleViewIdentifier = @"MonthTitleView";
     // Fetch each of the dates that need to be displayed prior to the first day of the given month
     for (NSInteger i = numberOfDaysBefore; i > 0; i--)
     {
-        NSDate *priorDate = [NSDate dateWithTimeInterval:-(i*secondsInDay()) sinceDate:firstDate];
+        dayComponent.day = -i;
+        NSDate *priorDate = [calendar dateByAddingComponents:dayComponent toDate:firstDate options:0];
         [dates addObject:priorDate];
     }
     
     // Create each of the dates in the month
     for (NSInteger i = 0; i < [firstDate daysInMonth] ; i++)
     {
-        NSDate *nextDate = [NSDate dateWithTimeInterval:i*secondsInDay() sinceDate:firstDate];
+        dayComponent.day = i;
+        NSDate *nextDate = [calendar dateByAddingComponents:dayComponent toDate:firstDate options:0];
         [dates addObject:nextDate];
     }
     
@@ -253,7 +301,8 @@ static NSString * const MonthTitleViewIdentifier = @"MonthTitleView";
     NSDate *lastDateOfMonth = [dates lastObject];
     for (NSInteger i = 1; i <= numberOfDaysAfter; i++)
     {
-        NSDate *postDate = [NSDate dateWithTimeInterval:i*secondsInDay() sinceDate:lastDateOfMonth];
+        dayComponent.day = i;
+        NSDate *postDate = [calendar dateByAddingComponents:dayComponent toDate:lastDateOfMonth options:0];
         [dates addObject:postDate];
     }
     
@@ -264,8 +313,41 @@ static NSString * const MonthTitleViewIdentifier = @"MonthTitleView";
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    _date = _datesArray[indexPath.section][@"days"][indexPath.item];
-    [self sendActionsForControlEvents:UIControlEventValueChanged];
+    if (collectionView.tag == kCalendarView)
+    {
+        _date = _datesArray[indexPath.section][@"days"][indexPath.item];
+        [self sendActionsForControlEvents:UIControlEventValueChanged];
+    }
+    
+    /* Month View */
+    else {
+        [self setDate:[NSDate date] animated:YES];
+    }
+}
+
+- (void)monthView:(LLMonthView *)monthView didSelectPageAtIndex:(NSInteger)index
+{
+    [self setDate:[NSDate date] animated:YES];
+}
+
+# pragma mark - Coordinate Scrolling of Month Labels and Dates
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    UIScrollView *otherScrollView;
+    if (scrollView.tag == kCalendarView) otherScrollView = (UIScrollView *)_monthView;
+    else otherScrollView = (UIScrollView *)_calendarView;
+    
+    // Scroll the other scrollview by the same percentage
+    // that we've scrolled the original scroll view
+    CGFloat percentage = ABS(scrollView.contentOffset.x / scrollView.contentSize.width);
+    CGRect bounds = otherScrollView.bounds;
+    bounds.origin.x = otherScrollView.contentSize.width * percentage;
+    [otherScrollView setBounds:bounds];
+    
+    // Let the month view format the months for their given position
+    CGPoint velocity = [scrollView.panGestureRecognizer velocityInView:[scrollView superview]];
+    [_monthView formatMonthsForScrollVelocity:velocity];
 }
 
 # pragma mark - Calendar Animation Methods
@@ -314,12 +396,16 @@ static NSString * const MonthTitleViewIdentifier = @"MonthTitleView";
 
 - (void)setFrame:(CGRect)frame withDuration:(NSTimeInterval)duration afterDelay:(NSTimeInterval)delay completion:(void (^)())completionBlock
 {
+    // Calculate by what amount to transform the view
+    CGFloat transformX = frame.origin.x;
+    CGFloat transformY = frame.origin.y;
+    
     [UIView animateWithDuration:duration
                           delay:delay
          usingSpringWithDamping:500.0f
           initialSpringVelocity:0.0f
                         options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveLinear
-                     animations:^{_calendarView.frame = frame;}
+                     animations:^{[self setTransform:CGAffineTransformMakeTranslation(transformX, transformY)];}
                      completion:^(BOOL finished){
                          if (completionBlock != nil)
                              completionBlock();

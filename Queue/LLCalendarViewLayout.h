@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-UIKIT_EXTERN NSString * const LLCalendarLayoutMonthTitleKind;
+UIKIT_EXTERN NSString * const LLCalendarLayoutWeekdayTitleKind;
 
 @interface LLCalendarViewLayout : UICollectionViewLayout
 
