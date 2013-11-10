@@ -114,5 +114,18 @@
     [super setContentInset:UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)];
 }
 
+// --------------------------------------------------------
+// Overriding this method to allow touches to pass through
+// the month view and directly to the underlying day view.
+// If we don't do this, only the current month of the month
+// view is scrollable because the other months are outside
+// of the view's frame.
+// --------------------------------------------------------
+//- (BOOL)touchesShouldBegin:(NSSet *)touches withEvent:(UIEvent *)event inContentView:(UIView *)view
+//{
+//    NSLog(@"%@", );
+//    return YES;
+//}
+
 
 @end

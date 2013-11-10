@@ -551,24 +551,23 @@ BOOL isScrollingDown;
 - (void)handleGesture:(UIPanGestureRecognizer *)gestureRecognizer
 {
     CGPoint distance = [gestureRecognizer translationInView:self.navigationController.navigationBar.superview];
-    LLPullNavigationController *pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
     
     switch (gestureRecognizer.state) {
         case UIGestureRecognizerStateBegan:
-            [pullController engageWithGestureRecognizer:gestureRecognizer];
+            [_pullController engageWithGestureRecognizer:gestureRecognizer];
             break;
             
         case UIGestureRecognizerStateChanged:
-            if (pullController.isEngaged)
-                [pullController adjustToPoint:CGPointMake(0, -distance.y)];
+            if (_pullController.isEngaged)
+                [_pullController adjustToPoint:CGPointMake(0, -distance.y)];
             break;
             
         case UIGestureRecognizerStateEnded:
-            if (pullController.isEngaged)
+            if (_pullController.isEngaged)
             {
-                [pullController disengageWithPotentialPageSwitch:YES];
-                if (![pullController shouldDismissScrollView])
-                    [pullController.scrollView setContentOffset:CGPointMake(0, pullController.scrollView.frame.size.height) animated:YES];
+                [_pullController disengageWithPotentialPageSwitch:YES];
+                if (![_pullController shouldDismissScrollView])
+                    [_pullController.scrollView setContentOffset:CGPointMake(0, _pullController.scrollView.frame.size.height) animated:YES];
 //                [UIView animateWithDuration:0.0 animations:^{self.navigationController.navigationBar.alpha = 1.0;}];
             }
             break;
@@ -602,45 +601,40 @@ BOOL isScrollingDown;
 // -----------------------------------------
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    LLPullNavigationController *pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
     if ([self.tableView.panGestureRecognizer velocityInView:[_tableView superview]].y > 0
         && scrollView.contentOffset.y <= -self.navigationController.navigationBar.frame.size.height)
     {
         [self prepareForQueueSelectionModeToBegin];
-        [pullController engageWithGestureRecognizer:self.tableView.panGestureRecognizer];
+        [_pullController engageWithGestureRecognizer:self.tableView.panGestureRecognizer];
     }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    NSLog(@"Scroll View Offset: %f", scrollView.contentOffset.y);
-    NSLog(@"Scroll View Inset: %f", scrollView.contentInset.top);
-    LLPullNavigationController *pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
     if (scrollView.contentOffset.y < 0)
     {
         isScrollingDown = YES;
-        if (pullController.isEngaged/* || pullController.isSwitchingToPage*/)
+        if (_pullController.isEngaged/* || pullController.isSwitchingToPage*/)
         {
-            [pullController adjustToPoint:CGPointMake(0, scrollView.contentOffset.y)];
+            [_pullController adjustToPoint:CGPointMake(0, scrollView.contentOffset.y)];
             [self.view setTransform:CGAffineTransformMakeTranslation(0, (scrollView.contentOffset.y + self.navigationController.navigationBar.frame.size.height))];
         }
     }
 //    else
 //    {
 //        isScrollingDown = NO;
-//        [pullController disengageWithPotentialPageSwitch:NO];
+//        [_pullController disengageWithPotentialPageSwitch:NO];
 //        [self prepareForQueueSelectionModeToEnd];
 //    }
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    LLPullNavigationController *pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
-    if (/*isScrollingDown && */pullController.isEngaged)
+    if (/*isScrollingDown && */_pullController.isEngaged)
     {
-        [pullController disengageWithPotentialPageSwitch:YES];
-        if (pullController.isSwitchingToPage) {
-            pullController.isEngaged = NO;
+        [_pullController disengageWithPotentialPageSwitch:YES];
+        if (_pullController.isSwitchingToPage) {
+            _pullController.isEngaged = NO;
             [self prepareForQueueSelectionModeToEnd];
         }
     }
@@ -648,7 +642,6 @@ BOOL isScrollingDown;
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-//    LLPullNavigationController *pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
     if (scrollView.frame.origin.y != 0.0)
     {
         _pullController.isEngaged = NO;
@@ -904,6 +897,8 @@ BOOL isScrollingDown;
 {
     [super viewDidLoad];
     
+    _pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
+    
     // Don't inset scroll view content - iOS7
 //    self.automaticallyAdjustsScrollViewInsets = NO;
 //    self.extendedLayoutIncludesOpaqueBars = NO;
@@ -974,7 +969,7 @@ BOOL isScrollingDown;
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    _pullController = (LLPullNavigationController *)[[self parentViewController] parentViewController];
+
 }
 
 - (void)didReceiveMemoryWarning

@@ -125,11 +125,11 @@ double queueDistance = 0.75;
         _queueInstructionControl = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, self.underView.frame.size.width, self.underView.frame.size.height)];
         [_queueInstructionControl addTarget:self action:@selector(editMeeting) forControlEvents:UIControlEventTouchUpInside];
         
-        [self.underView addSubview:_queueInstructionControl];
-        [self.underView addSubview:_meetingDateLabel];
-        [self.underView addSubview:_meetingLocationLabel];
-        [self.underView addSubview:_confirmMeetingButton];
-        [self.underView addSubview:_cancelMeetingButton];
+//        [self.underView addSubview:_queueInstructionControl];
+//        [self.underView addSubview:_meetingDateLabel];
+//        [self.underView addSubview:_meetingLocationLabel];
+//        [self.underView addSubview:_confirmMeetingButton];
+//        [self.underView addSubview:_cancelMeetingButton];
         
         // Background View
         UIImage *innerShadow = [[UIImage imageNamed:@"timeline-inner-shadow.png"] stretchableImageWithLeftCapWidth:5 topCapHeight:5];
@@ -193,8 +193,8 @@ double queueDistance = 0.75;
         UILabel *snoozeLabel = [[UILabel alloc] initWithFrame:CGRectMake((self.frame.size.width - SNOOZE_LABEL_WIDTH)/2,
                                                                          26.0f, SNOOZE_LABEL_WIDTH, 22.0f)];
         snoozeLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17.0];
-        snoozeLabel.textColor = [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:0.4];
-        snoozeLabel.shadowColor = [UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:0.4];
+        snoozeLabel.textColor = [UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:0.4];
+        snoozeLabel.shadowColor = [UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:0.2];
         snoozeLabel.shadowOffset = CGSizeMake(0, -0.5);
         snoozeLabel.backgroundColor = [UIColor clearColor];
         snoozeLabel.textAlignment = NSTextAlignmentCenter;
@@ -496,7 +496,13 @@ double queueDistance = 0.75;
     if (snooze)
         self.snoozeLabel.text = @"Release to snooze";
     else
-        self.snoozeLabel.text = @"Slide to snooze";
+    {
+        if (_contact.meetInterval)
+            self.snoozeLabel.text = [NSString stringWithFormat:@"Snooze for %@", [_contact meetIntervalText]];
+        else
+            self.snoozeLabel.text = @"Slide to snooze";
+    }
+    
     
 }
 

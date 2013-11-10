@@ -170,6 +170,60 @@ static double defaultMeetInterval = 3 * 30.5 * 24 * 60 * 60; /* 1 month ~ 31.5 d
 }
 
 // -------------------------------------------------------------
+// Return a text form of the meet interval
+// e.g. "3 months"
+// -------------------------------------------------------------
+- (NSString *)meetIntervalText
+{
+    if (self.meetInterval)
+    {
+		int year = 31536000;
+		int month = 2635200;
+		int week = 604800;
+		int day = 86400;
+		
+		int display = [self.meetInterval intValue];
+		int remainderYear = (display % year);
+		int remainderMonth = (display % month);
+		int remainderWeek = (display % week);
+		int remainderDay = (display % day);
+		
+		int divideMonth = (display / month);
+		int divideWeek = (display / week);
+		int divideDay = (display / day);
+		
+		if (remainderYear == 0)
+			return @"1 year";
+        
+		else if (remainderMonth == 0)
+        {
+			if (divideMonth == 1)
+				return @"1 month";
+			else
+				return [NSString stringWithFormat:@"%d months", divideMonth];
+        }
+        
+        else if (remainderWeek == 0)
+        {
+            if (divideWeek == 1)
+                return @"1 week";
+            else
+                return [NSString stringWithFormat:@"%d weeks", divideWeek];
+        }
+        
+        else if (remainderDay == 0)
+        {
+            if (divideDay == 1)
+                return @"1 day";
+            else
+                return [NSString stringWithFormat:@"%d days", divideDay];
+        }
+	}
+    
+	return @"never";
+}
+
+// -------------------------------------------------------------
 // Return the contacts meetings sorted by date
 // -------------------------------------------------------------
 - (NSArray *)sortedMeetings

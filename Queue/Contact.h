@@ -56,6 +56,7 @@ typedef enum {
 - (UIImage *)thumbnail;
 - (UIImage *)thumbnailWithSize:(CGFloat)size cornerRadius:(CGFloat)radius;
 - (NSString *)queueName;
+- (NSString *)meetIntervalText;
 
 @end
 
