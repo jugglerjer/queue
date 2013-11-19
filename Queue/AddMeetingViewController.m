@@ -10,7 +10,11 @@
 #import "QueueBarButtonItem.h"
 #import "Meeting.h"
 #import "Contact.h"
+#import "Location.h"
 #import "LLDatePicker.h"
+#import <SalesforceSDKCore/SFJsonUtils.h>
+#import <SalesforceNativeSDK/SFRestAPI.h>
+#import <SalesforceNativeSDK/SFRestRequest.h>
 
 #define kDateCellRow    0
 #define kNoteCellRow    1
@@ -55,6 +59,10 @@ static CGFloat keyboardHeight = 216;
     self.meeting.note = self.textView.text;
     [self.contact addMeetingsObject:self.meeting];
     [self.locationChooser clearLocations];
+    
+    if (_contact.salesforceID)
+        [self saveMeetingToSalesforce];
+    
     NSError *error = nil;
     if (![self.managedObjectContext save:&error]) {
         // Handle the error.
@@ -78,6 +86,51 @@ static CGFloat keyboardHeight = 216;
         }];
     }
     
+}
+
+// Save the meeting to Salesforce
+- (void)saveMeetingToSalesforce
+{
+    NSDateFormatter *activityDateFormatter = [[NSDateFormatter alloc] init];
+    [activityDateFormatter setDateFormat:@"y-MM-dd"];
+    NSString *date = [activityDateFormatter stringFromDate:_meeting.date];
+    
+    NSString *fieldsJSON = [NSString stringWithFormat:@"{\"ActivityDate\":\"%@\",\"Description\":\"%@\",\"Location\":\"%@\"}", date, _meeting.note, _meeting.location.name];
+    NSDictionary *fields = [SFJsonUtils objectFromJSONString:fieldsJSON];
+    
+    // If the meeting has a Salesforce ID, update it in Salesforce
+    SFRestRequest *request = [[SFRestAPI sharedInstance] requestForDescribeWithObjectType:@"Event"];
+//    if (_meeting.salesforceID)
+//        request = [[SFRestAPI sharedInstance] requestForUpdateWithObjectType:@"Event" objectId:_meeting.salesforceID fields:fields];
+//    
+//    // If not, create a new meeting
+//    else
+//    {
+//        request = [[SFRestAPI sharedInstance] requestForCreateWithObjectType:@"Event" fields:fields];
+//    }
+    
+    [[SFRestAPI sharedInstance] send:request delegate:self];
+}
+
+#pragma mark - SFRestAPIDelegate
+
+- (void)request:(SFRestRequest *)request didLoadResponse:(id)jsonResponse {
+    NSLog(@"%@", jsonResponse);
+}
+
+- (void)request:(SFRestRequest*)request didFailLoadWithError:(NSError*)error {
+    NSLog(@"request:didFailLoadWithError: %@", error);
+    //add your failed error handling here
+}
+
+- (void)requestDidCancelLoad:(SFRestRequest *)request {
+    NSLog(@"requestDidCancelLoad: %@", request);
+    //add your failed error handling here
+}
+
+- (void)requestDidTimeout:(SFRestRequest *)request {
+    NSLog(@"requestDidTimeout: %@", request);
+    //add your failed error handling here
 }
 
 - (void)cancel
@@ -265,7 +318,7 @@ static CGFloat keyboardHeight = 216;
     LLDatePicker *datePicker = [[LLDatePicker alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
                                                                               self.view.bounds.size.height - (keyboardHeight) - (44 + 20),
                                                                               self.view.bounds.size.width,
-                                                                              keyboardHeight + 44)];
+                                                                              keyboardHeight)];
 //    datePicker.datePickerMode = UIDatePickerModeDate;
 //    datePicker.maximumDate = [NSDate date];
     [datePicker addTarget:self action:@selector(datePickerDateDidChange:) forControlEvents:UIControlEventValueChanged];
@@ -365,7 +418,12 @@ static CGFloat keyboardHeight = 216;
     [self.scrollView setContentOffset:CGPointMake(0, [self dateViewContainerHeight] + [self noteViewContainerHeight]) animated:YES];
     [self hideActiveInputView];
     [self.locationChooser updateLocationViewMode:LocationChooserViewModeLocationSearch];
-    [self.locationChooser activateWithAnimation:YES];
+    [self.locationChooser activateWithAnimation:YES completion:^{
+        // Adjust the datepicker frame
+        CGRect datePickerFrame = _datePicker.frame;
+        datePickerFrame.origin.y += self.navigationController.navigationBar.frame.size.height + [UIApplication sharedApplication].statusBarFrame.size.height;
+        _datePicker.frame = datePickerFrame;
+    }];
     self.locationExpanderButton.hidden = YES;
     self.isLocationExpanded = YES;
 }
@@ -375,7 +433,12 @@ static CGFloat keyboardHeight = 216;
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     [self.scrollView setContentOffset:CGPointMake(0.0, 0.0) animated:YES];
 //    [self showActiveInputView];
-    [self.locationChooser resignWithAnimation:YES];
+    [self.locationChooser resignWithAnimation:YES completion:^{
+        // Adjust the datepicker frame
+        CGRect datePickerFrame = _datePicker.frame;
+        datePickerFrame.origin.y -= self.navigationController.navigationBar.frame.size.height + [UIApplication sharedApplication].statusBarFrame.size.height;
+        _datePicker.frame = datePickerFrame;
+    }];
     self.locationExpanderButton.hidden = NO;
     self.isLocationExpanded = NO;
 }

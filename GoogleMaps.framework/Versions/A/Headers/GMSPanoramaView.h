@@ -192,6 +192,13 @@
 - (void)moveNearCoordinate:(CLLocationCoordinate2D)coordinate;
 
 /**
+ * Similar to moveNearCoordinate: but allows specifying a search radius (meters)
+ * around |coordinate|.
+ */
+- (void)moveNearCoordinate:(CLLocationCoordinate2D)coordinate
+                    radius:(NSUInteger)radius;
+
+/**
  * Requests a panorama with |panoramaID|.
  * Upon successful completion panoramaView:didMoveToPanorama: will be sent to
  * GMSPanoramaViewDelegate.
@@ -227,5 +234,14 @@
  */
 + (instancetype)panoramaWithFrame:(CGRect)frame
                    nearCoordinate:(CLLocationCoordinate2D)coordinate;
+
+/**
+ * Similar to panoramaWithFrame:nearCoordinate: but allows specifying a
+ * search radius (meters) around |coordinate|.
+ */
++ (instancetype)panoramaWithFrame:(CGRect)frame
+                   nearCoordinate:(CLLocationCoordinate2D)coordinate
+                           radius:(NSUInteger)radius;
+
 
 @end

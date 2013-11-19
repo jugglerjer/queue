@@ -35,6 +35,7 @@ typedef enum {
 @property (nonatomic, retain) NSString * fullName;
 @property (nonatomic, retain) NSString * note;
 @property (nonatomic, retain) NSNumber * addressBookID;
+@property (nonatomic, retain) NSString * salesforceID;
 @property (nonatomic, retain) NSNumber * meetInterval;
 @property (nonatomic, retain) NSDate   * oneTimeDueDate;
 @property (nonatomic, retain) NSDate   * dateAdded;
@@ -47,6 +48,7 @@ typedef enum {
 //@property (nonatomic, retain) UIImage  * image;
 //@property (nonatomic)         int32_t    imageType;
 
+- (void)populateWithSalesforceLead:(NSDictionary *)lead;
 - (void)populateWithAddressBookRecord:(ABRecordRef)person;
 - (BOOL)isOverdueIncludingSnoozes:(BOOL)snoozes;
 - (NSDate *)dueDateIncludingSnoozes:(BOOL)snoozes;

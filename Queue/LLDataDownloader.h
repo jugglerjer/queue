@@ -10,7 +10,7 @@
 
 @protocol LLDataDownloaderDelegate;
 
-@interface LLDataDownloader : NSObject {
+@interface LLDataDownloader : NSObject <NSURLConnectionDelegate> {
     
     NSMutableData *receivedData;
     id<LLDataDownloaderDelegate> delegate;

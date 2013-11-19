@@ -7,10 +7,14 @@
 //
 
 #import "QueuesViewController.h"
-#import "QueueViewController.h"
 #import "QueueBarButtonItem.h"
 #import "Queue.h"
+#import "Contact.h"
+#import "LLPullNavigationControllerViewController.h"
 #import <QuartzCore/QuartzCore.h>
+
+#import "SFRestAPI.h"
+#import "SFRestRequest.h"
 
 #define NAME_LABEL_MARGIN_RIGHT     21
 #define NAME_LABEL_MARGIN_LEFT      19
@@ -253,12 +257,18 @@ CGFloat rowHeight = 44.0;
     {
         QueueViewController *queueView = [[QueueViewController alloc] initWithQueue:[self.queuesArray objectAtIndex:index]];
         queueView.managedObjectContext = self.managedObjectContext;
+        queueView.delegate = self;
         queueView.title = [[self.queuesArray objectAtIndex:index] name];
         
         self.queueViewController = queueView;
         
         navController = [[UINavigationController alloc] initWithRootViewController:queueView];
         navController.navigationBar.barTintColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1];
+        
+        // Make the navigation bar 64 px tall to account for iOS7s new crazy way of doing things
+        // and our crazy pull to change queue implementation
+//        navController.navigationBar.delegate = self;
+        
         [self.queueViewControllersArray replaceObjectAtIndex:index withObject:navController];
     }
     else
@@ -273,13 +283,21 @@ CGFloat rowHeight = 44.0;
 //    
 //    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:queueView];
 //    [queueView.navigationController setNavigationBarHidden:NO animated:NO];
-    LLPullNavigationController *pullController = (LLPullNavigationController *)self.parentViewController;
+//    LLPullNavigationController *pullController = (LLPullNavigationController *)self.parentViewController;
 //    queueView.navigationController.navigationBar.alpha = 0.0;
-    [pullController switchToViewController:navController atPage:index animated:YES completion:nil];
+//    [pullController switchToViewController:navController atPage:index animated:YES completion:nil];
 //    [self setNavigationBar:queueView.navigationController.navigationBar alpha:0.0 withDuration:0.0];
     
-    [self sendQueueAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0] toTopOfListWithDelay:0.5];
-    selectedQueue = 0;
+//    [self sendQueueAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0] toTopOfListWithDelay:0.5];
+//    selectedQueue = 0;
+    
+    [self presentViewController:navController animated:YES completion:nil];
+}
+
+- (void)queueViewControllerShouldBeDismissed:(QueueViewController *)queueViewController
+{
+    if ([queueViewController isEqual:_queueViewController])
+        [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)sendQueueAtIndexPath:(NSIndexPath *)indexPath toTopOfListWithDelay:(NSTimeInterval)delay
@@ -495,14 +513,19 @@ CGFloat rowHeight = 44.0;
 {
     [super viewDidLoad];
     
+    self.queuesArray = [NSMutableArray array];
+    self.queueViewControllersArray = [NSMutableArray arrayWithCapacity:[self.queuesArray count]];
+    
+    self.view.backgroundColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1];
+    
     LLPullNavigationController *pullController = (LLPullNavigationController *)self.parentViewController;
     pullController.delegate = self;
 	
     // Create a table view to hold the contacts
     UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
-                                                                           self.view.bounds.origin.y,
+                                                                           self.view.bounds.origin.y + [UIApplication sharedApplication].statusBarFrame.size.height,
                                                                            self.view.bounds.size.width,
-                                                                           self.view.bounds.size.height - self.navigationController.navigationBar.frame.size.height)
+                                                                           self.view.bounds.size.height /*- self.navigationController.navigationBar.frame.size.height*/)
                                                           style:UITableViewStylePlain];
     tableView.delegate = self;
     tableView.dataSource = self;
@@ -541,22 +564,80 @@ CGFloat rowHeight = 44.0;
     QueueBarButtonItem *addContactButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeAdd target:self action:@selector(addQueue)];
     self.navigationItem.rightBarButtonItem = addContactButton;
     
+    // TODO load queues from Salesforce and sync with local data
+    // Load all of the queues from Salesforce
+    SFRestRequest *sfRequest = [[SFRestAPI sharedInstance] requestForQuery:@"SELECT Id, FirstName, LastName, (SELECT Body FROM Notes), (SELECT Id, ActivityDate, Location, Description, WhoId FROM Events), CreatedDate, Name FROM Lead"];
+    [[SFRestAPI sharedInstance] send:sfRequest delegate:self];
+    
     // Load all of the Queues from memory
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Queue" inManagedObjectContext:_managedObjectContext];
-    [request setEntity:entity];
-    
-    NSError *error = nil;
-    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:request error:&error] mutableCopy];
-    if (mutableFetchResults == nil) {
-        // Handle the error.
-    }
+//    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+//    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Queue" inManagedObjectContext:_managedObjectContext];
+//    [request setEntity:entity];
+//    
+//    NSError *error = nil;
+//    NSMutableArray *mutableFetchResults = [[_managedObjectContext executeFetchRequest:request error:&error] mutableCopy];
+//    if (mutableFetchResults == nil) {
+//        // Handle the error.
+//    }
+//
+//    [self setQueuesArray:mutableFetchResults];
+//    
+//    self.queueViewControllersArray = [NSMutableArray arrayWithCapacity:[self.queuesArray count]];
+//    for (int i = 0; i < [self.queuesArray count]; i++)
+//        [self.queueViewControllersArray addObject:[NSNull null]];
+}
 
-    [self setQueuesArray:mutableFetchResults];
+#pragma mark - SFRestAPIDelegate
+
+- (void)request:(SFRestRequest *)request didLoadResponse:(id)jsonResponse {
+    NSArray *records = [jsonResponse objectForKey:@"records"];
+    NSLog(@"%@", records);
+    NSLog(@"request:didLoadResponse: #records: %d", records.count);
+//    self.dataRows = records;
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [self.tableView reloadData];
+//    });
     
-    self.queueViewControllersArray = [NSMutableArray arrayWithCapacity:[self.queuesArray count]];
-    for (int i = 0; i < [self.queuesArray count]; i++)
-        [self.queueViewControllersArray addObject:[NSNull null]];
+    // Create a queue for the new leads
+    Queue *newQueue = (Queue *)[NSEntityDescription insertNewObjectForEntityForName:@"Queue"
+                                                             inManagedObjectContext:_managedObjectContext];
+    for (NSDictionary *lead in records)
+    {
+        Contact *contact = (Contact *)[NSEntityDescription insertNewObjectForEntityForName:@"Contact"
+                                               inManagedObjectContext:_managedObjectContext];
+        [contact populateWithSalesforceLead:lead];
+        [newQueue addContactsObject:contact];
+    }
+    
+    newQueue.name = @"Leads";
+    [self.queuesArray addObject:newQueue];
+    [self.queueViewControllersArray addObject:[NSNull null]];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_queuesArray count]-1 inSection:0];
+//    [self performSelector:@selector(insertTableViewRowsWithRowAnimationLeftAtIndexPaths:) withObject:@[indexPath] afterDelay:100];
+    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+}
+
+- (void)insertTableViewRowsWithRowAnimationLeftAtIndexPaths:(NSArray *)indexPaths
+{
+    [self.tableView beginUpdates];
+    [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationLeft];
+    [self.tableView endUpdates];
+}
+
+
+- (void)request:(SFRestRequest*)request didFailLoadWithError:(NSError*)error {
+    NSLog(@"request:didFailLoadWithError: %@", error);
+    //add your failed error handling here
+}
+
+- (void)requestDidCancelLoad:(SFRestRequest *)request {
+    NSLog(@"requestDidCancelLoad: %@", request);
+    //add your failed error handling here
+}
+
+- (void)requestDidTimeout:(SFRestRequest *)request {
+    NSLog(@"requestDidTimeout: %@", request);
+    //add your failed error handling here
 }
 
 - (void)didReceiveMemoryWarning

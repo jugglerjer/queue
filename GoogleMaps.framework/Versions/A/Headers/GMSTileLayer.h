@@ -27,7 +27,7 @@ FOUNDATION_EXTERN UIImage *const kGMSTileLayerNoTile;
                    image:(UIImage *)image;
 @end
 
-/*
+/**
  * GMSTileLayer is an abstract class that allows overlaying of custom image
  * tiles on a specified GMSMapView. It may not be initialized directly, and
  * subclasses must implement the tileForX:y:zoom: method to return tiles.

@@ -27,6 +27,7 @@
 #import <GoogleMaps/GMSMapView+Overlays.h>
 #import <GoogleMaps/GMSMapView.h>
 #import <GoogleMaps/GMSMarker.h>
+#import <GoogleMaps/GMSMarkerLayer.h>
 #import <GoogleMaps/GMSMutablePath.h>
 #import <GoogleMaps/GMSOrientation.h>
 #import <GoogleMaps/GMSOverlay.h>

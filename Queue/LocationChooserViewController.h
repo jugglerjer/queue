@@ -30,8 +30,8 @@ typedef enum
 @property (strong, nonatomic) Location *location;
 @property LocationChooserViewMode viewMode;
 
-- (void)activateWithAnimation:(BOOL)animation;
-- (void)resignWithAnimation:(BOOL)animation;
+- (void)activateWithAnimation:(BOOL)animation completion:(void (^)())completionBlock;
+- (void)resignWithAnimation:(BOOL)animation completion:(void (^)())completionBlock;
 - (void)updateLocationViewMode:(LocationChooserViewMode)mode;
 - (void)clearLocations;
 

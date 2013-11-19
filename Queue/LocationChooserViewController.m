@@ -282,7 +282,7 @@ CGFloat marginTop;
     }
 }
 
-- (void)activateWithAnimation:(BOOL)animation
+- (void)activateWithAnimation:(BOOL)animation completion:(void (^)())completionBlock
 {    
     [self updateLocationViewMode:LocationChooserViewModeLocationSearch];
     
@@ -318,10 +318,13 @@ CGFloat marginTop;
                          self.isActive = YES;
                          self.locationTitleView.text = @"";
                          self.locationTitleView.placeholder = @"Where did you meet up?";
+                         if (completionBlock) {
+                             completionBlock();
+                         }
                      }];
 }
 
-- (void)resignWithAnimation:(BOOL)animation
+- (void)resignWithAnimation:(BOOL)animation completion:(void (^)())completionBlock
 {    
     if (self.isLocationEnabled)
         [self updateLocationViewMode:LocationChooserViewModeLocationEnabled];
@@ -368,6 +371,8 @@ CGFloat marginTop;
                          self.searchResultsTable.frame = searchResultsFrame;
                      } completion:^(BOOL finished){
                          self.isActive = NO;
+                         if (completionBlock)
+                             completionBlock();
                      }];
 }
 
@@ -470,7 +475,7 @@ CGFloat marginTop;
         [self.location populateWithLocation:self.meeting.location];
         [self displayMeetingLocation];
         [self performSearchWithDefaultLocation:YES];
-        [self resignWithAnimation:NO];
+        [self resignWithAnimation:NO completion:nil];
     }
     
     [self startStandardUpdates];
@@ -526,7 +531,7 @@ CGFloat marginTop;
     }
     
     [self startStandardUpdates];
-    [self resignWithAnimation:YES];
+    [self resignWithAnimation:YES completion:nil];
 }
 
 - (void)shouldShowMethodChooser
@@ -588,7 +593,7 @@ CGFloat marginTop;
     self.location = [self.searchResultsArray objectAtIndex:indexPath.row];
     self.isLocationEnabled = YES;
     [self displayMeetingLocation];
-    [self resignWithAnimation:YES];
+    [self resignWithAnimation:YES completion:nil];
     if ([_delegate respondsToSelector:@selector(locationChooser:didSelectLocation:forMeeting:)])
     {
         [_delegate locationChooser:self didSelectLocation:self.location forMeeting:self.meeting];

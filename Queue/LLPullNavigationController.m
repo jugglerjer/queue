@@ -70,7 +70,7 @@ int pageToSwitchTo;
 	// Setup the scroll view that will
     // hold the presented subview
 //    CGRect frame = self.view.frame;
-//    frame.origin.y += 20.0;
+//    frame.origin.y -= [UIApplication sharedApplication].statusBarFrame.size.height;
 //    frame.origin.y = self.view.frame.size.height;
     LLPullNavigationScrollView *scrollView = [[LLPullNavigationScrollView alloc] initWithFrame:frame];
     [scrollView setDelaysContentTouches:NO];
@@ -81,7 +81,7 @@ int pageToSwitchTo;
     scrollView.userInteractionEnabled = NO;
     self.scrollView = scrollView;
     [self.view addSubview:self.scrollView];
-//    [self.scrollView setContentOffset:CGPointMake(0, self.view.frame.size.height)];
+    [self.scrollView setContentOffset:CGPointMake(0, self.view.frame.size.height)];
     isScrollViewDismissed = YES;
     
     // Setup the instruction view that will
@@ -139,26 +139,34 @@ int pageToSwitchTo;
     // Disengage the page switcher
 //    [self resignScrollControl];
     
+    // Remove the current presented view from the heirarchy
     if (self.currentViewController)
     {
-        // Remove the current presented view from the heirarchy
-        [self.currentViewController willMoveToParentViewController:nil];
-        [self.currentViewController.view removeFromSuperview];
-        [self.currentViewController removeFromParentViewController];
+        [_currentViewController willMoveToParentViewController:nil];
+        [_currentViewController removeFromParentViewController];
     }
-    
     
     // Assign the new view to the current view property
     self.currentViewController = newViewController;
-    
     [self addChildViewController:self.currentViewController];
+
     CGRect frame = self.view.bounds;
     frame.origin.y = self.view.frame.size.height;
-    self.currentViewController.view.frame = frame;
-    [self.scrollView addSubview:self.currentViewController.view];
     
-    [self.scrollView bringSubviewToFront:self.instructionView];
-    [self presentScrollView];
+    [self transitionFromViewController:nil
+                      toViewController:_currentViewController
+                              duration:0.4
+                               options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut
+                            animations:^{
+                                _currentViewController.view.frame = frame;
+                            }
+                            completion:^(BOOL finished){
+                                [_currentViewController didMoveToParentViewController:self];
+                            }];
+    
+//    [self.scrollView addSubview:self.currentViewController.view];
+//    [self.scrollView bringSubviewToFront:self.instructionView];
+//    [self presentScrollView];
     
     NSLog(@"Switching page");
     
@@ -242,7 +250,6 @@ int pageToSwitchTo;
 - (void)adjustToPoint:(CGPoint)point
 {
     [self.scrollView setContentOffset:CGPointMake(point.x, point.y + self.view.frame.size.height)];
-    NSLog(@"Pull View Content Offset: %f", _scrollView.contentOffset.y - _scrollView.frame.size.height);
 }
 
 // -----------------------------------------
@@ -304,7 +311,6 @@ int pageToSwitchTo;
     _isSwitchingToPage = YES;
     [self.scrollView setContentOffset:CGPointMake(0, self.view.frame.size.height) animated:YES];
     [self setPageSwitchingMode:NO withDelay:0.4];
-    
 }
 
 // -----------------------------------------

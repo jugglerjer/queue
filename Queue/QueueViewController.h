@@ -16,13 +16,23 @@
 @class Queue;
 @class LLPullNavigationTableView;
 
-@interface QueueViewController : UIViewController <ABPeoplePickerNavigationControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, TimelineViewControllerDelegate, UIGestureRecognizerDelegate, QueueContactCellDelegate, AddContactViewControllerDelegate, LLLocationManagerDelegate, AddMeetingViewControllerDelegate>
+@protocol QueueViewControllerDelegate;
 
+@interface QueueViewController : UIViewController <ABPeoplePickerNavigationControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, TimelineViewControllerDelegate, UIGestureRecognizerDelegate, QueueContactCellDelegate, AddContactViewControllerDelegate, LLLocationManagerDelegate, AddMeetingViewControllerDelegate, UINavigationBarDelegate>
+
+@property (weak, nonatomic)      id <QueueViewControllerDelegate> delegate;
 @property (strong, nonatomic) Queue *queue;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (strong, nonatomic) LLPullNavigationTableView *tableView;
 @property (strong, nonatomic) NSIndexPath * selectedIndexPath;
+@property (strong, nonatomic) UINavigationBar *navBar;
 
 - (id)initWithQueue:(Queue *)queue;
+
+@end
+
+@protocol QueueViewControllerDelegate <NSObject>
+
+- (void)queueViewControllerShouldBeDismissed:(QueueViewController *)queueViewController;
 
 @end

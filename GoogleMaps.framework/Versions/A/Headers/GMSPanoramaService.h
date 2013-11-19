@@ -34,6 +34,14 @@ typedef void (^GMSPanoramaCallback)(GMSPanorama *panorama, NSError *error);
                              callback:(GMSPanoramaCallback)callback;
 
 /**
+ * Similar to requestPanoramaNearCoordinate:callback: but allows specifying
+ * a search radius (meters) around |coordinate|.
+ */
+- (void)requestPanoramaNearCoordinate:(CLLocationCoordinate2D)coordinate
+                               radius:(NSUInteger)radius
+                             callback:(GMSPanoramaCallback)callback;
+
+/**
  * Retrieves information about a panorama with the given |panoramaID|.
  * |callback| will be called with the result.
  */

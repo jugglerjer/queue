@@ -37,6 +37,10 @@
                 normalImageName = @"back.png";
                 break;
                 
+            case QueueBarButtonItemTypeList:
+                normalImageName = @"list-flat.png";
+                break;
+                
             default:
                 break;
         }

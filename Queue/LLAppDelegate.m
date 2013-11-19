@@ -14,12 +14,68 @@
 #import "Queue.h"
 #import "Contact.h"
 #import "Contact+LocalNotifications.h"
+#import "SFAccountManager.h"
+#import "SFAuthenticationManager.h"
+#import "SFPushNotificationManager.h"
+#import "SFOAuthInfo.h"
+#import "SFLogger.h"
+
+static NSString * const RemoteAccessConsumerKey = @"3MVG9A2kN3Bn17hsfhGoDhS8J6NA2FjFPP7qJEj2rDbvzwpLP8BfZzIJDNNYYCC6KXAvVoyS3JqPArwJDu53j";
+static NSString * const OAuthRedirectURI        = @"queue://";
+
+@interface LLAppDelegate ()
+
+/**
+ * Success block to call when authentication completes.
+ */
+@property (nonatomic, copy) SFOAuthFlowSuccessCallbackBlock initialLoginSuccessBlock;
+
+/**
+ * Failure block to calls if authentication fails.
+ */
+@property (nonatomic, copy) SFOAuthFlowFailureCallbackBlock initialLoginFailureBlock;
+
+/**
+ * Handles the notification from SFAuthenticationManager that a logout has been initiated.
+ * @param notification The notification containing the details of the logout.
+ */
+- (void)logoutInitiated:(NSNotification *)notification;
+
+/**
+ * Handles the notification from SFAuthenticationManager that the login host has changed in
+ * the Settings application for this app.
+ * @param The notification whose userInfo dictionary contains:
+ *        - kSFLoginHostChangedNotificationOriginalHostKey: The original host, prior to host change.
+ *        - kSFLoginHostChangedNotificationUpdatedHostKey: The updated (new) login host.
+ */
+- (void)loginHostChanged:(NSNotification *)notification;
+
+@end
 
 @implementation LLAppDelegate
 
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
+@synthesize initialLoginSuccessBlock = _initialLoginSuccessBlock;
+@synthesize initialLoginFailureBlock = _initialLoginFailureBlock;
+
+- (id)init
+{
+    if (self = [super init])
+    {
+        [SFLogger setLogLevel:SFLogLevelDebug];
+        
+        // Set SF Credentials
+        [SFAccountManager setClientId:RemoteAccessConsumerKey];
+        [SFAccountManager setRedirectUri:OAuthRedirectURI];
+        [SFAccountManager setScopes:[NSSet setWithObjects:@"api", nil]];
+        [[SFAccountManager sharedInstance].credentials setClientId:@"3MVG9A2kN3Bn17hsfhGoDhS8J6NA2FjFPP7qJEj2rDbvzwpLP8BfZzIJDNNYYCC6KXAvVoyS3JqPArwJDu53j"];
+//        NSLog(@"%@", [SFAccountManager clientId]);
+    }
+    
+    return self;
+}
 
 - (void)customizeUserInterfaceElements
 {
@@ -72,14 +128,24 @@
     [self customizeUserInterfaceElements];
     [GMSServices provideAPIKey:@"AIzaSyA9I-EJpd4dZ7SgSFmKkYz-PzxeMCoHaU4"];
     
-    NSManagedObjectContext *context = [self managedObjectContext];
-    if (!context) {
-        // Handle the error.
-    }
+    // Set up Salesforce SDK
+    [self setupSalesforceIntegration];
     
     // Cancel any scheduled local notifications
     UIApplication *myApp = [UIApplication sharedApplication];
     [myApp cancelAllLocalNotifications];
+    
+    [self.window makeKeyAndVisible];
+    
+    return YES;
+}
+
+- (void)setupQueueViewsController
+{
+    NSManagedObjectContext *context = [self managedObjectContext];
+    if (!context) {
+        // Handle the error.
+    }
     
     // Create a table to hold the queue
     QueuesViewController *queueTable = [[QueuesViewController alloc] init];
@@ -87,17 +153,13 @@
     queueTable.managedObjectContext = context;
     
     // Add the table to the nav controller
-    _pullController = [[LLPullNavigationController alloc] initWithRootViewController:queueTable];
-//    _navController = [[UINavigationController alloc] initWithRootViewController:queueTable];
-//    self.pullController = pullController;
+    //    _pullController = [[LLPullNavigationController alloc] initWithRootViewController:queueTable];
+    //    _navController = [[UINavigationController alloc] initWithRootViewController:queueTable];
+    //    self.pullController = pullController;
     
     // Add the nav controller to the window
-    self.window.rootViewController = _pullController;
-    
+    self.window.rootViewController = queueTable;
     self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
-    
-    return YES;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -145,6 +207,42 @@
             abort();
         }
     }
+}
+
+#pragma mark - Salesforce Methods
+
+- (void)setupSalesforceIntegration
+{
+    // Register for SF notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutInitiated:) name:kSFUserLogoutNotification object:[SFAuthenticationManager sharedManager]];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginHostChanged:) name:kSFLoginHostChangedNotification object:[SFAuthenticationManager sharedManager]];
+    
+    // Configure login and logout actions
+    __weak LLAppDelegate *weakSelf = self;
+    self.initialLoginSuccessBlock = ^(SFOAuthInfo *info) {
+//        [weakSelf setupRootViewController];
+        [weakSelf setupQueueViewsController];
+    };
+    self.initialLoginFailureBlock = ^(SFOAuthInfo *info, NSError *error) {
+        [[SFAuthenticationManager sharedManager] logout];
+    };
+    
+    // Attempt to login
+    [[SFAuthenticationManager sharedManager] loginWithCompletion:self.initialLoginSuccessBlock failure:self.initialLoginFailureBlock];
+}
+
+- (void)logoutInitiated:(NSNotification *)notification
+{
+    [self log:SFLogLevelDebug msg:@"Logout notification received.  Resetting app."];
+//    [self initializeAppViewState];
+    [[SFAuthenticationManager sharedManager] loginWithCompletion:self.initialLoginSuccessBlock failure:self.initialLoginFailureBlock];
+}
+
+- (void)loginHostChanged:(NSNotification *)notification
+{
+    [self log:SFLogLevelDebug msg:@"Login host changed notification received.  Resetting app."];
+//    [self initializeAppViewState];
+    [[SFAuthenticationManager sharedManager] loginWithCompletion:self.initialLoginSuccessBlock failure:self.initialLoginFailureBlock];
 }
 
 #pragma mark - Local Notifications Methods

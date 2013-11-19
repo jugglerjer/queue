@@ -13,7 +13,8 @@ typedef enum
     QueueBarButtonItemTypeAdd,
     QueueBarButtonItemTypeDone,
     QueueBarButtonItemTypeCancel,
-    QueueBarButtonItemTypeBack
+    QueueBarButtonItemTypeBack,
+    QueueBarButtonItemTypeList
 } QueueBarButtonItemType;
 
 @interface QueueBarButtonItem : UIBarButtonItem

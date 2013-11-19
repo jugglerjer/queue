@@ -16,6 +16,7 @@
 
 @class GMSCameraPosition;
 @class GMSCameraUpdate;
+@class GMSCoordinateBounds;
 @class GMSIndoorDisplay;
 @class GMSMapLayer;
 @class GMSMapView;
@@ -112,6 +113,21 @@
  * @return The custom info window for the specified marker, or nil for default
  */
 - (UIView *)mapView:(GMSMapView *)mapView markerInfoWindow:(GMSMarker *)marker;
+
+/**
+ * Called when dragging has been initiated on a marker.
+ */
+- (void)mapView:(GMSMapView *)mapView didBeginDraggingMarker:(GMSMarker *)marker;
+
+/**
+ * Called after dragging of a marker ended.
+ */
+- (void)mapView:(GMSMapView *)mapView didEndDraggingMarker:(GMSMarker *)marker;
+
+/**
+ * Called while a marker is dragged.
+ */
+- (void)mapView:(GMSMapView *)mapView didDragMarker:(GMSMarker *)marker;
 
 @end
 
@@ -234,6 +250,21 @@ typedef enum {
 @property(nonatomic, strong, readonly) GMSUISettings *settings;
 
 /**
+ * Controls the 'visible' region of the view.  By applying padding an area
+ * arround the edge of the view can be created which will contain map data
+ * but will not contain UI controls.
+ *
+ * If the padding is not balanced, the visual center of the view will move as
+ * appropriate.  Padding will also affect the |projection| property so the
+ * visible region will not include the padding area.  GMSCameraUpdate
+ * fitToBounds will ensure that both this padding and any padding requested
+ * will be taken into account.
+ *
+ * This property may be animated within a UIView-based animation block.
+ */
+@property(nonatomic, assign) UIEdgeInsets padding;
+
+/**
  * Defaults to YES. If set to NO, GMSMapView will generate accessibility
  * elements for overlay objects, such as GMSMarker and GMSPolyline.
  *
@@ -272,6 +303,16 @@ typedef enum {
  * or reset the current mapType.
  */
 - (void)clear;
+
+/**
+ * Build a GMSCameraPosition that presents |bounds| with |padding|. The camera
+ * will have a zero bearing and tilt (i.e., facing north and looking directly at
+ * the Earth). This takes the frame and padding of this GMSMapView into account.
+ *
+ * If the bounds is nil or invalid this method will return a nil camera.
+ */
+- (GMSCameraPosition *)cameraForBounds:(GMSCoordinateBounds *)bounds
+                                insets:(UIEdgeInsets)insets;
 
 /**
  * Changes the camera according to |update|.

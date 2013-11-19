@@ -497,8 +497,8 @@ BOOL isScrollingDown;
 
 - (CGFloat)fullTimelineHeight
 {
-//    NSLog(@"%f", self.tableView.frame.size.height - contactRowHeight - [UIApplication sharedApplication].statusBarFrame.size.height - self.navigationController.navigationBar.frame.size.height);
-    return self.tableView.frame.size.height - contactRowHeight/* - [UIApplication sharedApplication].statusBarFrame.size.height - self.navigationController.navigationBar.frame.size.height*/;
+//    NSLog(@"%f", self.tableView.frame.size.height - contactRowHeight - [UIApplication sharedApplication].statusBarFrame.size.height - _navBar.frame.size.height);
+    return self.tableView.frame.size.height - contactRowHeight/* - [UIApplication sharedApplication].statusBarFrame.size.height - _navBar.frame.size.height*/;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -537,7 +537,7 @@ BOOL isScrollingDown;
 {
     if ([gestureRecognizer respondsToSelector:@selector(velocityInView:)])
     {
-        CGPoint velocity = [gestureRecognizer velocityInView:self.navigationController.navigationBar.superview];
+        CGPoint velocity = [gestureRecognizer velocityInView:_navBar.superview];
         if ( ABS(velocity.y) > ABS(velocity.x) && velocity.y > 0)
             return YES;
     }
@@ -550,7 +550,7 @@ BOOL isScrollingDown;
 // -----------------------------------------
 - (void)handleGesture:(UIPanGestureRecognizer *)gestureRecognizer
 {
-    CGPoint distance = [gestureRecognizer translationInView:self.navigationController.navigationBar.superview];
+    CGPoint distance = [gestureRecognizer translationInView:_navBar.superview];
     
     switch (gestureRecognizer.state) {
         case UIGestureRecognizerStateBegan:
@@ -568,7 +568,7 @@ BOOL isScrollingDown;
                 [_pullController disengageWithPotentialPageSwitch:YES];
                 if (![_pullController shouldDismissScrollView])
                     [_pullController.scrollView setContentOffset:CGPointMake(0, _pullController.scrollView.frame.size.height) animated:YES];
-//                [UIView animateWithDuration:0.0 animations:^{self.navigationController.navigationBar.alpha = 1.0;}];
+//                [UIView animateWithDuration:0.0 animations:^{_navBar.alpha = 1.0;}];
             }
             break;
             
@@ -599,80 +599,80 @@ BOOL isScrollingDown;
 // Prepare for queue selection mode when
 // The user begins dragging the table
 // -----------------------------------------
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    if ([self.tableView.panGestureRecognizer velocityInView:[_tableView superview]].y > 0
-        && scrollView.contentOffset.y <= -self.navigationController.navigationBar.frame.size.height)
-    {
-        [self prepareForQueueSelectionModeToBegin];
-        [_pullController engageWithGestureRecognizer:self.tableView.panGestureRecognizer];
-    }
-}
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    if (scrollView.contentOffset.y < 0)
-    {
-        isScrollingDown = YES;
-        if (_pullController.isEngaged/* || pullController.isSwitchingToPage*/)
-        {
-            [_pullController adjustToPoint:CGPointMake(0, scrollView.contentOffset.y)];
-            [self.view setTransform:CGAffineTransformMakeTranslation(0, (scrollView.contentOffset.y + self.navigationController.navigationBar.frame.size.height))];
-        }
-    }
-//    else
+//- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+//{
+//    if ([self.tableView.panGestureRecognizer velocityInView:[_tableView superview]].y > 0
+//        && scrollView.contentOffset.y <= -_navBar.frame.size.height)
 //    {
-//        isScrollingDown = NO;
-//        [_pullController disengageWithPotentialPageSwitch:NO];
+//        [self prepareForQueueSelectionModeToBegin];
+//        [_pullController engageWithGestureRecognizer:self.tableView.panGestureRecognizer];
+//    }
+//}
+//
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+//{
+//    if (scrollView.contentOffset.y < 0)
+//    {
+//        isScrollingDown = YES;
+//        if (_pullController.isEngaged/* || pullController.isSwitchingToPage*/)
+//        {
+//            [_pullController adjustToPoint:CGPointMake(0, scrollView.contentOffset.y)];
+//            [self.view setTransform:CGAffineTransformMakeTranslation(0, (scrollView.contentOffset.y + _navBar.frame.size.height))];
+//        }
+//    }
+////    else
+////    {
+////        isScrollingDown = NO;
+////        [_pullController disengageWithPotentialPageSwitch:NO];
+////        [self prepareForQueueSelectionModeToEnd];
+////    }
+//}
+//
+//- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+//{
+//    if (/*isScrollingDown && */_pullController.isEngaged)
+//    {
+//        [_pullController disengageWithPotentialPageSwitch:YES];
+//        if (_pullController.isSwitchingToPage) {
+//            _pullController.isEngaged = NO;
+//            [self prepareForQueueSelectionModeToEnd];
+//        }
+//    }
+//}
+//
+//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+//{
+//    if (scrollView.frame.origin.y != 0.0)
+//    {
+//        _pullController.isEngaged = NO;
 //        [self prepareForQueueSelectionModeToEnd];
 //    }
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-    if (/*isScrollingDown && */_pullController.isEngaged)
-    {
-        [_pullController disengageWithPotentialPageSwitch:YES];
-        if (_pullController.isSwitchingToPage) {
-            _pullController.isEngaged = NO;
-            [self prepareForQueueSelectionModeToEnd];
-        }
-    }
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    if (scrollView.frame.origin.y != 0.0)
-    {
-        _pullController.isEngaged = NO;
-        [self prepareForQueueSelectionModeToEnd];
-    }
-}
-
-// -----------------------------------------
-// Prepare for queue selection mode when
-// The user begins dragging the table
-// -----------------------------------------
-- (void)prepareForQueueSelectionModeToBegin
-{
-//    [_tableView setTransform:CGAffineTransformMakeTranslation(0.0, _tableView.contentInset.top)];
-    [UIView animateWithDuration:0.0 animations:^{self.navigationController.navigationBar.alpha = 0.0;}];
-    [_tableView setContentInset:UIEdgeInsetsZero];
-    _tableView.showsVerticalScrollIndicator = NO;
-}
+//}
+//
+//// -----------------------------------------
+//// Prepare for queue selection mode when
+//// The user begins dragging the table
+//// -----------------------------------------
+//- (void)prepareForQueueSelectionModeToBegin
+//{
+////    [_tableView setTransform:CGAffineTransformMakeTranslation(0.0, _tableView.contentInset.top)];
+//    [UIView animateWithDuration:0.0 animations:^{_navBar.alpha = 0.0;}];
+//    [_tableView setContentInset:UIEdgeInsetsZero];
+//    _tableView.showsVerticalScrollIndicator = NO;
+//}
 
 // -----------------------------------------
 // Prepare for resumption of normal mode when
 // the user stops dragging the table
 // -----------------------------------------
-- (void)prepareForQueueSelectionModeToEnd
-{
-    [UIView animateWithDuration:0.0 animations:^{self.navigationController.navigationBar.alpha = 1.0;}];
-    [_tableView setContentInset:UIEdgeInsetsMake(self.navigationController.navigationBar.frame.size.height, 0.0, 0.0, 0.0)];
-    [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-    [_tableView setTransform:CGAffineTransformMakeTranslation(0.0, 0.0)];
-    _tableView.showsVerticalScrollIndicator = YES;
-}
+//- (void)prepareForQueueSelectionModeToEnd
+//{
+////    [UIView animateWithDuration:0.0 animations:^{_navBar.alpha = 1.0;}];
+//    [_tableView setContentInset:UIEdgeInsetsMake(_navBar.frame.size.height, 0.0, 0.0, 0.0)];
+//    [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+//    [_tableView setTransform:CGAffineTransformMakeTranslation(0.0, 0.0)];
+//    _tableView.showsVerticalScrollIndicator = YES;
+//}
 
 # pragma mark - Queue Row Selection Methods
 
@@ -782,7 +782,7 @@ BOOL isScrollingDown;
     // beneath it.
     _contractedBounds = _tableView.bounds;
     _expandedBounds = _contractedBounds;
-    _expandedBounds.origin.y = _selectedIndexPath.row * contactRowHeight - self.navigationController.navigationBar.frame.size.height;
+    _expandedBounds.origin.y = _selectedIndexPath.row * contactRowHeight - _navBar.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height;
 
     [UIView animateWithDuration:duration
                      animations:^{
@@ -901,20 +901,24 @@ BOOL isScrollingDown;
     
     // Don't inset scroll view content - iOS7
 //    self.automaticallyAdjustsScrollViewInsets = NO;
-//    self.extendedLayoutIncludesOpaqueBars = NO;
+//    self.extendedLayoutIncludesOpaqueBars = YES;
+    
+    // Add a custom UINavigationBar to the view so that we can control whether
+    // it gets positioned as UIBarPositionTopAttached and merges with the status bar
+    _navBar = self.navigationController.navigationBar;
     
     // A a gesture recognizer to the navigation bar to let the user pull to switch queues using its area
     UIPanGestureRecognizer *navBarGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
     navBarGesture.delegate = self;
-    [self.navigationController.navigationBar addGestureRecognizer:navBarGesture];
+    [_navBar addGestureRecognizer:navBarGesture];
     
     self.view.backgroundColor = [UIColor clearColor];
 	
     // Create a table view to hold the contacts
     LLPullNavigationTableView *tableView = [[LLPullNavigationTableView alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
-                                                                           self.view.bounds.origin.y/* + self.navigationController.navigationBar.frame.size.height*/,
+                                                                           self.view.bounds.origin.y,
                                                                            self.view.frame.size.width,
-                                                                           self.view.frame.size.height /*+ self.navigationController.navigationBar.frame.size.height*/ - [UIApplication sharedApplication].statusBarFrame.size.height)
+                                                                           self.view.frame.size.height /*+ _navBar.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height*/)
                                                           style:UITableViewStylePlain];
     tableView.backgroundColor = [UIColor colorWithPatternImage: [UIImage imageNamed:@"queue_background.png"]];
 //    tableView.backgroundColor = [UIColor clearColor];
@@ -935,6 +939,10 @@ BOOL isScrollingDown;
 //    QueueBarButtonItem *backButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeBack target:self action:@selector(back)];
 //    self.navigationItem.leftBarButtonItem = backButton;
     
+    // Add a menu button to the left side of the navigation bar
+    QueueBarButtonItem *menuButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeList target:self action:@selector(backToMenu:)];
+    self.navigationItem.leftBarButtonItem = menuButton;
+    
     [self updateContactsArrayWithTableReload:NO];
     _imagesDictionary = [NSMutableDictionary dictionaryWithCapacity:[self.contactsArray count]];
     
@@ -949,9 +957,20 @@ BOOL isScrollingDown;
     [_locationManager startStandardUpdates];
 }
 
+- (UIBarPosition)positionForBar:(id<UIBarPositioning>)bar
+{
+    return UIBarPositionTopAttached;
+}
+
 - (void)back
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)backToMenu:(QueueBarButtonItem *)sender
+{
+    if ([_delegate respondsToSelector:@selector(queueViewControllerShouldBeDismissed:)])
+        [_delegate queueViewControllerShouldBeDismissed:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -969,7 +988,7 @@ BOOL isScrollingDown;
 
 - (void)viewDidAppear:(BOOL)animated
 {
-
+    NSLog(@"%d", _navBar.barPosition);
 }
 
 - (void)didReceiveMemoryWarning

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import "LocationChooserViewController.h"
+#import "SFRestAPI.h"
 @class Meeting;
 @class Contact;
 
@@ -20,7 +21,7 @@ typedef enum
     QueueEditMeetingTypeUpdate
 } QueueEditMeetingType;
 
-@interface AddMeetingViewController : UIViewController <UITextViewDelegate, UIScrollViewDelegate, LocationChooseViewControllerDelegate>
+@interface AddMeetingViewController : UIViewController <UITextViewDelegate, UIScrollViewDelegate, LocationChooseViewControllerDelegate, SFRestDelegate>
 
 @property (weak, nonatomic) id<AddMeetingViewControllerDelegate> delegate;
 @property (strong, nonatomic) Contact *contact;

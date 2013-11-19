@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import "LLDataDownloader.h"
 
 @class Contact, Location;
 
@@ -18,12 +19,16 @@ typedef enum
     MeetingMethodInPerson
 } MeetingMethod;
 
-@interface Meeting : NSManagedObject
+@interface Meeting : NSManagedObject <LLDataDownloaderDelegate>
 
+@property (nonatomic, retain) NSString *salesforceID;
 @property (nonatomic, retain) NSDate * date;
 @property (nonatomic, retain) NSString * method;
 @property (nonatomic, retain) NSString * note;
 @property (nonatomic, retain) Contact *contact;
 @property (nonatomic, retain) Location *location;
+
+- (void)populateWithSalesforceEvent:(NSDictionary *)event;
+- (void)setLocationWithSearchTerm:(NSString *)searchTerm;
 
 @end

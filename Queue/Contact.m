@@ -18,6 +18,7 @@
 @dynamic fullName;
 @dynamic note;
 @dynamic addressBookID;
+@dynamic salesforceID;
 @dynamic meetInterval;
 @dynamic oneTimeDueDate;
 @dynamic dateAdded;
@@ -33,6 +34,31 @@
 #pragma mark - Data Population Methods
 
 static double defaultMeetInterval = 3 * 30.5 * 24 * 60 * 60; /* 1 month ~ 31.5 days */
+
+// -------------------------------------------------------------
+// Populate a lead from the Salesforce API
+// -------------------------------------------------------------
+- (void)populateWithSalesforceLead:(NSDictionary *)lead
+{
+    self.firstName = [lead objectForKey:@"FirstName"];
+    self.lastName = [lead objectForKey:@"LastName"];
+    self.fullName = [lead objectForKey:@"Name"];
+    
+    if (![[lead objectForKey:@"Events"] isEqual:[NSNull null]])
+    {
+        for (NSDictionary *meetingDict in [[lead objectForKey:@"Events"] objectForKey:@"records"])
+        {
+            Meeting *meeting = (Meeting *)[NSEntityDescription insertNewObjectForEntityForName:@"Meeting"
+                                                                        inManagedObjectContext:self.managedObjectContext];
+            [meeting populateWithSalesforceEvent:meetingDict];
+            [self addMeetingsObject:meeting];
+        }
+    }
+
+    self.salesforceID = [lead objectForKey:@"Id"];
+    
+    [self populateWithDefaultSettings];
+}
 
 // -------------------------------------------------------------
 // Populate a contact with the data from an address book record
