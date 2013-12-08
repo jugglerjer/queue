@@ -99,15 +99,15 @@ static CGFloat keyboardHeight = 216;
     NSDictionary *fields = [SFJsonUtils objectFromJSONString:fieldsJSON];
     
     // If the meeting has a Salesforce ID, update it in Salesforce
-    SFRestRequest *request = [[SFRestAPI sharedInstance] requestForDescribeWithObjectType:@"Event"];
-//    if (_meeting.salesforceID)
-//        request = [[SFRestAPI sharedInstance] requestForUpdateWithObjectType:@"Event" objectId:_meeting.salesforceID fields:fields];
-//    
-//    // If not, create a new meeting
-//    else
-//    {
-//        request = [[SFRestAPI sharedInstance] requestForCreateWithObjectType:@"Event" fields:fields];
-//    }
+    SFRestRequest *request;
+    if (_meeting.salesforceID)
+        request = [[SFRestAPI sharedInstance] requestForUpdateWithObjectType:@"Event" objectId:_meeting.salesforceID fields:fields];
+    
+    // If not, create a new meeting
+    else
+    {
+        request = [[SFRestAPI sharedInstance] requestForCreateWithObjectType:@"Event" fields:fields];
+    }
     
     [[SFRestAPI sharedInstance] send:request delegate:self];
 }
