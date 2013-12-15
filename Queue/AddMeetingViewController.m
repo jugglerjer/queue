@@ -60,7 +60,7 @@ static CGFloat keyboardHeight = 216;
         // Handle the error.
     } else {
         [self dismissViewControllerAnimated:YES completion:^{
-            if  (self.editMeetingType == QueueEditMeetingTypeAdd)
+            if  (self.editMeetingType == QueueEditMeetingTypeAdd || self.editMeetingType == QueueEditMeetingTypeLast)
             {
                 if ([_delegate respondsToSelector:@selector(addMeetingViewController:didAddMeeting:forContact:)])
                 {
@@ -84,6 +84,13 @@ static CGFloat keyboardHeight = 216;
 {
     [self.locationChooser clearLocations];
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
+    if([_delegate respondsToSelector:@selector(addMeetingViewController:didCancelWithoutUpdatingMeeting:forContact:)])
+        [_delegate addMeetingViewController:self didCancelWithoutUpdatingMeeting:_meeting forContact:_contact];
 }
 
 #define DATE_TEXT_MARGIN_LEFT       48
@@ -145,15 +152,37 @@ static CGFloat keyboardHeight = 216;
         newMeeting.date = [NSDate date];
         newMeeting.note = @"";
         self.meeting = newMeeting;
-        self.title = @"Add Meeting";
+        if (_editMeetingType == QueueEditMeetingTypeLast)
+            self.title = @"Last Meeting";
+        else
+            self.title = @"Add Meeting";
     } else {
         self.title = @"Edit Meeting";
     }
    
-    // Add the save and cancel buttons to the nav bar    
-    QueueBarButtonItem *cancelButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeCancel target:self action:@selector(cancel)];
+    
+    // Add the save and cancel buttons to the nav bar
+    QueueBarButtonItem *leftButton;
+    switch (_editMeetingType)
+    {
+        case QueueEditMeetingTypeAdd:
+            leftButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeCancel target:self action:@selector(cancel)];
+            break;
+            
+        case QueueEditMeetingTypeUpdate:
+            leftButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeCancel target:self action:@selector(cancel)];
+            break;
+            
+        case QueueEditMeetingTypeLast:
+            leftButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeBack target:self action:@selector(back)];
+            
+        default:
+            break;
+    }
+    
+//    QueueBarButtonItem *cancelButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeCancel target:self action:@selector(cancel)];
     QueueBarButtonItem *addMeetingButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeDone target:self action:@selector(saveMeeting)];
-    self.navigationItem.leftBarButtonItem = cancelButton;
+    self.navigationItem.leftBarButtonItem = leftButton;
     self.navigationItem.rightBarButtonItem = addMeetingButton;
     
 //    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,

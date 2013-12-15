@@ -125,11 +125,11 @@ double queueDistance = 0.75;
         _queueInstructionControl = [[UIControl alloc] initWithFrame:CGRectMake(0, 0, self.underView.frame.size.width, self.underView.frame.size.height)];
         [_queueInstructionControl addTarget:self action:@selector(editMeeting) forControlEvents:UIControlEventTouchUpInside];
         
-//        [self.underView addSubview:_queueInstructionControl];
-//        [self.underView addSubview:_meetingDateLabel];
-//        [self.underView addSubview:_meetingLocationLabel];
-//        [self.underView addSubview:_confirmMeetingButton];
-//        [self.underView addSubview:_cancelMeetingButton];
+        [self.underView addSubview:_queueInstructionControl];
+        [self.underView addSubview:_meetingDateLabel];
+        [self.underView addSubview:_meetingLocationLabel];
+        [self.underView addSubview:_confirmMeetingButton];
+        [self.underView addSubview:_cancelMeetingButton];
         
         // Background View
         UIImage *innerShadow = [[UIImage imageNamed:@"timeline-inner-shadow.png"] stretchableImageWithLeftCapWidth:5 topCapHeight:5];

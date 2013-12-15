@@ -510,6 +510,7 @@ CGFloat rowHeight = 44.0;
     tableView.allowsSelectionDuringEditing = YES;
     tableView.backgroundColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1];
     
+    
     UIView *newQueueView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, rowHeight)];
     
     CGRect nameFrame = CGRectMake(newQueueView.bounds.origin.x + NAME_LABEL_MARGIN_LEFT,

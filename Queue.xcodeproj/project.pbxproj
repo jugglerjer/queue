@@ -120,6 +120,7 @@
 		3FAC625F1763017F00E20373 /* NSArray-SortUsingArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FAC625D1762FD0600E20373 /* NSArray-SortUsingArray.m */; };
 		3FB5D98A17ADCB2D0086DCFE /* cancel-delete-meeting@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FB5D98817ADCB2D0086DCFE /* cancel-delete-meeting@2x.png */; };
 		3FB5D98B17ADCB2D0086DCFE /* delete-meeting@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3FB5D98917ADCB2D0086DCFE /* delete-meeting@2x.png */; };
+		3FCC9A2918552C5100E455D2 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3FCC9A2818552C5100E455D2 /* GoogleMaps.bundle */; };
 		3FD76DCB1800A4F400077CDF /* LLDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD76DC01800A4F400077CDF /* LLDatePicker.m */; };
 		3FD76DCC1800A4F400077CDF /* LLCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD76DC21800A4F400077CDF /* LLCalendarView.m */; };
 		3FD76DCD1800A4F400077CDF /* LLCalendarViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FD76DC41800A4F400077CDF /* LLCalendarViewLayout.m */; };
@@ -300,6 +301,7 @@
 		3FAC625D1762FD0600E20373 /* NSArray-SortUsingArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray-SortUsingArray.m"; sourceTree = "<group>"; };
 		3FB5D98817ADCB2D0086DCFE /* cancel-delete-meeting@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cancel-delete-meeting@2x.png"; path = "Queue/cancel-delete-meeting@2x.png"; sourceTree = "<group>"; };
 		3FB5D98917ADCB2D0086DCFE /* delete-meeting@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "delete-meeting@2x.png"; path = "Queue/delete-meeting@2x.png"; sourceTree = "<group>"; };
+		3FCC9A2818552C5100E455D2 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle; sourceTree = "<group>"; };
 		3FD76DBF1800A4F400077CDF /* LLDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLDatePicker.h; sourceTree = "<group>"; };
 		3FD76DC01800A4F400077CDF /* LLDatePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLDatePicker.m; sourceTree = "<group>"; };
 		3FD76DC11800A4F400077CDF /* LLCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLCalendarView.h; sourceTree = "<group>"; };
@@ -387,20 +389,6 @@
 			children = (
 				3F9B1A1A176E999900C566B9 /* icon.png */,
 				3F9B1A18176E995D00C566B9 /* icon@2x.png */,
-				3F93444E175AF244000FD331 /* AVFoundation.framework */,
-				3F93444F175AF244000FD331 /* CoreText.framework */,
-				3F934450175AF244000FD331 /* GLKit.framework */,
-				3F934451175AF245000FD331 /* ImageIO.framework */,
-				3F934452175AF245000FD331 /* libc++.dylib */,
-				3F934453175AF245000FD331 /* libicucore.dylib */,
-				3F934454175AF245000FD331 /* libz.dylib */,
-				3F934455175AF245000FD331 /* OpenGLES.framework */,
-				3F934456175AF245000FD331 /* QuartzCore.framework */,
-				3F934457175AF245000FD331 /* SystemConfiguration.framework */,
-				3F934436175AD49C000FD331 /* CoreLocation.framework */,
-				3FABEE2B174812A700BBB760 /* CoreData.framework */,
-				3FABEE271746012600BBB760 /* AddressBook.framework */,
-				3FABEE281746012600BBB760 /* AddressBookUI.framework */,
 				3FA1019117447769007D2520 /* Queue */,
 				3FAC62591762FC4900E20373 /* plists */,
 				3FE80CE4174DBFA50009D61D /* Images */,
@@ -422,6 +410,21 @@
 		3FA1018A17447769007D2520 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3FCC9A2818552C5100E455D2 /* GoogleMaps.bundle */,
+				3F93444E175AF244000FD331 /* AVFoundation.framework */,
+				3F93444F175AF244000FD331 /* CoreText.framework */,
+				3F934450175AF244000FD331 /* GLKit.framework */,
+				3F934451175AF245000FD331 /* ImageIO.framework */,
+				3F934452175AF245000FD331 /* libc++.dylib */,
+				3F934453175AF245000FD331 /* libicucore.dylib */,
+				3F934454175AF245000FD331 /* libz.dylib */,
+				3F934455175AF245000FD331 /* OpenGLES.framework */,
+				3F934456175AF245000FD331 /* QuartzCore.framework */,
+				3F934457175AF245000FD331 /* SystemConfiguration.framework */,
+				3F934436175AD49C000FD331 /* CoreLocation.framework */,
+				3FABEE2B174812A700BBB760 /* CoreData.framework */,
+				3FABEE271746012600BBB760 /* AddressBook.framework */,
+				3FABEE281746012600BBB760 /* AddressBookUI.framework */,
 				3FA8F73D182710B10097640D /* Reveal.framework */,
 				3F97456517DB94560036D117 /* CFNetwork.framework */,
 				3F96995417D9B4A80018A2A2 /* GoogleMaps.framework */,
@@ -688,6 +691,11 @@
 				CLASSPREFIX = LL;
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Lubin Labs";
+				TargetAttributes = {
+					3FA1018717447769007D2520 = {
+						DevelopmentTeam = ZU8AGQYY9F;
+					};
+				};
 			};
 			buildConfigurationList = 3FA1018317447769007D2520 /* Build configuration list for PBXProject "Queue" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -767,6 +775,7 @@
 				3FB5D98B17ADCB2D0086DCFE /* delete-meeting@2x.png in Resources */,
 				3FAC0F6D17AF34BD0057D9AF /* confirm-meeting.png in Resources */,
 				3F15D11C182B7CF000D9D40E /* confirm-delete-queue@2x.png in Resources */,
+				3FCC9A2918552C5100E455D2 /* GoogleMaps.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -930,7 +939,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
-				PROVISIONING_PROFILE = "A41780CB-6160-405C-885C-0087E1959506";
+				PROVISIONING_PROFILE = "7ADA54A5-98A1-46B9-9DB6-AF65D127AF2B";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = armv7;
 			};
@@ -959,7 +968,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "-ObjC";
-				PROVISIONING_PROFILE = "A41780CB-6160-405C-885C-0087E1959506";
+				PROVISIONING_PROFILE = "7ADA54A5-98A1-46B9-9DB6-AF65D127AF2B";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = armv7;
@@ -969,6 +978,7 @@
 		3FA101BB17447769007D2520 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
@@ -986,7 +996,7 @@
 		3FA101BC17447769007D2520 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Lubin Labs (ZU8AGQYY9F)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Lubin Labs (ZU8AGQYY9F)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

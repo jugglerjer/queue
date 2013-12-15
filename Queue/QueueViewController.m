@@ -90,7 +90,7 @@ BOOL isScrollingDown;
 {
     if([navigationController isKindOfClass:[ABPeoplePickerNavigationController class]])
     {
-        if (![viewController isKindOfClass:[AddContactViewController class]])
+        if (![viewController isKindOfClass:[AddMeetingViewController class]])
         {
             QueueBarButtonItem *cancelButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeCancel target:self action:@selector(peoplePickerNavigationControllerDidCancel:)];
             navigationController.topViewController.navigationItem.leftBarButtonItem = cancelButton;
@@ -140,16 +140,40 @@ BOOL isScrollingDown;
 //        }
         // Show the add contact view controller
         // so the user can configure settings
-        AddContactViewController *addContactController = [[AddContactViewController alloc] init];
-        addContactController.managedObjectContext = self.managedObjectContext;
-        addContactController.contact = newContact;
-        addContactController.delegate = self;
-        addContactController.editContactType = QueueEditContactTypeAdd;
+//        AddContactViewController *addContactController = [[AddContactViewController alloc] init];
+//        addContactController.managedObjectContext = self.managedObjectContext;
+//        addContactController.contact = newContact;
+//        addContactController.delegate = self;
+//        addContactController.editContactType = QueueEditContactTypeAdd;
         
-        [peoplePicker pushViewController:addContactController animated:YES];
+        AddMeetingViewController *addMeetingController = [[AddMeetingViewController alloc] init];
+        addMeetingController.managedObjectContext = self.managedObjectContext;
+        addMeetingController.contact = newContact;
+        addMeetingController.delegate = self;
+        addMeetingController.editMeetingType = QueueEditMeetingTypeLast;
+        
+        [peoplePicker pushViewController:addMeetingController animated:YES];
         
     }
     return NO;
+}
+
+- (void)addMeetingViewController:(AddMeetingViewController *)addMeetingViewController didAddMeeting:(Meeting *)meeting forContact:(Contact *)contact
+{
+    [_queue addContactsObject:contact];
+    NSError *error = nil;
+    if (![self.managedObjectContext save:&error]) {
+        // Handle the error.
+    } else {
+        [self updateContactsArrayWithTableReload:NO];
+        NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:[self.contactsArray indexOfObject:contact] inSection:0];
+        [self insertRowAtIndexPath:newIndexPath];
+    }
+}
+
+- (void)addMeetingViewController:(AddMeetingViewController *)addMeetingViewController didCancelWithoutUpdatingMeeting:(Meeting *)meeting forContact:(Contact *)contact
+{
+    [self.managedObjectContext deleteObject:contact];
 }
 
 - (void)addContactViewController:(AddContactViewController *)addContactViewController didUpdateContact:(Contact *)contact

@@ -17,7 +17,8 @@
 typedef enum
 {
     QueueEditMeetingTypeAdd,
-    QueueEditMeetingTypeUpdate
+    QueueEditMeetingTypeUpdate,
+    QueueEditMeetingTypeLast
 } QueueEditMeetingType;
 
 @interface AddMeetingViewController : UIViewController <UITextViewDelegate, UIScrollViewDelegate, LocationChooseViewControllerDelegate>
@@ -38,6 +39,10 @@ typedef enum
 
 - (void)addMeetingViewController:(AddMeetingViewController *)addMeetingViewController
                 didUpdateMeeting:(Meeting *)meeting
+                      forContact:(Contact *)contact;
+
+- (void)addMeetingViewController:(AddMeetingViewController *)addMeetingViewController
+ didCancelWithoutUpdatingMeeting:(Meeting *)meeting
                       forContact:(Contact *)contact;
 
 @end
