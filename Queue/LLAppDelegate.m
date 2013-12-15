@@ -87,12 +87,12 @@
     queueTable.managedObjectContext = context;
     
     // Add the table to the nav controller
-    _pullController = [[LLPullNavigationController alloc] initWithRootViewController:queueTable];
+//    _pullController = [[LLPullNavigationController alloc] initWithRootViewController:queueTable];
 //    _navController = [[UINavigationController alloc] initWithRootViewController:queueTable];
 //    self.pullController = pullController;
     
     // Add the nav controller to the window
-    self.window.rootViewController = _pullController;
+    self.window.rootViewController = queueTable;
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];

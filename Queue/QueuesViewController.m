@@ -254,6 +254,7 @@ CGFloat rowHeight = 44.0;
         QueueViewController *queueView = [[QueueViewController alloc] initWithQueue:[self.queuesArray objectAtIndex:index]];
         queueView.managedObjectContext = self.managedObjectContext;
         queueView.title = [[self.queuesArray objectAtIndex:index] name];
+        queueView.delegate = self;
         
         self.queueViewController = queueView;
         
@@ -273,13 +274,21 @@ CGFloat rowHeight = 44.0;
 //    
 //    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:queueView];
 //    [queueView.navigationController setNavigationBarHidden:NO animated:NO];
-    LLPullNavigationController *pullController = (LLPullNavigationController *)self.parentViewController;
+//    LLPullNavigationController *pullController = (LLPullNavigationController *)self.parentViewController;
 //    queueView.navigationController.navigationBar.alpha = 0.0;
-    [pullController switchToViewController:navController atPage:index animated:YES completion:nil];
+//    [pullController switchToViewController:navController atPage:index animated:YES completion:nil];
 //    [self setNavigationBar:queueView.navigationController.navigationBar alpha:0.0 withDuration:0.0];
     
-    [self sendQueueAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0] toTopOfListWithDelay:0.5];
-    selectedQueue = 0;
+//    [self sendQueueAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0] toTopOfListWithDelay:0.5];
+//    selectedQueue = 0;
+    
+    [self presentViewController:navController animated:YES completion:nil];
+}
+
+- (void)queueViewControllerShouldBeDismissed:(QueueViewController *)queueViewController
+{
+    if ([queueViewController isEqual:_queueViewController])
+        [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)sendQueueAtIndexPath:(NSIndexPath *)indexPath toTopOfListWithDelay:(NSTimeInterval)delay
@@ -509,6 +518,7 @@ CGFloat rowHeight = 44.0;
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     tableView.allowsSelectionDuringEditing = YES;
     tableView.backgroundColor = [UIColor colorWithRed:126.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1];
+    tableView.contentInset = UIEdgeInsetsMake(20.0, 0.0, 0.0, 0.0);
     
     
     UIView *newQueueView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, rowHeight)];

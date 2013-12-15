@@ -806,7 +806,7 @@ BOOL isScrollingDown;
     // beneath it.
     _contractedBounds = _tableView.bounds;
     _expandedBounds = _contractedBounds;
-    _expandedBounds.origin.y = _selectedIndexPath.row * contactRowHeight - self.navigationController.navigationBar.frame.size.height;
+    _expandedBounds.origin.y = _selectedIndexPath.row * contactRowHeight - self.navigationController.navigationBar.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height;
 
     [UIView animateWithDuration:duration
                      animations:^{
@@ -938,7 +938,7 @@ BOOL isScrollingDown;
     LLPullNavigationTableView *tableView = [[LLPullNavigationTableView alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
                                                                            self.view.bounds.origin.y/* + self.navigationController.navigationBar.frame.size.height*/,
                                                                            self.view.frame.size.width,
-                                                                           self.view.frame.size.height /*+ self.navigationController.navigationBar.frame.size.height*/ - [UIApplication sharedApplication].statusBarFrame.size.height)
+                                                                           self.view.frame.size.height /*+ self.navigationController.navigationBar.frame.size.height - [UIApplication sharedApplication].statusBarFrame.size.height*/)
                                                           style:UITableViewStylePlain];
     tableView.backgroundColor = [UIColor colorWithPatternImage: [UIImage imageNamed:@"queue_background.png"]];
 //    tableView.backgroundColor = [UIColor clearColor];
@@ -956,8 +956,8 @@ BOOL isScrollingDown;
     self.addButton = addContactButton;
     self.navigationItem.rightBarButtonItem = self.addButton;
     
-//    QueueBarButtonItem *backButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeBack target:self action:@selector(back)];
-//    self.navigationItem.leftBarButtonItem = backButton;
+    QueueBarButtonItem *menuButton = [[QueueBarButtonItem alloc] initWithType:QueueBarButtonItemTypeMenu target:self action:@selector(backToMenu:)];
+    self.navigationItem.leftBarButtonItem = menuButton;
     
     [self updateContactsArrayWithTableReload:NO];
     _imagesDictionary = [NSMutableDictionary dictionaryWithCapacity:[self.contactsArray count]];
@@ -976,6 +976,15 @@ BOOL isScrollingDown;
 - (void)back
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)backToMenu:(QueueBarButtonItem *)sender
+{
+    if (self.isTimelineExpanded)
+        [self hideTimelineWithContactReposition:YES];
+    
+    if ([_delegate respondsToSelector:@selector(queueViewControllerShouldBeDismissed:)])
+        [_delegate queueViewControllerShouldBeDismissed:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated
